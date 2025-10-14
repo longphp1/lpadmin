@@ -367,7 +367,6 @@
                     });
                 } else if (obj.event === 'remove') {
                     layer.confirm('确定删除该菜单吗？', {icon: 3, title: '提示'}, function (index) {
-                        console.log(data)
                         let deleteUrl = DELETE_API.replace(':id', data[PRIMARY_KEY]);
                         $.ajax({
                             url: deleteUrl,

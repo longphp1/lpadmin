@@ -55,13 +55,13 @@
                     'label' => '菜单类型',
                     'required' => true,
                     'options' => [
-                        ['value' => '0', 'title' => '目录'],
-                        ['value' => '1', 'title' => '菜单'],
-                        ['value' => '2', 'title' => '按钮']
+                        ['value' => 'directory', 'title' => '目录'],
+                        ['value' => 'menu', 'title' => '菜单'],
+                        ['value' => 'button', 'title' => '按钮']
                     ],
                     'default' => $menu->type,
-                    'help' => $menu->type == 0 ? '目录：用于组织菜单结构，不对应具体页面' :
-                             ($menu->type == 1 ? '菜单：显示在左侧菜单栏中的页面链接' :
+                    'help' => $menu->type == 'directory' ? '目录：用于组织菜单结构，不对应具体页面' :
+                             ($menu->type == 'menu' ? '菜单：显示在左侧菜单栏中的页面链接' :
                              '按钮：不在菜单中显示，用于权限控制的操作标识（如：添加、编辑、删除等）')
                 ])
 

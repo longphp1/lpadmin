@@ -55,11 +55,11 @@
                     'label' => '菜单类型',
                     'required' => true,
                     'options' => [
-                        ['value' => '0', 'title' => '目录'],
-                        ['value' => '1', 'title' => '菜单'],
-                        ['value' => '2', 'title' => '按钮']
+                        ['value' => 'directory', 'title' => '目录'],
+                        ['value' => 'menu', 'title' => '菜单'],
+                        ['value' => 'button', 'title' => '按钮']
                     ],
-                    'default' => '1',
+                    'default' => 'menu',
                     'help' => '菜单：显示在左侧菜单栏中的页面链接'
                 ])
 

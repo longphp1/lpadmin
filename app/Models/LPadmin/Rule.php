@@ -437,6 +437,15 @@ class Rule extends Model
     }
 
     /**
+     * 检查是否可以作为父级
+     */
+    public function canSetAsParent($parent_id): bool
+    {
+        $parent = static::find($parent_id);
+        return $parent ? $parent->canSetAsParent($parent->parent_id) : false;
+    }
+
+    /**
      * 获取显示状态标签
      */
     public function getShowLabelAttribute(): string

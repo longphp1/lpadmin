@@ -24,7 +24,7 @@ class MenuController extends BaseController
     public function select(Request $request): JsonResponse
     {
         try {
-            $query = Rule::where('type', Rule::TYPE_MENU);
+            $query = Rule::whereIn('type', [Rule::TYPE_DIRECTORY,Rule::TYPE_MENU]);
 
             // 搜索条件
             if ($request->filled('title')) {
@@ -83,7 +83,7 @@ class MenuController extends BaseController
                 'parent_id' => 'required|integer|min:0',
                 'icon' => 'nullable|string|max:50',
                 'url' => 'nullable|string|max:255',
-                'type' => 'required|integer|in:0,1,2',
+                'type' => 'required|string|in:directory,menu,button',
                 'target' => 'nullable|string|max:20',
                 'is_show' => 'required|integer|in:0,1',
                 'status' => 'required|integer|in:0,1',
@@ -121,7 +121,9 @@ class MenuController extends BaseController
             if (!isset($data['target'])) {
                 $data['target'] = '_self';
             }
-
+            if($data['type'] === 'directory'){
+                $data['type'] = 'menu';
+            }
             Rule::create($data);
 
             return $this->success('创建成功');
@@ -139,6 +141,9 @@ class MenuController extends BaseController
     public function edit($id): View
     {
         $menu = Rule::findOrFail($id);
+        if($menu->type === 'menu' && $menu->hasChildren()){
+            $menu->type = 'directory';
+        }
         $parentOptions = Rule::getParentOptions($id);
         return view('lpadmin.menu.edit', compact('menu', 'parentOptions'));
     }
@@ -162,7 +167,7 @@ class MenuController extends BaseController
                 'parent_id' => 'required|integer|min:0',
                 'icon' => 'nullable|string|max:50',
                 'url' => 'nullable|string|max:255',
-                'type' => 'required|integer|in:0,1,2',
+                'type' => 'required|string|in:directory,menu,button',
                 'target' => 'nullable|string|max:20',
                 'is_show' => 'required|integer|in:0,1',
                 'status' => 'required|integer|in:0,1',
@@ -197,7 +202,7 @@ class MenuController extends BaseController
             ]);
 
             // 验证父级菜单设置（避免循环引用）
-            if ($data['parent_id'] != 0 && !$menu->canSetAsParent($data['parent_id'])) {
+            if ($data['parent_id'] != 0 && $menu->canSetAsParent($data['parent_id'])) {
                 return $this->error('不能将自己或子菜单设置为父菜单');
             }
 
@@ -205,7 +210,9 @@ class MenuController extends BaseController
             if (!isset($data['target'])) {
                 $data['target'] = '_self';
             }
-
+            if($data['type'] === 'directory'){
+                $data['type'] = 'menu';
+            }
             $menu->update($data);
 
             return $this->success('更新成功');

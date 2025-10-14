@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('parent_id')->default(0)->comment('父级ID');
             $table->string('name', 100)->unique()->comment('权限名称');
             $table->string('title', 100)->comment('权限标题');
-            $table->enum('type', ['menu', 'api', 'button'])->default('menu')->comment('类型：menu菜单,api接口,button按钮');
+            $table->enum('type', ['directory','menu', 'api', 'button'])->default('menu')->comment('类型：directory目录,menu菜单,api接口,button按钮');
             $table->string('icon', 50)->nullable()->comment('图标');
             $table->string('route_name', 100)->nullable()->comment('路由名称');
             $table->string('url')->nullable()->comment('菜单URL');
