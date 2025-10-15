@@ -1,22 +1,26 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LPadmin\AuthController;
-use App\Http\Controllers\LPadmin\CaptchaController;
-use App\Http\Controllers\LPadmin\DashboardController;
 use App\Http\Controllers\LPadmin\AdminController;
-use App\Http\Controllers\LPadmin\RoleController;
-use App\Http\Controllers\LPadmin\RuleController;
-use App\Http\Controllers\LPadmin\UserController;
-use App\Http\Controllers\LPadmin\MenuController;
-use App\Http\Controllers\LPadmin\UploadController;
-use App\Http\Controllers\LPadmin\ConfigController;
+use App\Http\Controllers\LPadmin\AuthController;
 use App\Http\Controllers\LPadmin\CacheController;
+use App\Http\Controllers\LPadmin\CaptchaController;
+use App\Http\Controllers\LPadmin\ComponentController;
+use App\Http\Controllers\LPadmin\ConfigController;
+use App\Http\Controllers\LPadmin\DashboardController;
 use App\Http\Controllers\LPadmin\DictionaryController;
 use App\Http\Controllers\LPadmin\DictionaryItemController;
 use App\Http\Controllers\LPadmin\DocController;
-use App\Http\Controllers\LPadmin\ComponentController;
+use App\Http\Controllers\LPadmin\MenuController;
+use App\Http\Controllers\LPadmin\RoleController;
+use App\Http\Controllers\LPadmin\RuleController;
+use App\Http\Controllers\LPadmin\UploadController;
+use App\Http\Controllers\LPadmin\UserController;
+use App\Http\Controllers\Website\WebSiteConfigController;
+use App\Http\Controllers\Website\WebSiteHomeController;
+use App\Http\Controllers\Website\WebSiteMenuController;
+use App\Http\Controllers\Website\WebSiteProductController;
 use App\Services\LPadmin\ComponentRouteManager;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -329,6 +333,60 @@ Route::group($groupConfig, function () {
             Route::post('batch-delete', [UploadController::class, 'batchDelete'])->name('batch_delete'); // 批量删除文件
             Route::get('{upload}', [UploadController::class, 'show'])->name('show'); // 查看文件详情
             Route::delete('{upload}', [UploadController::class, 'destroy'])->name('destroy'); // 删除文件
+        });
+
+        Route::prefix('website')->name('website.')->group(function () {
+            Route::prefix('home')->name('home.')->group(function () {
+                //Route::resource('/', WebSiteHomeController::class)->parameters(['' => 'website.home'])->except(['show']); // 角色资源路由
+                Route::get('/', [WebSiteHomeController::class, 'index'])->name('index');
+                Route::get('/show/{id}', [WebSiteHomeController::class, 'show'])->name('show');
+                Route::get('/edit/{id}', [WebSiteHomeController::class, 'edit'])->name('edit');
+                Route::put('/update/{id}', [WebSiteHomeController::class, 'update'])->name('update');
+                Route::get('/create', [WebSiteHomeController::class, 'create'])->name('create');
+                Route::post('/store', [WebSiteHomeController::class, 'store'])->name('store');
+                Route::delete('{id}', [WebSiteHomeController::class, 'destroy'])->name('destroy');
+            });
+
+            Route::prefix('config')->name('config.')->group(function () {
+                /* -站点配置- */
+                Route::get('/', [WebSiteConfigController::class, 'index'])->name('index');
+                Route::get('/webSiteList', [WebSiteConfigController::class, 'webSiteList'])->name('webSiteList');
+                Route::get('/show/{id}', [WebSiteConfigController::class, 'show'])->name('show');
+                Route::get('/edit/{id}', [WebSiteConfigController::class, 'edit'])->name('edit');
+                Route::post('/update/{id}', [WebSiteConfigController::class, 'update'])->name('update');
+                Route::get('/create', [WebSiteConfigController::class, 'create'])->name('create');
+                Route::post('/store', [WebSiteConfigController::class, 'store'])->name('store');
+                Route::delete('/{id}', [WebSiteConfigController::class, 'destroy'])->name('destroy');
+            });
+
+            Route::prefix('menu')->name('menu.')->group(function () {
+                /* -菜单管理- */
+                Route::get('/', [WebSiteMenuController::class, 'index'])->name('index');
+                Route::get('/edit/{id}', [WebSiteMenuController::class, 'edit'])->name('edit');
+                Route::get('/show/{id}', [WebSiteMenuController::class, 'show'])->name('show');
+                Route::put('/update/{id}', [WebSiteMenuController::class, 'update'])->name('update');
+                Route::get('/create', [WebSiteMenuController::class, 'create'])->name('create');
+                Route::post('/store', [WebSiteMenuController::class, 'store'])->name('store');
+                Route::delete('/{id}', [WebSiteMenuController::class, 'destroy'])->name('destroy');
+            });
+
+            Route::prefix('product')->name('product.')->group(function () {
+                /* -菜单管理- */
+                Route::get('/', [WebSiteProductController::class, 'index'])->name('index');
+                Route::get('/edit/{id}', [WebSiteProductController::class, 'edit'])->name('edit');
+                Route::get('/show/{id}', [WebSiteProductController::class, 'show'])->name('show');
+                Route::post('/update/{id}', [WebSiteProductController::class, 'update'])->name('update');
+                Route::get('/create', [WebSiteProductController::class, 'create'])->name('create');
+                Route::post('/store', [WebSiteProductController::class, 'store'])->name('store');
+                Route::delete('/{id}', [WebSiteProductController::class, 'destroy'])->name('destroy');
+                Route::post('/batch-delete', [WebSiteProductController::class, 'batchDelete'])->name('batch_delete');
+                Route::get('/export', [WebSiteProductController::class, 'exportProduct'])->name('export');
+                Route::get('/import', [WebSiteProductController::class, 'showImport'])->name('import.show');
+                Route::post('/import', [WebSiteProductController::class, 'import'])->name('import');
+                Route::get('/brand', [WebSiteProductController::class, 'showBrand'])->name('brand.show');
+                Route::post('/brand', [WebSiteProductController::class, 'updateProductBrand'])->name('brand.update');
+            });
+
         });
     });
 });

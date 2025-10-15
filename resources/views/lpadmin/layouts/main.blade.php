@@ -26,7 +26,7 @@
                 <!-- 图标 -->
                 <img class="logo" src="/static/admin/images/logo.png">
                 <!-- 标题 -->
-                <span class="title">{{ config('lpadmin.system.name', 'LPadmin') }}</span>
+                <span class="title">{{ config('lpadmin.system.name', 'TBadmin') }}</span>
             </div>
             <!-- 顶部左侧功能 -->
             <ul class="layui-nav layui-layout-left">

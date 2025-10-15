@@ -89,7 +89,7 @@ return [
     |
     */
     'system' => [
-        'name' => env('LPADMIN_SYSTEM_NAME', 'LPadmin管理系统'),
+        'name' => env('LPADMIN_SYSTEM_NAME', 'TBadmin管理系统'),
         'version' => '1.0.1',
         'logo' => env('LPADMIN_LOGO', '/static/admin/images/logo.png'),
         'favicon' => env('LPADMIN_FAVICON', '/static/admin/images/favicon.ico'),
@@ -115,11 +115,12 @@ return [
     | System Information Configuration
     |--------------------------------------------------------------------------
     |
+
     | These options control the system information displayed on the homepage.
     |
     */
     'system' => [
-        'name' => env('LPADMIN_SYSTEM_NAME', 'LPadmin管理系统'),
+        'name' => env('LPADMIN_SYSTEM_NAME', 'TBadmin管理系统'),
         'version' => env('LPADMIN_SYSTEM_VERSION', '1.0.0'),
         'description' => env('LPADMIN_SYSTEM_DESC', '基于Laravel 10+和PearAdminLayui构建的现代化后台管理系统'),
         'logo' => env('LPADMIN_LOGO', '/static/admin/images/logo.png'),
