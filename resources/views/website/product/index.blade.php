@@ -126,7 +126,7 @@
             const UPDATE_URL = "{{ route('lpadmin.website.product.edit', ':id') }}";
             const UPDATE_BRAND_URL = "{{ route('lpadmin.website.product.brand.show') }}";
             const EXPORT_API = "{{ route('lpadmin.website.product.export') }}";
-            const IMPORT_URL = "{{ route('lpadmin.website.product.import') }}";
+            const IMPORT_URL = "{{ route('lpadmin.website.product.import.show') }}";
             // 字段 创建时间 created_at
             layui.use(["laydate"], function() {
                 layui.laydate.render({
@@ -404,35 +404,24 @@
                     if (searchData.group) {
                         exportUrl += '?group=' + searchData.group;
                     }
-
-                    $.get(exportUrl, function(res) {
-                        if (res.code === 0) {
-                            const dataStr = JSON.stringify(res.data, null, 2);
-                            const blob = new Blob([dataStr], {type: 'application/json'});
-                            const url = URL.createObjectURL(blob);
-                            const a = document.createElement('a');
-                            a.href = url;
-                            a.download = 'config_export_' + new Date().getTime() + '.json';
-                            document.body.appendChild(a);
-                            a.click();
-                            document.body.removeChild(a);
-                            URL.revokeObjectURL(url);
-                            layer.msg('导出成功', {icon: 1});
-                        } else {
-                            layer.msg(res.message, {icon: 2});
-                        }
-                    });
+                    // 创建隐藏的下载链接
+                    const link = document.createElement('a');
+                    link.href = exportUrl;
+                    link.download = 'product_' + new Date().getTime() + '.xlsx'; // 动态生成文件名
+                    document.body.appendChild(link);
+                    // 触发下载
+                    link.click();
+                    // 清理DOM
+                    document.body.removeChild(link);
                 }
                 // 表格编辑数据
                 let doImport = function(obj) {
-                    let value = obj.data[PRIMARY_KEY];
-                    let url = UPDATE_URL.replace(':id', value);
                     layer.open({
                         type: 2,
-                        title: "修改",
+                        title: "上传商品",
                         shade: 0.1,
                         area: [common.isModile()?"100%":"70%", common.isModile()?"100%":"80%"],
-                        content: url+'?id='+value
+                        content: IMPORT_URL
                     });
                 }
 

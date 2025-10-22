@@ -18,6 +18,7 @@ use App\Http\Controllers\LPadmin\UserController;
 use App\Http\Controllers\Website\WebSiteConfigController;
 use App\Http\Controllers\Website\WebSiteHomeController;
 use App\Http\Controllers\Website\WebSiteMenuController;
+use App\Http\Controllers\Website\WebSitePlatformController;
 use App\Http\Controllers\Website\WebSiteProductController;
 use App\Services\LPadmin\ComponentRouteManager;
 use Illuminate\Support\Facades\Route;
@@ -353,7 +354,7 @@ Route::group($groupConfig, function () {
                 Route::get('/webSiteList', [WebSiteConfigController::class, 'webSiteList'])->name('webSiteList');
                 Route::get('/show/{id}', [WebSiteConfigController::class, 'show'])->name('show');
                 Route::get('/edit/{id}', [WebSiteConfigController::class, 'edit'])->name('edit');
-                Route::post('/update/{id}', [WebSiteConfigController::class, 'update'])->name('update');
+                Route::put('/update/{id}', [WebSiteConfigController::class, 'update'])->name('update');
                 Route::get('/create', [WebSiteConfigController::class, 'create'])->name('create');
                 Route::post('/store', [WebSiteConfigController::class, 'store'])->name('store');
                 Route::delete('/{id}', [WebSiteConfigController::class, 'destroy'])->name('destroy');
@@ -387,6 +388,18 @@ Route::group($groupConfig, function () {
                 Route::post('/brand', [WebSiteProductController::class, 'updateProductBrand'])->name('brand.update');
             });
 
+            Route::prefix('platform')->name('platform.')->group(function () {
+                /* -站点配置- */
+                Route::get('/', [WebSitePlatformController::class, 'index'])->name('index');
+                Route::get('/show/{id}', [WebSitePlatformController::class, 'show'])->name('show');
+                Route::get('/edit/{id}', [WebSitePlatformController::class, 'edit'])->name('edit');
+                Route::put('/update/{id}', [WebSitePlatformController::class, 'update'])->name('update');
+                Route::get('/create', [WebSitePlatformController::class, 'create'])->name('create');
+                Route::post('/store', [WebSitePlatformController::class, 'store'])->name('store');
+                Route::delete('/{id}', [WebSitePlatformController::class, 'destroy'])->name('destroy');
+                Route::post('/updatePlatform', [WebSitePlatformController::class, 'updatePlatform'])->name('updatePlatform');
+                Route::post('/pushPlatform', [WebSitePlatformController::class, 'pushPlatform'])->name('pushPlatform');
+            });
         });
     });
 });

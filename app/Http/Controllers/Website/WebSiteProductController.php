@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Website;
 
+use App\Exports\ProductExport;
 use App\Http\Controllers\LPadmin\BaseController;
+use App\Imports\ProductImport;
 use App\Models\LPadmin\Website\MenuConfig;
 use App\Models\LPadmin\Website\ProductMenu;
 use App\Models\LPadmin\Website\WebSiteConfig;
@@ -10,6 +12,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class WebSiteProductController extends BaseController
@@ -242,43 +245,22 @@ class WebSiteProductController extends BaseController
         return $this->success($result);
     }
 
-    public function export()
-    {
-        // 初始化 Vtiful\Kernel\Excel 对象
-        $excel = new \Vtiful\Kernel\Excel([
-            "path" => storage_path(""), // 确保目录存在并可写
-        ]);
-        // 创建一个新的工作簿
-        $fileName = "example.xlsx";
-        // 设置表头
-        $headers = ["ID", "Name", "Email"];
-        // 填充数据（这里假设从数据库获取数据）
-        $data     = [
-            ["1", "John Doe", "john@example.com"],
-            ["2", "Jane Smith", "jane@example.com"],
-            // 可以继续添加更多数据
-        ];
-        $filePath = $excel->fileName($fileName, 'sheet1')
-            ->header($headers)
-            ->data($data)
-            ->output();
-        // 返回文件下载响应
-        return response()->download($filePath)->deleteFileAfterSend(true);
-    }
+
 
     public function showImport()
     {
         $siteConfigList = WebSiteConfig::query()->select(['id', 'name'])->get();
         $menuList       = MenuConfig::query()->select(['id', 'menu_name'])->get();
-        return view('website::product.upload', compact('siteConfigList', 'menuList'));
+        return view('website.product.upload', compact('siteConfigList', 'menuList'));
     }
 
     public function import(Request $request)
     {
         $data = $request->all();
+        Log::info('import data:' . json_encode($data));
         validator($data, [
             'file'    => 'required|file|mimes:xlsx,xls|max:20480',
-            'site_id' => 'required|integer',
+            'site_id' => 'sometimes|nullable|integer',
             'menu_id' => 'sometimes|nullable|integer'
         ])->validate();
 
@@ -288,19 +270,15 @@ class WebSiteProductController extends BaseController
 
         $tempFileName = $requestFile->getFilename();
 
-        $excel = new \Vtiful\Kernel\Excel(['path' => trim($originalPath, $tempFileName)]);
-
-        $sheetDataList = $excel->openFile($tempFileName)
-            ->openSheet()
-            ->getSheetData();
-
-
-        $header = $sheetDataList[0];
-        unset($sheetDataList[0]);
+        $sheetDataList = Excel::toArray(new ProductImport, $requestFile);
+        Log::info('sheetDataList toArray:' ,$sheetDataList);
+        $importProductList  = $sheetDataList[0];
+        $header = $importProductList[0];
+        unset($importProductList[0]);
         $range            = 1;
         $productList      = [];
         $existProductList = [];
-        foreach ($sheetDataList as $k => $cells) {
+        foreach ($importProductList as $k => $cells) {
             Log::info($cells);
             $page = ceil($range / 100);
             /*if (empty($cells[0]) && $cells[1]) {
@@ -317,7 +295,7 @@ class WebSiteProductController extends BaseController
             }
             $brand = str_replace([PHP_EOL, ",", "，", ".", "\r\n", "\n", "\r"], '', $cells[1]);
             $tmp   = [
-                'site_id'            => $data['site_id'],
+                'site_id'            => $data['site_id']??1,
                 'menu_id'            => $menuConfig->id,
                 'page'               => $page,
                 'range'              => $range,
@@ -371,8 +349,10 @@ class WebSiteProductController extends BaseController
                 $tmp['tao_buy_platform'] = 'Open TaooBuy Link';
             }
             $range++;
+            Log::info('tmp:', $tmp);
             $existProduct = ProductMenu::query()->where('name', $tmp['name'])->first();
             if ($existProduct && $existProduct->id) {
+                Log::info('existProduct:'.$existProduct->name);
                 unset($tmp['site_id']);
                 unset($tmp['menu_id']);
                 unset($tmp['page']);
@@ -389,7 +369,7 @@ class WebSiteProductController extends BaseController
                 ProductMenu::query()->insert($chunk);
             }
         }
-        return $this->result(true, ['msg' => 'success']);
+        return $this->success([]);
     }
 
     public function encrypt($data, $passphrase, $salt = null)
@@ -444,33 +424,7 @@ class WebSiteProductController extends BaseController
 
     public function exportProduct(Request $request)
     {
-        ini_set('memory_limit', '500M');
-        set_time_limit(0);//设置超时限制为0分钟
-
-        $info = ProductMenu::query()->with(['menu'])->get();
-        // 设置表头
-        $cellData[0] = array('分类', '品牌', '商品名称', '价格', '主图', '子图', '主购买链接', '主购买平台', '其他购买链接', '其他购买平台', '来源', '来源商品ID', '来源商品URL');
-        foreach ($info as $k => $v) {
-            $cellData[] = [
-                $v->menu->menu_name,
-                $v->brand,
-                $v->name,
-                $v->price,
-                $v->main_img,
-                $v->img,
-                $v->main_buy_link,
-                $v->main_buy_platform,
-                $v->other_buy_link,
-                $v->other_buy_platform,
-                $v->source,
-                $v->source_product_id,
-                $v->source_product_url,
-            ];
-        }
-
-        // dd($cellData);exit;
-
-
+        return Excel::download(new ProductExport, 'product.xlsx');
     }
 
 }

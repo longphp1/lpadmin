@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\GenerateWebSiteEvent;
+use App\Listeners\GenerateWebSiteListener;
 use App\Listeners\LogDBQuery;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -22,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         QueryExecuted::class => [
             LogDBQuery::class,
+        ],
+        GenerateWebSiteEvent::class => [
+            GenerateWebSiteListener::class,
         ],
     ];
 
