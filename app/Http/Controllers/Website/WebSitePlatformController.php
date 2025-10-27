@@ -10,6 +10,7 @@ use App\Models\LPadmin\Website\WebsitePlatform;
 use Carbon\Carbon;
 use Illuminate\Bus\Batch;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Bus;
@@ -190,7 +191,7 @@ class WebSitePlatformController extends BaseController
             return $this->error('请选择要删除的商品');
         }
         WebsitePlatform::whereIn('id', $ids)->update(['status' => 'update_pending','updated_at'=>Carbon::now()->toDateTimeString()]);
-        //Event::dispatch(new GenerateWebSiteEvent());
+        Event::dispatch(new GenerateWebSiteEvent());
         return $this->success([]);
     }
 
@@ -204,7 +205,7 @@ class WebSitePlatformController extends BaseController
         foreach ($platformList as $platform) {
             if($platform->status !== 'update_success'){
                 Log::info('平台ID:'.$platform->platform_name.' 未更新成功');
-                continue;
+                //continue;
             }
             $this->pushCode($platform->platform_name);
             $platform->status = 'push_success';
@@ -216,23 +217,73 @@ class WebSitePlatformController extends BaseController
 
     public function pushCode($platformName)
     {
-        $gitDir = 'D:/phpstudy_pro/WWW/lpadmin/public/'.$platformName;
+        ini_set('max_execution_time', '600');
 
-        $gitBranch= $platformName;
+        $sourceDir = 'D:/phpstudy_pro/WWW/lpadmin/public/'.$platformName;
+
+        if(!file_exists($sourceDir)){
+            Log::info('平台目录不存在:'.$sourceDir);
+            return $this->error('平台目录不存在:'.$sourceDir);
+        }
+        $destinationDir='D:\phpstudy_pro\WWW\taoobuy';
+
+
+        $gitBranch= strtolower($platformName);
         // 定位到 Git 仓库的目录
-        chdir($gitDir); // 修改为你的项目路径
+        chdir($destinationDir); // 修改为你的项目路径
+
+        $gitBranch='test';
 
         exec('git checkout '.$gitBranch);
+        Log::info('切换到分支:'.$gitBranch);
+        $this->copyFile($sourceDir,$destinationDir);
 
         // 添加所有更改到暂存区
         exec('git add .');
-
+        Log::info('添加所有更改到暂存区');
+        $commitText='System auto update platform code time:'.date('Y-m-d H:i:s');
         // 提交更改到本地仓库
-        exec('git commit -m "Update platform code"');
-
+        exec('git commit -m "'.$commitText.'"');
+        Log::info('提交更改到本地仓库:'.$commitText);
         // 推送到远程仓库，例如 origin 的 $gitBranch 分支
         exec('git push origin '.$gitBranch);
-
+        Log::info('推送到远程仓库:'.$gitBranch);
         return 'Code pushed successfully.';
+    }
+
+    public function copyFile($sourcePath, $destinationPath) {
+        $files = new Filesystem();
+        // 确保源文件夹存在
+        if (!$files->isDirectory($sourcePath)) {
+            throw new \InvalidArgumentException("源文件夹不存在: {$sourcePath}");
+        }
+
+        // 创建目标文件夹（如果不存在）
+        if (!$files->exists($destinationPath)) {
+            $files->makeDirectory($destinationPath, 0755, true);
+        }
+
+        // 获取源文件夹中的所有文件和子文件夹
+        $items = $files->allFiles($sourcePath);
+
+        foreach ($items as $item) {
+            // 构建目标文件路径
+            $target = str_replace($sourcePath, $destinationPath, $item->getPathname());
+            // 确保目标文件所在目录存在（关键修复：创建父目录）
+            $targetDir = dirname($target);
+            $files->ensureDirectoryExists($targetDir, 0755, true);
+            // 如果是文件夹，先创建目标文件夹
+            if ($item->isDir()) {
+                if (!$files->exists($target)) {
+                    $files->makeDirectory($target, 0755, true);
+                }
+            } else {
+                // 如果是文件，直接复制（会覆盖已存在的文件）
+                $files->copy($item->getPathname(), $target);
+                Log::info('文件复制成功:'.$target);
+            }
+        }
+        Log::info('文件复制完成');
+        return true; // 复制成功
     }
 }

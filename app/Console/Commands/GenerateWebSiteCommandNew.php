@@ -63,10 +63,10 @@ class GenerateWebSiteCommandNew extends Command
     {
         $platformList = WebsitePlatform::where('status', 'update_pending')->get();
         foreach ($platformList as $platform) {
-            $this->site_id      = $platform->site_id;
+            $this->site_id     = $platform->site_id;
             $this->websiteName = $platform->platform_name;
             $this->websiteUrl  = $platform->platform_url;
-            $this->siteConfig   = WebSiteConfig::query()->find($platform->site_id);
+            $this->siteConfig  = WebSiteConfig::query()->find($platform->site_id);
             if (empty($this->websiteName) || empty($this->websiteUrl)){
                 $this->error('请输入网站名称和网站URL');
                 return 0;
@@ -74,6 +74,8 @@ class GenerateWebSiteCommandNew extends Command
             Log::info('生成网站:'.$this->websiteName.' 网站URL:'.$this->websiteUrl);
             try {
                 $this->generateWeb();
+                $this->status='update_success';
+                $platform->save();
             } catch (\Exception $e) {
                 $this->error('生成网站:'.$this->websiteName.' 网站URL:'.$this->websiteUrl.' error:'.$e->getMessage());
             }
@@ -81,6 +83,8 @@ class GenerateWebSiteCommandNew extends Command
 
         return 0;
     }
+
+
 
     public function generateWeb()
     {
@@ -145,6 +149,7 @@ class GenerateWebSiteCommandNew extends Command
         // 创建文件夹
         if (!empty($filePath) && !file_exists($baseFilePath)) {
             $this->info('创建文件夹:' . $baseFilePath);
+            Log::info('创建文件夹:' . $baseFilePath);
             mkdir($baseFilePath, 0777, true);
         }
         $filePathName = $filePath . '/' . $fileName;
@@ -157,8 +162,10 @@ class GenerateWebSiteCommandNew extends Command
         $content = $this->compressHTML($content);
         if (file_put_contents($path, $content) !== false) {
             $this->info('fileName:' . $filePathName . ',创建成功并写入内容');
+            Log::info('fileName:' . $filePathName . ',创建成功并写入内容');
         } else {
             $this->info('fileName:' . $filePathName . ',创建失败');
+            Log::info('fileName:' . $filePathName . ',创建失败');
         }
     }
 
@@ -869,6 +876,7 @@ class GenerateWebSiteCommandNew extends Command
         $number      = 1;
         foreach ($productList as $product) {
             $this->info('number:' . $number);
+            Log::info('number:' . $number);
             $newProductName = preg_replace('/[^a-zA-Z0-9 ]/', '', $product->name);
             $newProductName = strtolower(str_replace(' ', '-', $newProductName));
             $this->download($product->main_img, $newProductName, 'main.png');
@@ -928,6 +936,7 @@ class GenerateWebSiteCommandNew extends Command
 // 将图片内容保存到本地文件
             $saveResult = file_put_contents($newFilePath, $imageContent);
             $this->info($newFilePath);
+            Log::info($newFilePath);
 // 检查是否成功保存文件
             if ($saveResult === FALSE) {
                 return '';
@@ -935,6 +944,7 @@ class GenerateWebSiteCommandNew extends Command
             return $newFilePath;
         } catch (\Exception $e) {
             $this->info($e->getMessage());
+            Log::info($e->getMessage());
             return '';
         }
 
