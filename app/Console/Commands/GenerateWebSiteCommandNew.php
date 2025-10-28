@@ -61,7 +61,8 @@ class GenerateWebSiteCommandNew extends Command
      */
     public function handle(): int
     {
-        $platformList = WebsitePlatform::where('status', 'update_pending')->get();
+        //where('status', 'update_pending')->
+        $platformList = WebsitePlatform::get();
         foreach ($platformList as $platform) {
             $this->site_id     = $platform->site_id;
             $this->websiteName = $platform->platform_name;
@@ -74,7 +75,7 @@ class GenerateWebSiteCommandNew extends Command
             Log::info('生成网站:'.$this->websiteName.' 网站URL:'.$this->websiteUrl);
             try {
                 $this->generateWeb();
-                $this->status='update_success';
+                $platform->status='update_success';
                 $platform->save();
             } catch (\Exception $e) {
                 $this->error('生成网站:'.$this->websiteName.' 网站URL:'.$this->websiteUrl.' error:'.$e->getMessage());
