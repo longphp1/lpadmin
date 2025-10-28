@@ -186,6 +186,7 @@ class WebSitePlatformController extends BaseController
 
     public function updatePlatform(Request $request)
     {
+        ini_set('max_execution_time', '1200');
         $ids = $request->input('ids', []);
         if (empty($ids)) {
             return $this->error('请选择要删除的商品');
@@ -197,6 +198,7 @@ class WebSitePlatformController extends BaseController
 
     public function pushPlatform(Request $request)
     {
+        ini_set('max_execution_time', '1200');
         $ids = $request->input('ids', []);
         if (empty($ids)) {
             return $this->error('请选择要删除的商品');
@@ -217,7 +219,7 @@ class WebSitePlatformController extends BaseController
 
     public function pushCode($platformName)
     {
-        ini_set('max_execution_time', '600');
+        ini_set('max_execution_time', '1200');
 
         $sourceDir = 'D:/phpstudy_pro/WWW/lpadmin/public/'.$platformName;
 
