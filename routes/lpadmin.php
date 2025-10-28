@@ -376,7 +376,7 @@ Route::group($groupConfig, function () {
                 Route::get('/', [WebSiteProductController::class, 'index'])->name('index');
                 Route::get('/edit/{id}', [WebSiteProductController::class, 'edit'])->name('edit');
                 Route::get('/show/{id}', [WebSiteProductController::class, 'show'])->name('show');
-                Route::post('/update/{id}', [WebSiteProductController::class, 'update'])->name('update');
+                Route::put('/update/{id}', [WebSiteProductController::class, 'update'])->name('update');
                 Route::get('/create', [WebSiteProductController::class, 'create'])->name('create');
                 Route::post('/store', [WebSiteProductController::class, 'store'])->name('store');
                 Route::delete('/{id}', [WebSiteProductController::class, 'destroy'])->name('destroy');

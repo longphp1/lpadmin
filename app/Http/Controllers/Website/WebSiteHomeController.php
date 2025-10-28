@@ -143,7 +143,7 @@ class WebSiteHomeController extends BaseController
             'middle_qr_title' => 'sometimes|nullable|string',
             'middle_logo'     => 'sometimes|nullable|string',
             'middle_content'  => 'sometimes|nullable|string',
-            'content'         => 'sometimes|string',
+            'content'         => 'sometimes|nullable|string',
 
         ]);
         $homeData = HomeMenu::query()->find($id);

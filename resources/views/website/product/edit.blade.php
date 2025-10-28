@@ -199,7 +199,7 @@
 
                     layui.$.ajax({
                         url: apiUrl,
-                        type: "POST",
+                        type: "PUT",
                         dateType: "json",
                         data: data.field,
                         success: function (res) {
