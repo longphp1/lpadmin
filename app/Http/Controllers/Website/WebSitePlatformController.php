@@ -234,8 +234,11 @@ class WebSitePlatformController extends BaseController
         // 定位到 Git 仓库的目录
         chdir($destinationDir); // 修改为你的项目路径
 
-        $gitBranch='test';
-
+        Log::info('重置本地仓库到最新提交');
+        exec('git reset --hard HEAD');
+        Log::info('清除本地未跟踪文件');
+        exec('git clean -fd');
+        //$gitBranch='test';
         exec('git checkout '.$gitBranch);
         Log::info('切换到分支:'.$gitBranch);
         $this->copyFile($sourceDir,$destinationDir);
