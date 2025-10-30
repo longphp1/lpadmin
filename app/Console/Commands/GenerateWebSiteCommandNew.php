@@ -960,6 +960,7 @@ class GenerateWebSiteCommandNew extends Command
         $content  = str_replace('replacePaltformUrl', $this->websiteUrl, $content);
         file_put_contents($howToDir, $content);
         Log::info('重新加载howTo完成');
+        $this->info('重新加载howTo完成');
     }
 
     public function reloadJs()
@@ -970,6 +971,7 @@ class GenerateWebSiteCommandNew extends Command
         $content  = str_replace('Kakobuy', $this->websiteName, $content);
         file_put_contents($howToDir, $content);
         Log::info('重新加载site.js完成');
+        $this->info('重新加载site.js完成');
     }
 
     public function renameIco()
@@ -990,9 +992,12 @@ class GenerateWebSiteCommandNew extends Command
         $newPath = $directory . '/favicon' . '.' . $extension;
         // 检查新文件名是否已存在
         if (file_exists($newPath)) {
-            throw new \RuntimeException("目标文件已存在: {$newPath}");
+            if (!unlink($newPath)) {
+                throw new \RuntimeException("无法删除已存在的目标文件: {$newPath}");
+            }
         }
         Log::info('重命名favicon完成');
+        $this->info('重命名favicon完成');
         // 执行重命名
         return rename($oldPath, $newPath);
 
