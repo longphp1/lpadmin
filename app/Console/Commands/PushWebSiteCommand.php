@@ -87,9 +87,11 @@ class PushWebSiteCommand extends Command
             Log::info('平台目录不存在:'.$sourceDir);
             return false;
         }
+
         $destinationDir='D:\phpstudy_pro\WWW\taoobuy';
 
         $gitBranch= strtolower($platformName);
+        $this->info('推送分支:'.$platformName);
         // 定位到 Git 仓库的目录
         chdir($destinationDir); // 修改为你的项目路径
 
@@ -97,24 +99,31 @@ class PushWebSiteCommand extends Command
 
         exec('git reset --hard HEAD');
         Log::info('重置本地仓库到最新提交');
+        $this->info('重置本地仓库到最新提交');
         exec('git clean -fd');
         Log::info('清除本地未跟踪文件');
+        $this->info('清除本地未跟踪文件');
         exec('git checkout '.$gitBranch);
         Log::info('切换到分支:'.$gitBranch);
+        $this->info('切换到分支:'.$gitBranch);
         exec('git pull origin '.$gitBranch);
         Log::info('拉取远程仓库最新代码');
+        $this->info('拉取远程仓库最新代码');
         $this->copyFile($sourceDir,$destinationDir);
 
         // 添加所有更改到暂存区
         exec('git add .');
         Log::info('添加所有更改到暂存区');
+        $this->info('添加所有更改到暂存区');
         $commitText='System auto update platform code time:'.date('Y-m-d H:i:s');
         // 提交更改到本地仓库
         exec('git commit -m "'.$commitText.'"');
         Log::info('提交更改到本地仓库:'.$commitText);
+        $this->info('提交更改到本地仓库:'.$commitText);
         // 推送到远程仓库，例如 origin 的 $gitBranch 分支
         exec('git push origin '.$gitBranch);
         Log::info('推送到远程仓库:'.$gitBranch);
+        $this->info('推送到远程仓库:'.$gitBranch);
         return 'Code pushed successfully.';
     }
 
@@ -148,9 +157,11 @@ class PushWebSiteCommand extends Command
                 // 如果是文件，直接复制（会覆盖已存在的文件）
                 $files->copy($item->getPathname(), $target);
                 Log::info('文件复制成功:'.$target);
+                $this->info('文件复制成功:'.$target);
             }
         }
         Log::info('文件复制完成');
+        $this->info('文件复制完成');
         return true; // 复制成功
     }
 
