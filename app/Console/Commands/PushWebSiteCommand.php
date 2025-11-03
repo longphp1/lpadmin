@@ -64,7 +64,10 @@ class PushWebSiteCommand extends Command
                 $platform->status = 'push_success';
                 $platform->push_at = \Carbon\Carbon::now()->toDateTimeString();
                 $platform->save();
-                Log::info('平台ID:'.$platform->platform_name.' 推送成功');
+                Log::info('平台:'.$platform->platform_name.' 推送成功');
+                $this->info('平台:'.$platform->platform_name.' 推送成功');
+                sleep(5);
+                $this->info('等待5秒后继续推送下一个平台');
             } catch (\Exception $e) {
                 $this->error('平台ID:'.$platform->platform_name.' 推送失败 error:'.$e->getMessage());
                 Log::error('平台ID:'.$platform->platform_name.' 推送失败 error:'.$e->getMessage());
