@@ -50,6 +50,7 @@ class WebSiteMenuController extends BaseController
                     'min_logo'         => $menu->menu_url,
                     'range'            => $menu->range,
                     'type'             => $menu->type,
+                    'type_name'        => WebSiteConfig::$menuType[$menu->type]['name'],
                     'status'           => $menu->status,
                     'meta_keyword'     => $menu->meta_keyword,
                     'meta_description' => $menu->meta_description,
@@ -123,11 +124,11 @@ class WebSiteMenuController extends BaseController
      */
     public function edit(Request $request, $id)
     {
-        $data           = MenuConfig::query()->find($id);
+        $menuData           = MenuConfig::query()->find($id);
         $siteConfigList = WebSiteConfig::query()->select(['id', 'name'])->get();
         $menuType       = WebSiteConfig::$menuType;
         $statusList     = WebSiteConfig::$statusList;
-        return view('website.menu.edit', compact('data', 'siteConfigList', 'menuType', 'statusList'));
+        return view('website.menu.edit', compact('menuData', 'siteConfigList', 'menuType', 'statusList'));
     }
 
     /**

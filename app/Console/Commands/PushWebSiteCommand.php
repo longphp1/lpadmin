@@ -51,6 +51,8 @@ class PushWebSiteCommand extends Command
      */
     public function handle(): int
     {
+
+
         $platformList = WebsitePlatform::where('status', 'update_success')->get();
         foreach ($platformList as $platform) {
 
@@ -92,7 +94,6 @@ class PushWebSiteCommand extends Command
         }
 
         $destinationDir='D:\phpstudy_pro\WWW\taoobuy';
-
         $gitBranch= strtolower($platformName);
         $this->info('推送分支:'.$platformName);
         // 定位到 Git 仓库的目录
@@ -112,6 +113,8 @@ class PushWebSiteCommand extends Command
         exec('git pull origin '.$gitBranch);
         Log::info('拉取远程仓库最新代码');
         $this->info('拉取远程仓库最新代码');
+        $this->deleteDirectory($destinationDir);
+        $this->info('删除原始数据成功');
         $this->copyFile($sourceDir,$destinationDir);
 
         // 添加所有更改到暂存区
@@ -166,6 +169,32 @@ class PushWebSiteCommand extends Command
         Log::info('文件复制完成');
         $this->info('文件复制完成');
         return true; // 复制成功
+    }
+
+    function deleteDirectory($dirPath) {
+        $files = new \Illuminate\Filesystem\Filesystem(); // 使用 Laravel Filesystem 类
+
+        if (!$files->exists($dirPath)) {
+            return true;
+        }
+
+        // 先删除所有非 .git 的子目录（递归删除目录及内容）
+        foreach ($files->directories($dirPath) as $subDir) {
+            $subDirName = basename($subDir);
+            if ($subDirName === '.git') {
+                continue; // 跳过 .git 目录
+            }
+            $this->info('删除目录: ' . $subDir);
+            $files->deleteDirectory($subDir); // 递归删除子目录及所有内容
+        }
+
+        // 再删除根目录下的所有文件
+        foreach ($files->files($dirPath) as $file) {
+            $this->info('删除文件: ' . $file->getPathname());
+            $files->delete($file->getPathname());
+        }
+
+        return true;
     }
 
 }

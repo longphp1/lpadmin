@@ -177,9 +177,9 @@ class GenerateWebSiteCommandNew extends Command
         $brandList[] = 'All';
         foreach ($brandList as $brand) {
             if ($brand == 'All') {
-                $productList = ProductMenu::query()->where('site_id', $this->site_id)->get();
+                $productList = ProductMenu::query()->where('site_id', $this->site_id)->orderBy('id', 'desc')->orderBy('updated_at', 'desc')->get();
             } else {
-                $productList = ProductMenu::query()->where('site_id', $this->site_id)->where('brand', $brand)->get();
+                $productList = ProductMenu::query()->where('site_id', $this->site_id)->where('brand', $brand)->orderBy('id', 'desc')->orderBy('updated_at', 'desc')->get();
             }
             $total       = count($productList);
             $maxPage     = ceil(count($productList) / 50);
@@ -215,9 +215,9 @@ class GenerateWebSiteCommandNew extends Command
             $brandList[] = 'All';
             foreach ($brandList as $brand) {
                 if ($brand == 'All') {
-                    $productList = ProductMenu::query()->where('site_id', $this->site_id)->where('menu_id', $productMenu->id)->get();
+                    $productList = ProductMenu::query()->where('site_id', $this->site_id)->where('menu_id', $productMenu->id)->orderBy('id', 'desc')->orderBy('updated_at', 'desc')->get();
                 } else {
-                    $productList = ProductMenu::query()->where('site_id', $this->site_id)->where('menu_id', $productMenu->id)->where('brand', $brand)->get();
+                    $productList = ProductMenu::query()->where('site_id', $this->site_id)->where('menu_id', $productMenu->id)->where('brand', $brand)->orderBy('id', 'desc')->orderBy('updated_at', 'desc')->get();
                 }
                 $total       = count($productList);
                 $maxPage     = ceil(count($productList) / 50);
@@ -521,7 +521,7 @@ class GenerateWebSiteCommandNew extends Command
 
     public function createProductDetailHtml()
     {
-        $productList = ProductMenu::query()->with(['local', 'menu'])->where('site_id', $this->site_id)->get();
+        $productList = ProductMenu::query()->with(['local', 'menu'])->where('site_id', $this->site_id)->orderBy('id', 'desc')->orderBy('updated_at', 'desc')->get();
 
         foreach ($productList as $product) {
             $newProductName = preg_replace('/[^a-zA-Z0-9 ]/', '', $product->name);

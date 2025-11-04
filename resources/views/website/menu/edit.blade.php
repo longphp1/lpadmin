@@ -52,7 +52,7 @@
                         <div class="layui-input-block">
                             <select name="type" id="type" >
                                 @foreach($menuType as $menu)
-                                    <option value="{{ $menu['type'] }}">{{ $menu['name'] }}</option>
+                                    <option value="{{ $menu['type'] }}" {{ isset($menuData->type) && $menuData->type == $menu['type'] ? 'selected' : '' }}>{{ $menu['name'] }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -112,8 +112,8 @@
 
             // 相关接口
             const PRIMARY_KEY = "id";
-            const SELECT_API = "{{ route('lpadmin.website.menu.show', $admin->id ?? ':id') }}";
-            const UPDATE_API = "{{ route('lpadmin.website.menu.update', $admin->id ?? ':id') }}";
+            const SELECT_API = "{{ route('lpadmin.website.menu.show', $menuData->id ?? ':id') }}";
+            const UPDATE_API = "{{ route('lpadmin.website.menu.update', $menuData->id ?? ':id') }}";
 
 
             // 获取数据库记录
@@ -127,7 +127,7 @@
 
                 // 从URL获取ID
                 let urlParams = new URLSearchParams(window.location.search);
-                let adminId = urlParams.get('id') || '{{ $admin->id ?? "" }}';
+                let adminId = urlParams.get('id') || '{{ $menuData->id ?? "" }}';
 
                 if (adminId) {
                     let apiUrl = SELECT_API.replace(':id', adminId);

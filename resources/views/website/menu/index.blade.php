@@ -131,7 +131,7 @@
                         field: "range",
                     },{
                         title: "分类类型",
-                        field: "type",
+                        field: "type_name",
                     },{
 						title: "分类关键字",
 						field: "meta_keyword",
