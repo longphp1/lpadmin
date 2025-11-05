@@ -409,7 +409,7 @@ class GenerateWebSiteCommandNew extends Command
             if ($menu->menu_name == 'Home') {
                 $menuUrl = '/';
             } else {
-                $menuUrl = '/item-type/' . $menu->menu_url . '/All';
+                $menuUrl = '/item-type/' . $menu->menu_url . '/All/';
             }
             if ($menu->menu_name == $menu_name) {
 
