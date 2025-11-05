@@ -61,6 +61,7 @@ class GenerateWebSiteCommandNew extends Command
      */
     public function handle(): int
     {
+
         //where('status', 'update_pending')->
         $platformList = WebsitePlatform::get();
         foreach ($platformList as $platform) {
@@ -108,7 +109,7 @@ class GenerateWebSiteCommandNew extends Command
         $this->fileName  = $this->websiteName;
         $sourcePath      = public_path('baseNew');
         $destinationPath = public_path($this->fileName);
-
+        $this->deleteDirectory($destinationPath);
         // 确保目标目录存在
         if (!File::exists($destinationPath)) {
             File::makeDirectory($destinationPath, 0755, true);
@@ -1001,6 +1002,21 @@ class GenerateWebSiteCommandNew extends Command
         // 执行重命名
         return rename($oldPath, $newPath);
 
+    }
+
+    function deleteDirectory($dirPath) {
+        $files = new \Illuminate\Filesystem\Filesystem(); // 使用 Laravel Filesystem 类
+
+        if (!$files->exists($dirPath)) {
+            $this->info('目录不存在: ' . $dirPath);
+            return true;
+        }
+
+        // 清空目录内所有文件和子目录（保留目录本身）
+        $files->cleanDirectory($dirPath);
+        $this->info('成功删除目录下所有内容: ' . $dirPath);
+
+        return true;
     }
 }
 
