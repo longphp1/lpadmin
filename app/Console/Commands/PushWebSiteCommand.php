@@ -113,10 +113,24 @@ class PushWebSiteCommand extends Command
         exec('git pull origin '.$gitBranch);
         Log::info('拉取远程仓库最新代码');
         $this->info('拉取远程仓库最新代码');
+
         $this->deleteDirectory($destinationDir);
         $this->info('删除原始数据成功');
-        $this->copyFile($sourceDir,$destinationDir);
+        exec('git add .');
+        Log::info('删除原始数据成功,添加所有更改到暂存区');
+        $this->info('删除原始数据成功,添加所有更改到暂存区');
+        $commitText='System auto delete platform code time:'.date('Y-m-d H:i:s');
+        // 提交更改到本地仓库
+        exec('git commit -m "'.$commitText.'"');
+        Log::info('删除原始数据成功,提交更改到本地仓库:'.$commitText);
+        $this->info('删除原始数据成功,提交更改到本地仓库:'.$commitText);
+        // 推送到远程仓库，例如 origin 的 $gitBranch 分支
+        exec('git push origin '.$gitBranch);
+        Log::info('删除原始数据成功,推送到远程仓库:'.$gitBranch);
+        $this->info('删除原始数据成功,推送到远程仓库:'.$gitBranch);
 
+        $this->info('复制最新的数据到目标目录');
+        $this->copyFile($sourceDir,$destinationDir);
         // 添加所有更改到暂存区
         exec('git add .');
         Log::info('添加所有更改到暂存区');
