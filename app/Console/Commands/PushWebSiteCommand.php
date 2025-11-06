@@ -110,6 +110,9 @@ class PushWebSiteCommand extends Command
         exec('git checkout '.$gitBranch);
         Log::info('切换到分支:'.$gitBranch);
         $this->info('切换到分支:'.$gitBranch);
+        exec('git clean -fd');
+        Log::info('清除本地未跟踪文件');
+        $this->info('清除本地未跟踪文件');
         exec('git pull origin '.$gitBranch);
         Log::info('拉取远程仓库最新代码');
         $this->info('拉取远程仓库最新代码');
