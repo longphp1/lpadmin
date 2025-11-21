@@ -146,13 +146,13 @@
                 title: "Discord URL",
                 field: "discord_url",
             }, {
-                title: "平台名称",
+                title: "平台关键词",
                 field: "meta_keyword",
             }, {
-                title: "平台名称",
+                title: "平台描述",
                 field: "meta_description",
             }, {
-                title: "平台名称",
+                title: "平台标题",
                 field: "meta_title",
             }, {
                 title: "创建时间",

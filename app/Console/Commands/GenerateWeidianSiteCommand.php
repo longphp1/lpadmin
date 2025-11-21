@@ -14,14 +14,14 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 
-class GenerateWebSiteCommandNew extends Command
+class GenerateWeidianSiteCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'generate:website_new';
+    protected $signature = 'generate:weidian_site';
 
     /**
      * The console command description.
@@ -36,14 +36,12 @@ class GenerateWebSiteCommandNew extends Command
 
     public $initProductImage = false;
 
-    public $websiteName = 'Taoobuy';
+    public $websiteName = 'Weidian';
 
-    public $websiteTitle = 'Taoobuy';
+    public $productPlatform = 'Taoobuy';
+    public $websiteHeader = 'Spreadsheet For All Agents';
     public $websiteUrl = 'https://www.taoobuy.com/en_US';  //https://www.taoobuy.com/en_US  https://cnfans.com  //https://acbuy.com/home   https://mulebuy.com/  https://kakobuy.com/
 
-
-    public $websiteNameList = ['Kakobuy' => 'Kakobuy', 'Taoobuy' => 'Taoobuy', 'Cnfans' => 'Cnfans', 'Acbuy' => 'Acbuy', 'Mulebuy' => 'Mulebuy'];
-    public $websiteUrlList = ['Kakobuy' => 'https://kakobuy.com', 'Taoobuy' => 'https://www.taoobuy.com/en_US', 'Cnfans' => 'https://cnfans.com', 'Acbuy' => 'https://acbuy.com/home', 'Mulebuy' => 'https://mulebuy.com'];
 
     /**
      * Create a new command instance.
@@ -65,12 +63,11 @@ class GenerateWebSiteCommandNew extends Command
     {
 
         //where('status', 'update_pending')->
-        $platformList = WebsitePlatform::get();
+        $platformList = WebsitePlatform::where('platform','Weidian')->get();
         foreach ($platformList as $platform) {
             $this->site_id     = $platform->site_id;
             $this->websiteName = $platform->platform_name;
             $this->websiteUrl  = $platform->platform_url;
-            $this->websiteTitle  = $platform->meta_title;
             $this->siteConfig  = WebSiteConfig::query()->find($platform->site_id);
             if (empty($this->websiteName) || empty($this->websiteUrl)){
                 $this->error('请输入网站名称和网站URL');
@@ -81,6 +78,7 @@ class GenerateWebSiteCommandNew extends Command
                 $this->generateWeb();
                 $platform->status='update_success';
                 $platform->save();
+                break;
             } catch (\Exception $e) {
                 $this->error('生成网站:'.$this->websiteName.' 网站URL:'.$this->websiteUrl.' error:'.$e->getMessage());
             }
@@ -306,16 +304,28 @@ class GenerateWebSiteCommandNew extends Command
         <div class="container flex" >
             <div class="auto">
                 <a href="/" class="logo">
-                    <h1>' . $this->websiteName . ' Spreadsheet</h1>
+                    <h1>' . $this->websiteHeader . '</h1>
                 </a>
             </div>
             <div class="nav">
                 <a href="#faq">FAQ</a>
                 <a href="/howTo">How-To</a>
                 <a href="' . $this->websiteUrl . '" target="_blank">Get more discounts</a>
-                <a href="' . $this->websiteUrl . '" class="btn">
-                    <span class="inner">Join the ' . $this->websiteName . '</span>
-                </a>
+                <a href="#" class="btn">
+                <select class="inner selectIn"   onchange="if(this.value) window.location.href=this.value">
+                    <option value="https://www.taoobuy.com/en_US">Join TaooBuy</option>
+                    <option value="https://kakobuy.com">Join Kakobuy</option>
+                    <option value="https://mulebuy.com">Join Mulebuy</option>
+                    <option value="https://joyagoo.com">Join Joyagoo</option>
+                    <option value="https://oopbuy.com">Join Oopbuy</option>
+                    <option value="https://hoobuy.com">Join HooBuy</option>
+                    <option value="https://cnfans.com">Join Canfans</option>
+                    <option value="https://www.cssbuy.com">Join Cssbuy</option>
+                    <option value="https://acbuy.com">Join Acbuy</option>
+                    <option value="https://www.allchinabuy.com">Join Allchinabuy</option>
+                    <option value="https://www.superbuy.com">Join Superbuy</option>
+                </select>
+            </a>
 
             </div>
         </div>
@@ -335,7 +345,7 @@ class GenerateWebSiteCommandNew extends Command
   <!-- common footer -->
   <footer>
         <div class="container" id="footer">
-            <div>&copy; ' . $this->websiteName . ' Spreadsheet. 2025</div>
+            <div>&copy; ' . $this->websiteHeader . ' . 2025</div>
             <div>
                 <img src="/img/discord.png" alt="">
                 <img src="/img/reddit.png" alt="">
@@ -349,7 +359,7 @@ class GenerateWebSiteCommandNew extends Command
       <div>Send product photos to our customer service, and they"ll help you find what you"re looking for！</div>
       <div>Ready to place an order? contact our customer service on discord to get a more discount！</div>
     </div>
-    <a href="' . $this->websiteUrl . '" class="link">Join  ' . $this->websiteName . '</a>
+    <a href="' . $this->websiteUrl . '" class="link">Join  ' . $this->productPlatform . '</a>
   </div>
   <script type="text/javascript" src="/js/site.js"></script>
 </body>
@@ -376,7 +386,10 @@ class GenerateWebSiteCommandNew extends Command
     {
         if ($menu_name == 'Home') {
             return '<div class="color-title">
-                        <span><a href="/">' . $this->websiteName . '</a></span>
+                        <span><a href="/">' . $this->websiteHeader . '</a></span>
+                        <div>
+                                <img src="/img/header.png" alt="" width="80%"/>
+                        </div>
                         <div class="textDesc">
                             <p>            1、The website is a ' . $this->websiteName . ' spreadsheet containing over 5,000+ ' . $this->websiteName . ' popular Chinese products. New and cheap products are updated every day.</p>
                             <p>            2、You can use "Ctrl+D" to add this ' . $this->websiteName . ' spreadsheet to your bookmarks list.</p>
@@ -473,8 +486,8 @@ class GenerateWebSiteCommandNew extends Command
                             <a href="' . $productUrl . '" target="_blank">$' . $product->price . '</a>
                           </div>
 
-                          <a href="' . $productUrl . '" target="_blank" class="buy">View details and Buy on ' . $this->websiteName . '</a>
-                          <a href="javascript:" class="join-btn">Join ' . $this->websiteName . ' for more discounts</a>
+                          <a href="' . $productUrl . '" target="_blank" class="buy">View details</a>
+                          <a href="javascript:" class="join-btn">Join ' . $this->productPlatform . ' for more discounts</a>
                         </div>
                       </div>';
         }
@@ -596,16 +609,28 @@ class GenerateWebSiteCommandNew extends Command
             <div class="auto">
 
                 <a href="/" class="logo1">
-                    ' . $this->websiteName . ' Spreadsheet
+                    ' . $this->websiteHeader . '
                 </a>
             </div>
             <div class="nav">
                 <a href="#faq">FAQ</a>
                 <a href="/howTo">How-To</a>
                 <a href="' . $this->websiteUrl . '" target="_blank">Get more discounts</a>
-                <a href="' . $this->websiteUrl . '" class="btn">
-                    <span class="inner">Join the ' . $this->websiteName . '</span>
-                </a>
+                <a href="#" class="btn">
+                <select class="inner selectIn"   onchange="if(this.value) window.location.href=this.value">
+                    <option value="https://www.taoobuy.com/en_US">Join TaooBuy</option>
+                    <option value="https://kakobuy.com">Join Kakobuy</option>
+                    <option value="https://mulebuy.com">Join Mulebuy</option>
+                    <option value="https://joyagoo.com">Join Joyagoo</option>
+                    <option value="https://oopbuy.com">Join Oopbuy</option>
+                    <option value="https://hoobuy.com">Join HooBuy</option>
+                    <option value="https://cnfans.com">Join Canfans</option>
+                    <option value="https://www.cssbuy.com">Join Cssbuy</option>
+                    <option value="https://acbuy.com">Join Acbuy</option>
+                    <option value="https://www.allchinabuy.com">Join Allchinabuy</option>
+                    <option value="https://www.superbuy.com">Join Superbuy</option>
+                </select>
+            </a>
 
             </div>
         </div>
@@ -613,7 +638,7 @@ class GenerateWebSiteCommandNew extends Command
 <section class="breadcrumbs">
   <div class="container">
     <h3>
-    <a href="/">' . $this->websiteName . ' Spreadsheet</a>
+    <a href="/">' . $this->websiteHeader . '</a>
     <span>/</span>
     <a href="/?category=10" >' . $menu_name . '</a>
     <span>/</span>
@@ -662,7 +687,7 @@ class GenerateWebSiteCommandNew extends Command
     </section>
 <footer>
         <div class="container" id="footer">
-            <div>&copy; ' . $this->websiteName . ' Spreadsheet. 2025</div>
+            <div>&copy; ' . $this->websiteHeader . ' . 2025</div>
             <div>
                 <img src="/img/discord.png" alt="">
                 <img src="/img/reddit.png" alt="">
@@ -676,7 +701,7 @@ class GenerateWebSiteCommandNew extends Command
       <div>Send product photos to our customer service, and they"ll help you find what you"re looking for！</div>
       <div>Ready to place an order? contact our customer service on discord to get a more discount！</div>
   </div>
-  <a href="' . $this->websiteUrl . '" class="link">Join ' . $this->websiteName . '</a>
+  <a href="' . $this->websiteUrl . '" class="link">Join ' . $this->productPlatform . '</a>
 </div>
 <script type="text/javascript" src="/js/site.js"></script>
 </body>
@@ -982,6 +1007,7 @@ class GenerateWebSiteCommandNew extends Command
     {
         $dir     = $this->websiteName;
         $icoName = $this->websiteName . '.ico';
+
         $oldPath = public_path($dir . '/' . $icoName);
         // 检查原文件是否存在
         if (!file_exists($oldPath)) {

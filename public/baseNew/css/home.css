@@ -47,6 +47,10 @@ a {
   background: linear-gradient(180deg, #34363d, #21242a, #434750);
   overflow: hidden;
 }
+.btn .selectIn {
+    color: #537ef7;
+    font-weight: bold;
+}
 .btn span,
 .btn img {
   vertical-align: middle;

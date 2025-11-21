@@ -15,9 +15,9 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-/public/baseNew
 /public/Acbuy
 /public/Cnfans
 /public/Kakobuy
 /public/Mulebuy
 /public/TaooBuy
+/public/Weidian
