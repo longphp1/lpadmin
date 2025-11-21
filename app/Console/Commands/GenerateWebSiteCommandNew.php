@@ -94,7 +94,7 @@ class GenerateWebSiteCommandNew extends Command
     public function generateWeb()
     {
         if(!$this->initProductImage){
-            //$this->productDownloadImage();
+            $this->productDownloadImage();
             $this->initProductImage = true;
         }
         $this->copyWebsitFile();
