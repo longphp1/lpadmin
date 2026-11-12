@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\GenerateNextWebSiteEvent;
 use App\Events\GenerateWebSiteEvent;
+use App\Listeners\GenerateNextWebSiteListener;
 use App\Listeners\GenerateWebSiteListener;
 use App\Listeners\LogDBQuery;
 use Illuminate\Auth\Events\Registered;
@@ -27,6 +29,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         GenerateWebSiteEvent::class => [
             GenerateWebSiteListener::class,
+        ],
+        GenerateNextWebSiteEvent::class => [
+            GenerateNextWebSiteListener::class,
         ],
     ];
 

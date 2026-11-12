@@ -398,6 +398,7 @@ Route::group($groupConfig, function () {
                 Route::post('/store', [WebSitePlatformController::class, 'store'])->name('store');
                 Route::delete('/{id}', [WebSitePlatformController::class, 'destroy'])->name('destroy');
                 Route::post('/updatePlatform', [WebSitePlatformController::class, 'updatePlatform'])->name('updatePlatform');
+                Route::post('/updateNextPlatform', [WebSitePlatformController::class, 'updateNextPlatform'])->name('updateNextPlatform');
                 Route::post('/pushPlatform', [WebSitePlatformController::class, 'pushPlatform'])->name('pushPlatform');
             });
         });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Website;
 
+use App\Events\GenerateNextWebSiteEvent;
 use App\Events\GenerateWebSiteEvent;
 use App\Http\Controllers\LPadmin\BaseController;
 use App\Models\LPadmin\Website\HomeMenu;
@@ -193,6 +194,22 @@ class WebSitePlatformController extends BaseController
         }
         WebsitePlatform::whereIn('id', $ids)->update(['status' => 'update_pending','updated_at'=>Carbon::now()->toDateTimeString()]);
         Event::dispatch(new GenerateWebSiteEvent());
+        return $this->success([]);
+    }
+
+    public function updateNextPlatform(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        if (empty($ids)) {
+            return $this->error('请选择要生成的平台');
+        }
+        dispatch(function () {
+            try {
+                Event::dispatch(new GenerateNextWebSiteEvent());
+            } catch (\Throwable $e) {
+                Log::error('generate:website_next 执行失败: ' . $e->getMessage());
+            }
+        })->afterResponse();
         return $this->success([]);
     }
 

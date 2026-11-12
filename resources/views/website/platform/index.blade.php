@@ -65,11 +65,15 @@
     </button>
     <button class="pear-btn pear-btn-normal pear-btn-sm" lay-event="updatePlatform">
         <i class="layui-icon layui-icon-export"></i>
-        更新平台网站
+        生成Html平台网站源码
+    </button>
+    <button class="pear-btn pear-btn-success pear-btn-sm" lay-event="updateNextPlatform">
+        <i class="layui-icon layui-icon-export"></i>
+        生成Next平台网站源码
     </button>
     <button class="pear-btn pear-btn-warm pear-btn-sm" lay-event="pushPlatform">
         <i class="layui-icon layui-icon-upload"></i>
-        推送平台网站
+        推送Html平台网站源码到GIT
     </button>
 </script>
 
@@ -94,6 +98,7 @@
     const SELECT_API = "{{ route('lpadmin.website.platform.index') }}";
     const PUSH_PLATFORM_API = "{{ route('lpadmin.website.platform.pushPlatform') }}";
     const UPDATE_PLATFORM_API = "{{ route('lpadmin.website.platform.updatePlatform') }}";
+    const UPDATE_NEXT_PLATFORM_API = "{{ route('lpadmin.website.platform.updateNextPlatform') }}";
     const UPDATE_API = "{{ route('lpadmin.website.platform.update', ':id') }}";
     const DELETE_API = "{{ route('lpadmin.website.platform.destroy', ':id') }}";
     const INSERT_URL = "{{ route('lpadmin.website.platform.create') }}";
@@ -253,6 +258,8 @@
                 refreshTable();
             } else if (obj.event === "updatePlatform") {
                 updatePlatform(obj);
+            } else if (obj.event === "updateNextPlatform") {
+                updateNextPlatform(obj);
             } else if (obj.event === "pushPlatform") {
                 pushPlatform(obj);
             }
@@ -323,6 +330,31 @@
             let loading = layer.load();
             $.ajax({
                 url: UPDATE_PLATFORM_API,
+                data: {
+                    ids: checkIds,
+                    '_token': $('meta[name="csrf-token"]').attr('content')
+                },
+                dataType: "json",
+                type: "post",
+                success: function (res) {
+                    layer.close(loading);
+                    if (res.code !== 0) {
+                        return layui.popup.failure(res.message);
+                    }
+                    return layui.popup.success("操作成功", refreshTable);
+                }
+            });
+        }
+        let updateNextPlatform = function (obj) {
+            let checkIds = common.checkField(obj, PRIMARY_KEY);
+            if (checkIds === "") {
+                layui.popup.warning("未选中数据");
+                return false;
+            }
+            checkIds = checkIds.split(",");
+            let loading = layer.load();
+            $.ajax({
+                url: UPDATE_NEXT_PLATFORM_API,
                 data: {
                     ids: checkIds,
                     '_token': $('meta[name="csrf-token"]').attr('content')
