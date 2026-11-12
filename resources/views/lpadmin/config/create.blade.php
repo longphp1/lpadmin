@@ -12,26 +12,26 @@
             color: red;
             margin-right: 4px;
         }
-        
+
         .options-config {
             display: none;
             margin-top: 10px;
         }
-        
+
         .option-item {
             display: flex;
             align-items: center;
             margin-bottom: 10px;
         }
-        
+
         .option-item input {
             margin-right: 10px;
         }
-        
+
         .option-item .layui-btn {
             margin-left: 10px;
         }
-        
+
         .type-description {
             color: #999;
             font-size: 12px;
@@ -176,7 +176,7 @@
             const layer = layui.layer;
 
             const STORE_API = "{{ route('lpadmin.config.store') }}";
-            const GROUPS_API = "{{ route('lpadmin.config.groups') }}";
+            const GROUPS_API = "{{ route('lpadmin.config.groups.index') }}";
 
             // 需要选项配置的类型
             const optionTypes = ['select', 'radio', 'checkbox'];
@@ -188,7 +188,7 @@
             form.on('select(type-change)', function(data) {
                 const type = data.value;
                 const optionsConfig = $('#options-config');
-                
+
                 if (optionTypes.includes(type)) {
                     optionsConfig.show();
                     // 如果没有选项，添加默认选项
@@ -245,7 +245,7 @@
             // 表单提交
             form.on('submit(submit)', function(data) {
                 const field = data.field;
-                
+
                 // 处理选项配置
                 if (optionTypes.includes(field.type)) {
                     const options = {};
