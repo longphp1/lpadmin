@@ -31,4 +31,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'hiobuy' => [
+        'key' => env('HIOBUY_API_KEY'),
+        'base_url' => env('HIOBUY_API_BASE', 'https://api.hiobuy.com'),
+    ],
+
 ];

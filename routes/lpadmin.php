@@ -379,6 +379,7 @@ Route::group($groupConfig, function () {
                 Route::put('/update/{id}', [WebSiteProductController::class, 'update'])->name('update');
                 Route::get('/create', [WebSiteProductController::class, 'create'])->name('create');
                 Route::post('/store', [WebSiteProductController::class, 'store'])->name('store');
+                Route::post('/fetch-source', [WebSiteProductController::class, 'fetchSource'])->name('fetch_source');
                 Route::delete('/{id}', [WebSiteProductController::class, 'destroy'])->name('destroy');
                 Route::post('/batch-delete', [WebSiteProductController::class, 'batchDelete'])->name('batch_delete');
                 Route::get('/export', [WebSiteProductController::class, 'exportProduct'])->name('export');

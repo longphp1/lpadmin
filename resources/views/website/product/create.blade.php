@@ -37,6 +37,15 @@
 
 
                     <div class="layui-form-item">
+                        <label class="layui-form-label">来源商品URL</label>
+                        <div class="layui-input-block" style="display:flex;gap:8px;">
+                            <input type="text" id="fetch_url" placeholder="1688、淘宝、微店商品链接" class="layui-input">
+                            <button type="button" class="pear-btn pear-btn-primary pear-btn-md" id="fetch-product">查询商品</button>
+                        </div>
+                        <div class="layui-input-block" style="color:#888;padding-top:6px;">查询后会填入下方商品信息，确认分类后提交</div>
+                    </div>
+
+                    <div class="layui-form-item">
                         <label class="layui-form-label required">商品名称</label>
                         <div class="layui-input-block">
                             <input type="text" name="name" value="" required lay-verify="required" class="layui-input">
@@ -65,9 +74,23 @@
                     </div>
 
                     <div class="layui-form-item">
+                        <label class="layui-form-label">商品ID</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="source_product_id" value="" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
                         <label class="layui-form-label">商品链接</label>
                         <div class="layui-input-block">
                             <input type="text" name="source_product_url" value="" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">商品子图</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="img" value="" class="layui-input">
                         </div>
                     </div>
 
@@ -137,10 +160,44 @@
 
             // 相关接口
             const INSERT_API = "{{ route('lpadmin.website.product.store') }}";
+            const FETCH_SOURCE_API = "{{ route('lpadmin.website.product.fetch_source') }}";
 
 
             //提交事件
-            layui.use(["form", "popup"], function () {
+            layui.use(["form", "popup", "layer"], function () {
+                let $ = layui.$;
+
+                $('#fetch-product').on('click', function () {
+                    let url = $.trim($('#fetch_url').val());
+                    if (!url) {
+                        return layui.popup.warning("请输入商品链接");
+                    }
+                    let loading = layui.layer.load();
+                    $.ajax({
+                        url: FETCH_SOURCE_API,
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            url: url,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function (res) {
+                            layui.layer.close(loading);
+                            if (res.code !== 0) {
+                                return layui.popup.failure(res.message);
+                            }
+                            let product = res.data || {};
+                            $.each(product, function (key, value) {
+                                $('input[name="' + key + '"]').val(value == null ? '' : value);
+                            });
+                            return layui.popup.success("已填入商品信息，请确认后提交");
+                        },
+                        error: function () {
+                            layui.layer.close(loading);
+                            return layui.popup.failure("查询商品失败");
+                        }
+                    });
+                });
 
                 // 表单提交处理
                 layui.form.on("submit(save)", function (data) {

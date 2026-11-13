@@ -36,6 +36,14 @@
                     </div>
 
                     <div class="layui-form-item">
+                        <label class="layui-form-label">文件说明</label>
+                        <div class="layui-input-block" style="color:#666;line-height:1.8;padding-top:8px;">
+                            保留原导入格式：分类、品牌、商品名称、价格、主图、子图、主购买链接、taoobuy链接。<br>
+                            另支持只有一列的文件，表头为「来源商品URL(Source Product URL)」，单元格填写 1688、淘宝或微店商品链接。该格式按上方选择的网站和商品分类导入，并调用接口补全商品信息。
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
                         <label class="layui-form-label required">商品文件</label>
                         <div class="layui-input-block">
                             <input type="file" name="file"  id="upload-btn"  lay-options="{accept: 'file'}" class="layui-input">
@@ -103,7 +111,7 @@
                     done: function(res){
                         // 上传完成处理
                         if(res.code === 0){
-                            layui.popup.success("导入成功", function(){
+                            layui.popup.success(res.message || "导入成功", function(){
                                 parent.refreshTable();
                                 parent.layer.close(parent.layer.getFrameIndex(window.name));
                             });

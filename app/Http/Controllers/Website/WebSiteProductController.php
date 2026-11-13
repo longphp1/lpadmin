@@ -8,6 +8,7 @@ use App\Imports\ProductImport;
 use App\Models\LPadmin\Website\MenuConfig;
 use App\Models\LPadmin\Website\ProductMenu;
 use App\Models\LPadmin\Website\WebSiteConfig;
+use App\Services\Website\HiobuyProductService;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -117,16 +118,27 @@ class WebSiteProductController extends BaseController
         $data    = $request->validate([
             'site_id'           => 'required|integer',
             'menu_id'           => 'required|integer',
-            'name'              => 'sometimes|nullable|string',
-            'price'             => 'sometimes|nullable|string',
-            'main_img'          => 'sometimes|nullable|string',
-            'img'               => 'sometimes|nullable|string',
-            'main_buy_link'     => 'sometimes|nullable|string',
-            'main_buy_platform' => 'sometimes|nullable|string',
-            'note_link'         => 'sometimes|nullable|string',
-            'note_content'      => 'sometimes|nullable|string',
-            'brand'             => 'sometimes|nullable|string',
+            'name'               => 'sometimes|nullable|string',
+            'price'              => 'sometimes|nullable|string',
+            'main_img'           => 'sometimes|nullable|string',
+            'img'                => 'sometimes|nullable|string',
+            'source'             => 'sometimes|nullable|string',
+            'source_product_id'  => 'sometimes|nullable|string',
+            'source_product_url' => 'sometimes|nullable|string',
+            'main_buy_link'      => 'sometimes|nullable|string',
+            'main_buy_platform'  => 'sometimes|nullable|string',
+            'note_link'          => 'sometimes|nullable|string',
+            'note_content'       => 'sometimes|nullable|string',
+            'brand'              => 'sometimes|nullable|string',
         ]);
+        $source = trim((string) ($data['source'] ?? ''));
+        if ($source === '') {
+            $source = $data['main_buy_platform'] ?? '';
+        }
+        $sourceProductUrl = trim((string) ($data['source_product_url'] ?? ''));
+        if ($sourceProductUrl === '') {
+            $sourceProductUrl = $data['main_buy_link'] ?? '';
+        }
         $product = [
             'site_id'            => $data['site_id'],
             'menu_id'            => $data['menu_id'],
@@ -136,9 +148,10 @@ class WebSiteProductController extends BaseController
             'price'              => $data['price'],
             'main_img'           => $data['main_img'],
             'img'                => $data['img']??'',
-            'source'             => $data['main_buy_platform'],
-            'source_product_url' => $data['main_buy_link'],
-            'main_buy_link'      => $data['main_buy_link'],
+            'source'             => $source,
+            'source_product_id'  => $data['source_product_id'] ?? '',
+            'source_product_url' => $sourceProductUrl,
+            'main_buy_link'      => $data['main_buy_link'] ?? $sourceProductUrl,
             'main_buy_platform'  => $data['main_buy_platform'],
             'note_link'          => $data['note_link']??'',
             'note_content'       => $data['note_content']??'',
@@ -272,8 +285,14 @@ class WebSiteProductController extends BaseController
 
         $sheetDataList = Excel::toArray(new ProductImport, $requestFile);
         Log::info('sheetDataList toArray:' ,$sheetDataList);
-        $importProductList  = $sheetDataList[0];
+        $importProductList  = $sheetDataList[0] ?? [];
+        if ($importProductList === [] || !is_array($importProductList[0] ?? null)) {
+            return $this->error('文件内容为空', 200);
+        }
         $header = $importProductList[0];
+        if ($this->isSourceUrlImport($header)) {
+            return $this->importBySourceUrl($importProductList, $data);
+        }
         unset($importProductList[0]);
         $range            = 1;
         $productList      = [];
@@ -370,6 +389,113 @@ class WebSiteProductController extends BaseController
             }
         }
         return $this->success([]);
+    }
+
+    public function fetchSource(Request $request, HiobuyProductService $hiobuy)
+    {
+        $data = $request->validate([
+            'url' => 'required|string|max:2000',
+        ]);
+        try {
+            return $this->success($hiobuy->fetchByUrl($data['url']));
+        } catch (\Throwable $e) {
+            return $this->error($e->getMessage(), 200);
+        }
+    }
+
+    private function isSourceUrlImport(array $header): bool
+    {
+        $first = trim((string) ($header[0] ?? ''));
+        if ($first === '') {
+            return false;
+        }
+        return mb_stripos($first, '来源商品URL') !== false
+            || stripos($first, 'Source Product URL') !== false;
+    }
+
+    private function importBySourceUrl(array $rows, array $data)
+    {
+        ini_set('max_execution_time', '1200');
+        $siteId = (int) ($data['site_id'] ?? 1);
+        $menuId = (int) ($data['menu_id'] ?? 0);
+        if ($menuId <= 0 || !MenuConfig::query()->where('id', $menuId)->exists()) {
+            return $this->error('链接导入请先选择商品分类', 200);
+        }
+
+        unset($rows[0]);
+        $hiobuy = app(HiobuyProductService::class);
+        $range = (int) ProductMenu::query()
+            ->where('site_id', $siteId)
+            ->where('menu_id', $menuId)
+            ->max('range');
+        $created = 0;
+        $updated = 0;
+        $failed = [];
+        $seen = [];
+
+        foreach ($rows as $index => $cells) {
+            $url = trim((string) ($cells[0] ?? ''));
+            if ($url === '') {
+                continue;
+            }
+            $rowNo = $index + 1;
+            if (isset($seen[$url])) {
+                continue;
+            }
+            $seen[$url] = true;
+            try {
+                $product = $hiobuy->fetchByUrl($url);
+            } catch (\Throwable $e) {
+                $failed[] = '第' . $rowNo . '行：' . $e->getMessage();
+                Log::warning('source url import failed', ['row' => $rowNo, 'url' => $url, 'error' => $e->getMessage()]);
+                continue;
+            }
+
+            $existProduct = null;
+            if ($product['source_product_id'] !== '') {
+                $existProduct = ProductMenu::query()
+                    ->where('source_product_id', $product['source_product_id'])
+                    ->first();
+            }
+            if (!$existProduct) {
+                $existProduct = ProductMenu::query()
+                    ->where('source_product_url', $product['source_product_url'])
+                    ->first();
+            }
+
+            $now = Carbon::now()->toDateTimeString();
+            if ($existProduct && $existProduct->id) {
+                ProductMenu::query()->where('id', $existProduct->id)->update(array_merge($product, [
+                    'updated_at' => $now,
+                ]));
+                $updated++;
+                continue;
+            }
+
+            $range++;
+            ProductMenu::query()->insert(array_merge($product, [
+                'site_id'    => $siteId,
+                'menu_id'    => $menuId,
+                'page'       => (int) ceil($range / 100),
+                'range'      => $range,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]));
+            $created++;
+        }
+
+        $message = '新增 ' . $created . ' 条，更新 ' . $updated . ' 条';
+        if (!empty($failed)) {
+            $message .= '，失败 ' . count($failed) . ' 条：' . implode('；', array_slice($failed, 0, 5));
+        }
+        if ($created === 0 && $updated === 0) {
+            return $this->error($message === '新增 0 条，更新 0 条' ? '没有可导入的商品链接' : $message, 200);
+        }
+        return $this->success([
+            'created' => $created,
+            'updated' => $updated,
+            'failed'  => count($failed),
+        ], $message);
     }
 
     public function encrypt($data, $passphrase, $salt = null)
