@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -93,10 +93,10 @@
                         </div>
 
                         <div class="layui-form-item">
-                            <label class="layui-form-label">状态 <span style="color: red;">*</span></label>
+                            <label class="layui-form-label">{{ __('admin.status') }}<span style="color: red;">*</span></label>
                             <div class="layui-input-block">
-                                <input type="radio" name="status" value="1" title="启用" checked>
-                                <input type="radio" name="status" value="0" title="禁用">
+                                <input type="radio" name="status" value="1" title="{{ __('admin.enabled') }}" checked>
+                                <input type="radio" name="status" value="0" title="{{ __('admin.disabled') }}">
                                 <div class="layui-form-mid layui-word-aux">
                                     禁用后选项将不可用
                                 </div>
@@ -120,8 +120,7 @@
                 <i class="layui-icon layui-icon-ok"></i> 保存
             </button>
             <button type="reset" class="layui-btn layui-btn-primary">
-                <i class="layui-icon layui-icon-refresh"></i> 重置
-            </button>
+                <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
             <button type="button" class="layui-btn layui-btn-primary" onclick="parent.layer.closeAll()">
                 <i class="layui-icon layui-icon-close"></i> 取消
             </button>

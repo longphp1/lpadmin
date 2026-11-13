@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -159,8 +159,7 @@
                             <i class="layui-icon layui-icon-ok"></i> 保存
                         </button>
                         <button type="reset" class="layui-btn layui-btn-primary">
-                            <i class="layui-icon layui-icon-refresh"></i> 重置
-                        </button>
+                            <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                         <button type="button" class="layui-btn layui-btn-primary" onclick="parent.layer.closeAll()">
                             <i class="layui-icon layui-icon-close"></i> 取消
                         </button>

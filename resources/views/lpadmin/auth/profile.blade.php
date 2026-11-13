@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
     <head>
         <meta charset="UTF-8">
         <title>个人资料</title>
@@ -14,21 +14,21 @@
                 <div class="main-container mr-5">
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">用户名</label>
+                        <label class="layui-form-label">{{ __('admin.username') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="username" value="{{ $admin->username }}" readonly class="layui-input layui-disabled">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">昵称</label>
+                        <label class="layui-form-label required">{{ __('admin.nickname') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="nickname" value="{{ $admin->nickname }}" required lay-verify="required" class="layui-input">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">头像</label>
+                        <label class="layui-form-label">{{ __('admin.avatar') }}</label>
                         <div class="layui-input-block">
                             <div class="avatar-container">
                                 <img class="avatar-preview" src="{{ $admin->avatar_url }}" alt="用户头像"/>
@@ -41,21 +41,21 @@
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">邮箱</label>
+                        <label class="layui-form-label">{{ __('admin.email') }}</label>
                         <div class="layui-input-block">
                             <input type="email" name="email" value="{{ $admin->email }}" class="layui-input">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">手机</label>
+                        <label class="layui-form-label">{{ __('admin.phone') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="phone" value="{{ $admin->phone }}" class="layui-input">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">角色</label>
+                        <label class="layui-form-label">{{ __('admin.role') }}</label>
                         <div class="layui-input-block">
                             <input type="text" value="{{ $admin->roles->pluck('display_name')->join(', ') }}" readonly class="layui-input layui-disabled">
                         </div>
@@ -83,9 +83,7 @@
                     <button type="submit" class="pear-btn pear-btn-primary pear-btn-md" lay-submit="" lay-filter="save">
                         保存
                     </button>
-                    <button type="reset" class="pear-btn pear-btn-md">
-                        重置
-                    </button>
+                    <button type="reset" class="pear-btn pear-btn-md">{{ __('admin.reset') }}</button>
                 </div>
             </div>
 

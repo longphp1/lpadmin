@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
     <head>
         <meta charset="UTF-8">
         <title>编辑权限规则</title>
@@ -190,7 +190,7 @@
                     @include('lpadmin.components.radio-group', [
                         'type' => 'status',
                         'name' => 'status',
-                        'label' => '状态',
+                        'label' => __('admin.status'),
                         'required' => false,
                         'default' => $rule->status
                     ])
@@ -208,13 +208,9 @@
             <div class="bottom">
                 <div class="button-container">
                     <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit lay-filter="save">
-                        <i class="layui-icon layui-icon-ok"></i>
-                        提交
-                    </button>
+                        <i class="layui-icon layui-icon-ok"></i>{{ __('admin.submit') }}</button>
                     <button type="reset" class="pear-btn pear-btn-sm">
-                        <i class="layui-icon layui-icon-refresh"></i>
-                        重置
-                    </button>
+                        <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                 </div>
             </div>
 
@@ -316,7 +312,7 @@
                             if (currentMenu) {
                                 $('#selected-menu-name').val(currentRuleName);
                                 let typeText = currentMenu.type == 0 ? '目录' : (currentMenu.type == 1 ? '菜单' : '按钮');
-                                $('#selected-menu-text').html('已选择：<strong>' + currentMenu.title + '</strong> (' + currentMenu.name + ') [' + typeText + '] <a href="javascript:void(0)" id="clear-selection" style="color: #FF5722; margin-left: 10px;">清除</a>');
+                                $('#selected-menu-text').html('已选择：<strong>' + currentMenu.title + '</strong> (' + currentMenu.name + ') [' + typeText + '] <a href="javascript:void(0)" id="clear-selection" style="color: #FF5722; margin-left: 10px;">{{ __('admin.clear') }}</a>');
 
                                 // 高亮当前选中项
                                 setTimeout(function() {
@@ -325,7 +321,7 @@
                             } else if (currentRuleName) {
                                 // 自定义权限标识
                                 $('#selected-menu-name').val(currentRuleName);
-                                $('#selected-menu-text').html('已选择：<strong>自定义标识</strong> (' + currentRuleName + ') [自定义] <a href="javascript:void(0)" id="clear-selection" style="color: #FF5722; margin-left: 10px;">清除</a>');
+                                $('#selected-menu-text').html('已选择：<strong>自定义标识</strong> (' + currentRuleName + ') [自定义] <a href="javascript:void(0)" id="clear-selection" style="color: #FF5722; margin-left: 10px;">{{ __('admin.clear') }}</a>');
                             }
                         } else {
                             $('#menu-tree-list').html('<div class="no-results">加载菜单失败</div>');
@@ -441,7 +437,7 @@
                     currentRuleName = name;
 
                     let typeText = type == 0 ? '目录' : (type == 1 ? '菜单' : '按钮');
-                    $('#selected-menu-text').html('已选择：<strong>' + title + '</strong> (' + name + ') [' + typeText + '] <a href="javascript:void(0)" id="clear-selection" style="color: #FF5722; margin-left: 10px;">清除</a>');
+                    $('#selected-menu-text').html('已选择：<strong>' + title + '</strong> (' + name + ') [' + typeText + '] <a href="javascript:void(0)" id="clear-selection" style="color: #FF5722; margin-left: 10px;">{{ __('admin.clear') }}</a>');
                 });
 
                 // 清除选择
@@ -465,7 +461,7 @@
                     if (customName) {
                         $('#selected-menu-name').val(customName);
                         currentRuleName = customName;
-                        $('#selected-menu-text').html('已选择：<strong>自定义标识</strong> (' + customName + ') [自定义] <a href="javascript:void(0)" id="clear-selection" style="color: #FF5722; margin-left: 10px;">清除</a>');
+                        $('#selected-menu-text').html('已选择：<strong>自定义标识</strong> (' + customName + ') [自定义] <a href="javascript:void(0)" id="clear-selection" style="color: #FF5722; margin-left: 10px;">{{ __('admin.clear') }}</a>');
 
                         // 隐藏自定义输入，显示选择框
                         $('#custom-name-item').hide();
@@ -528,7 +524,7 @@
                             if (res.code !== 0) {
                                 return layui.popup.failure(res.message);
                             }
-                            return layui.popup.success("操作成功", function () {
+                            return layui.popup.success("{{ __('admin.success') }}", function () {
                                 parent.refreshTable();
                                 parent.layer.close(parent.layer.getFrameIndex(window.name));
                             });

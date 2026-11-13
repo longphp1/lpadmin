@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -39,8 +39,7 @@
                                     <i class="layui-icon layui-icon-search"></i> 搜索
                                 </button>
                                 <button type="reset" class="layui-btn layui-btn-primary">
-                                    <i class="layui-icon layui-icon-refresh"></i> 重置
-                                </button>
+                                    <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                             </div>
                         </div>
                     </form>
@@ -131,11 +130,11 @@ layui.use(['table', 'form', 'layer'], function(){
             {field: 'description', title: '描述', minWidth: 250},
             {field: 'version', title: '版本', width: 100},
             {field: 'author', title: '作者', width: 120},
-            {field: 'status', title: '状态', width: 100, templet: '#statusTpl'},
+            {field: 'status', title: '{{ __('admin.status') }}', width: 100, templet: '#statusTpl'},
             {field: 'is_complete', title: '完整性', width: 100, templet: '#completeTpl'},
             {field: 'files', title: '文件结构', width: 200, templet: '#filesTpl'},
             {field: 'installed_at', title: '安装时间', width: 160},
-            {title: '操作', width: 200, toolbar: '#actionBar', fixed: 'right'}
+            {title: '{{ __('admin.actions_col') }}', width: 200, toolbar: '#actionBar', fixed: 'right'}
         ]],
         page: true,
         height: 'full-200',

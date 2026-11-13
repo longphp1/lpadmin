@@ -198,6 +198,26 @@ header .nav .btn .inner {
   color: #fff;
 }
 
+header .nav .lang-switch {
+  margin-left: 8px;
+  height: 36px;
+  padding: 0 28px 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background-color: rgba(255, 255, 255, 0.06);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23f4f4f5' d='M1 1.5 6 6.5 11 1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  color: #fff;
+  font-size: 14px;
+  appearance: none;
+  cursor: pointer;
+}
+
+header .nav .lang-switch option {
+  color: #111;
+}
+
 .banner {
   padding: 96px 0;
   text-align: center;
@@ -1527,7 +1547,8 @@ footer .container img + img {
   }
 
   header .nav a,
-  header .nav .btn {
+  header .nav .btn,
+  header .nav .lang-switch {
     flex: none;
     white-space: nowrap;
     margin-left: 0;

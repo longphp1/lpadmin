@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -81,7 +81,7 @@
                 <div class="layui-card-body">
                     <div class="layui-row">
                         <div class="layui-col-xs8">
-                            <div style="color: #666; font-size: 14px;">系统配置</div>
+                            <div style="color: #666; font-size: 14px;">{{ __('admin.system_config') }}</div>
                             <div style="font-size: 24px; font-weight: bold; color: #13c2c2;" id="system-configs">-</div>
                         </div>
                         <div class="layui-col-xs4" style="text-align: right;">
@@ -155,13 +155,9 @@
                     </div>
                     <div class="layui-inline">
                         <button type="submit" class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="config-query">
-                            <i class="layui-icon layui-icon-search"></i>
-                            查询
-                        </button>
+                            <i class="layui-icon layui-icon-search"></i>{{ __('admin.search') }}</button>
                         <button type="reset" class="pear-btn pear-btn-md">
-                            <i class="layui-icon layui-icon-refresh"></i>
-                            重置
-                        </button>
+                            <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                     </div>
                 </div>
             </form>
@@ -178,30 +174,22 @@
     <script type="text/html" id="config-toolbar">
         <div class="layui-btn-group">
             <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="add">
-                <i class="layui-icon layui-icon-add-1"></i>
-                新增
-            </button>
+                <i class="layui-icon layui-icon-add-1"></i>{{ __('admin.create') }}</button>
             <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="batchRemove">
-                <i class="layui-icon layui-icon-delete"></i>
-                删除
-            </button>
+                <i class="layui-icon layui-icon-delete"></i>{{ __('admin.delete') }}</button>
             <button class="pear-btn pear-btn-normal pear-btn-sm" lay-event="export">
-                <i class="layui-icon layui-icon-export"></i>
-                导出
-            </button>
+                <i class="layui-icon layui-icon-export"></i>{{ __('admin.export') }}</button>
             <button class="pear-btn pear-btn-warm pear-btn-sm" lay-event="import">
-                <i class="layui-icon layui-icon-upload"></i>
-                导入
-            </button>
+                <i class="layui-icon layui-icon-upload"></i>{{ __('admin.import') }}</button>
         </div>
     </script>
 
     <script type="text/html" id="config-toolbar-right">
         <div style="white-space: nowrap; display: flex; gap: 3px; justify-content: center;">
-            <button class="table-action-btn table-action-edit" lay-event="edit" title="编辑">
+            <button class="table-action-btn table-action-edit" lay-event="edit" title="{{ __('admin.edit') }}">
                 <i class="layui-icon layui-icon-edit"></i>
             </button>
-            <button class="table-action-btn table-action-delete" lay-event="remove" title="删除">
+            <button class="table-action-btn table-action-delete" lay-event="remove" title="{{ __('admin.delete') }}">
                 <i class="layui-icon layui-icon-delete"></i>
             </button>
         </div>
@@ -257,8 +245,8 @@
                     {title: '类型', field: 'type', width: 100, align: 'center', templet: '#type-tpl'},
                     {title: '排序', field: 'sort', width: 80, align: 'center'},
                     {title: '描述', field: 'description', width: 200},
-                    {title: '创建时间', field: 'created_at', width: 160, align: 'center'},
-                    {title: '操作', width: 100, align: 'center', toolbar: '#config-toolbar-right', fixed: 'right'}
+                    {title: '{{ __('admin.created_at') }}', field: 'created_at', width: 160, align: 'center'},
+                    {title: '{{ __('admin.actions_col') }}', width: 100, align: 'center', toolbar: '#config-toolbar-right', fixed: 'right'}
                 ]
             ];
 
@@ -268,7 +256,7 @@
                 method: 'GET',
                 toolbar: '#config-toolbar',
                 defaultToolbar: [{
-                    title: '刷新',
+                    title: '{{ __('admin.refresh') }}',
                     layEvent: 'refresh',
                     icon: 'layui-icon-refresh',
                 }, 'filter', 'print', 'exports'],
@@ -366,7 +354,7 @@
 
                     layer.confirm('确定要删除选中的 ' + checkStatus.data.length + ' 条配置吗？', {
                         icon: 3,
-                        title: '提示'
+                        title: '{{ __('admin.tip') }}'
                     }, function(index) {
                         const ids = checkStatus.data.map(item => item[PRIMARY_KEY]);
 
@@ -429,7 +417,7 @@
                 } else if (obj.event === 'clearCache') {
                     layer.confirm('确定要清除配置缓存吗？', {
                         icon: 3,
-                        title: '提示'
+                        title: '{{ __('admin.tip') }}'
                     }, function(index) {
                         $.post(CLEAR_CACHE_API, {
                             _token: $('meta[name="csrf-token"]').attr('content')
@@ -480,7 +468,7 @@
                 } else if (obj.event === 'remove') {
                     layer.confirm('确定要删除这个配置吗？', {
                         icon: 3,
-                        title: '提示'
+                        title: '{{ __('admin.tip') }}'
                     }, function(index) {
                         const removeUrl = REMOVE_API.replace(':id', data[PRIMARY_KEY]);
 

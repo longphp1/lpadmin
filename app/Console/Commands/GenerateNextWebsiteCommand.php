@@ -49,10 +49,15 @@ class GenerateNextWebsiteCommand extends Command
         }
 
         $payload = [
-            'pageSize'    => 50,
-            'generatedAt' => now()->toIso8601String(),
-            'catalogs'    => $catalogs,
-            'sites'       => $sites,
+            'pageSize'        => 50,
+            'generatedAt'     => now()->toIso8601String(),
+            'defaultLanguage' => 'en',
+            'languages'       => [
+                ['code' => 'en', 'label' => 'English'],
+                ['code' => 'zh', 'label' => '中文'],
+            ],
+            'catalogs'        => $catalogs,
+            'sites'           => $sites,
         ];
 
         File::ensureDirectoryExists($target . '/data');
@@ -79,7 +84,7 @@ class GenerateNextWebsiteCommand extends Command
             ->where('status', 0)
             ->where('type', 2)
             ->orderBy('range')
-            ->get(['menu_name', 'menu_url']);
+            ->get(['menu_name', 'menu_name_en', 'menu_url']);
 
         $products = ProductMenu::query()
             ->with(['local', 'menu'])
@@ -119,8 +124,9 @@ class GenerateNextWebsiteCommand extends Command
         return [
             'menus'    => $menus->map(function ($menu) {
                 return [
-                    'name' => $menu->menu_name,
-                    'url'  => $menu->menu_url,
+                    'name'   => $menu->menu_name,
+                    'nameEn' => $menu->menu_name_en ?: $menu->menu_name,
+                    'url'    => $menu->menu_url,
                 ];
             })->values()->all(),
             'products' => $rows,

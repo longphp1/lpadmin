@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
     <head>
         <meta charset="UTF-8">
         <title>编辑管理员</title>
@@ -13,7 +13,7 @@
             <div class="mainBox">
                 <div class="main-container mr-5">
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">网站选择</label>
+                        <label class="layui-form-label required">{{ __('admin.choose_site') }}</label>
                         <div class="layui-input-block">
                             <select name="site_id" id="site_id" >
                                 @foreach($siteConfigList as $site)
@@ -23,55 +23,55 @@
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">网站首页头部</label>
+                        <label class="layui-form-label required">{{ __('admin.home_header') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="top_head" value="" required lay-verify="required" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label ">网站首页标题</label>
+                        <label class="layui-form-label ">{{ __('admin.home_title') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="large_head" value=""  class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label ">网站首页底部</label>
+                        <label class="layui-form-label ">{{ __('admin.home_footer') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="top_head_bottom" value=""  class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label ">网站首页内容</label>
+                        <label class="layui-form-label ">{{ __('admin.home_content') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="header_content" value=""  class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label ">完整首页二维码</label>
+                        <label class="layui-form-label ">{{ __('admin.home_qr') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="middle_qr_code" value=""  class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label ">网站首页二维码标题</label>
+                        <label class="layui-form-label ">{{ __('admin.home_qr_title') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="middle_qr_title" value=""  class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label ">网站中间图片</label>
+                        <label class="layui-form-label ">{{ __('admin.home_middle_image') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="middle_logo" value=""  class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label ">网站中间内容</label>
+                        <label class="layui-form-label ">{{ __('admin.home_middle_content') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="middle_content" value=""  class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label ">网站首页内容</label>
+                        <label class="layui-form-label ">{{ __('admin.home_content') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="content" value=""  class="layui-input">
                         </div>
@@ -82,12 +82,8 @@
 
             <div class="bottom">
                 <div class="button-container">
-                    <button type="submit" class="pear-btn pear-btn-primary pear-btn-md" lay-submit="" lay-filter="save">
-                        提交
-                    </button>
-                    <button type="reset" class="pear-btn pear-btn-md">
-                        重置
-                    </button>
+                    <button type="submit" class="pear-btn pear-btn-primary pear-btn-md" lay-submit="" lay-filter="save">{{ __('admin.submit') }}</button>
+                    <button type="reset" class="pear-btn pear-btn-md">{{ __('admin.reset') }}</button>
                 </div>
             </div>
 
@@ -177,7 +173,7 @@
                             if (res.code !== 0) {
                                 return layui.popup.failure(res.message);
                             }
-                            return layui.popup.success("操作成功", function () {
+                            return layui.popup.success("{{ __('admin.success') }}", function () {
                                 parent.refreshTable();
                                 parent.layer.close(parent.layer.getFrameIndex(window.name));
                             });

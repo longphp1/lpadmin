@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
     <head>
         <meta charset="UTF-8">
         <title>编辑管理员</title>
@@ -14,7 +14,7 @@
                 <div class="main-container mr-5">
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">网站</label>
+                        <label class="layui-form-label required">{{ __('admin.website') }}</label>
                         <div class="layui-input-block">
                             <select name="site_id" id="site_id" >
                                 @foreach($siteConfigList as $site)
@@ -25,7 +25,7 @@
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">商品分类</label>
+                        <label class="layui-form-label required">{{ __('admin.category') }}</label>
                         <div class="layui-input-block">
                             <select name="menu_id" id="menu_id" >
                                 @foreach($menuList as $menu)
@@ -37,56 +37,56 @@
 
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">商品名称</label>
+                        <label class="layui-form-label required">{{ __('admin.product_name') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="name" value="" required lay-verify="required" class="layui-input">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">商品品牌</label>
+                        <label class="layui-form-label">{{ __('admin.brand') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="brand" value="" class="layui-input">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">商品价格</label>
+                        <label class="layui-form-label">{{ __('admin.price') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="price" value="" class="layui-input">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">商品来源</label>
+                        <label class="layui-form-label">{{ __('admin.source') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="source" value="" class="layui-input">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">商品链接</label>
+                        <label class="layui-form-label">{{ __('admin.product_url') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="source_product_url" value="" class="layui-input">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">商品图片</label>
+                        <label class="layui-form-label">{{ __('admin.image') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="main_img" value="" class="layui-input">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">购买平台</label>
+                        <label class="layui-form-label">{{ __('admin.buy_platform') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="main_buy_platform" value="" class="layui-input">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">购买链接</label>
+                        <label class="layui-form-label">{{ __('admin.buy_link') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="main_buy_link" value="" class="layui-input">
                         </div>
@@ -100,7 +100,7 @@
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">taoobuy链接</label>
+                        <label class="layui-form-label">{{ __('admin.tao_link') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="tao_buy_link" value="" class="layui-input">
                         </div>
@@ -111,12 +111,8 @@
 
             <div class="bottom">
                 <div class="button-container">
-                    <button type="submit" class="pear-btn pear-btn-primary pear-btn-md" lay-submit="" lay-filter="save">
-                        提交
-                    </button>
-                    <button type="reset" class="pear-btn pear-btn-md">
-                        重置
-                    </button>
+                    <button type="submit" class="pear-btn pear-btn-primary pear-btn-md" lay-submit="" lay-filter="save">{{ __('admin.submit') }}</button>
+                    <button type="reset" class="pear-btn pear-btn-md">{{ __('admin.reset') }}</button>
                 </div>
             </div>
 
@@ -206,7 +202,7 @@
                             if (res.code !== 0) {
                                 return layui.popup.failure(res.message);
                             }
-                            return layui.popup.success("操作成功", function () {
+                            return layui.popup.success("{{ __('admin.success') }}", function () {
                                 parent.refreshTable();
                                 parent.layer.close(parent.layer.getFrameIndex(window.name));
                             });

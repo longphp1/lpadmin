@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -128,9 +128,7 @@
                             保存配置
                         </button>
                         <button type="reset" class="pear-btn pear-btn-warm">
-                            <i class="layui-icon layui-icon-refresh"></i>
-                            重置
-                        </button>
+                            <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                         <button type="button" class="pear-btn pear-btn-normal" id="load-current">
                             <i class="layui-icon layui-icon-download-circle"></i>
                             加载当前配置

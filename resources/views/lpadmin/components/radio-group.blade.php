@@ -5,10 +5,6 @@
     'name' => 'status',
     'label' => '状态',
     'required' => true,
-    'options' => [
-        ['value' => '1', 'title' => '启用'],
-        ['value' => '0', 'title' => '禁用']
-    ],
     'default' => '1',
     'help' => '选择管理员状态'
 ])
@@ -30,10 +26,10 @@
         switch ($type) {
             case 'status':
                 $options = [
-                    ['value' => '1', 'title' => '启用'],
-                    ['value' => '0', 'title' => '禁用']
+                    ['value' => '1', 'title' => __('admin.enabled')],
+                    ['value' => '0', 'title' => __('admin.disabled')]
                 ];
-                $label = $label ?: '状态';
+                $label = $label ?: __('admin.status');
                 $required = $required ?: true;
                 $default = $default ?: '1';
                 break;

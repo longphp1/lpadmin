@@ -136,4 +136,9 @@ return [
             'wechat' => env('LPADMIN_WECHAT', 'Baron369'),
         ],
     ],
+
+    'languages' => [
+        'zh_CN' => '中文',
+        'en' => 'English',
+    ],
 ];

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <title>数据字典路由测试</title>
@@ -17,7 +17,7 @@
                         <tr>
                             <th>路由名称</th>
                             <th>路由地址</th>
-                            <th>状态</th>
+                            <th>{{ __('admin.status') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -106,7 +106,7 @@
                         <tr>
                             <th>路由名称</th>
                             <th>路由地址</th>
-                            <th>状态</th>
+                            <th>{{ __('admin.status') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -172,7 +172,7 @@
         <div class="layui-card">
             <div class="layui-card-header">快速访问</div>
             <div class="layui-card-body">
-                <a href="{{ route('lpadmin.dictionary.index') }}" class="layui-btn">字典管理</a>
+                <a href="{{ route('lpadmin.dictionary.index') }}" class="layui-btn">{{ __('admin.dictionary_mgmt') }}</a>
                 <a href="{{ route('lpadmin.dictionary.create') }}" class="layui-btn layui-btn-normal">新增字典</a>
             </div>
         </div>

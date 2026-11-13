@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -325,10 +325,10 @@ layui.use(['layer', 'table', 'form', 'echarts', 'jquery'], function(){
                 {field: 'ttl', title: 'TTL', align: 'center', templet: function(d) {
                     return d.ttl || 'N/A';
                 }},
-                {field: 'created_at', title: '创建时间', align: 'center', templet: function(d) {
+                {field: 'created_at', title: '{{ __('admin.created_at') }}', align: 'center', templet: function(d) {
                     return d.created_at || 'N/A';
                 }},
-                {title: '操作', width: 150, align: 'center', toolbar: '#cache-key-toolbar','fixed': 'right'}
+                {title: '{{ __('admin.actions_col') }}', width: 150, align: 'center', toolbar: '#cache-key-toolbar','fixed': 'right'}
             ]],
             text: {
                 none: '暂无缓存键数据'
@@ -596,7 +596,7 @@ layui.use(['layer', 'table', 'form', 'echarts', 'jquery'], function(){
 <!-- 表格工具栏模板 -->
 <script type="text/html" id="cache-key-toolbar">
     <a class="layui-btn layui-btn-xs" lay-event="view">查看</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">{{ __('admin.delete') }}</a>
 </script>
 
 </body>

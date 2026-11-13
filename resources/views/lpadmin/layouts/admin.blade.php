@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,7 +50,7 @@
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="javascript:;" id="userInfo">个人信息</a></dd>
-                    <dd><a href="javascript:;" id="changePassword">修改密码</a></dd>
+                    <dd><a href="javascript:;" id="changePassword">{{ __('admin.change_password') }}</a></dd>
                     <dd><a href="javascript:;" id="logout">退出登录</a></dd>
                 </dl>
             </li>
@@ -163,7 +163,7 @@
             
             // 退出登录
             $('#logout').on('click', function(){
-                layer.confirm('确定要退出登录吗？', {icon: 3, title:'提示'}, function(index){
+                layer.confirm('确定要退出登录吗？', {icon: 3, title:'{{ __('admin.tip') }}'}, function(index){
                     $.post('{{ route('lpadmin.logout') }}', function(res){
                         if(res.code === 0){
                             layer.msg('退出成功', {icon: 1}, function(){
@@ -193,7 +193,7 @@
             $('#changePassword').on('click', function(){
                 layer.open({
                     type: 2,
-                    title: '修改密码',
+                    title: '{{ __('admin.change_password') }}',
                     shadeClose: true,
                     shade: 0.8,
                     area: ['500px', '400px'],

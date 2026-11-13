@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>文件管理</title>
+    <title>{{ __('admin.file_mgmt') }}</title>
     <link rel="stylesheet" href="/static/admin/component/pear/css/pear.css" />
     <link rel="stylesheet" href="/static/admin/css/reset.css" />
     <link rel="stylesheet" href="/static/admin/css/table-common.css" />
@@ -182,13 +182,9 @@
                     </div>
                     <div class="layui-inline">
                         <button type="submit" class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="upload-query">
-                            <i class="layui-icon layui-icon-search"></i>
-                            查询
-                        </button>
+                            <i class="layui-icon layui-icon-search"></i>{{ __('admin.search') }}</button>
                         <button type="reset" class="pear-btn pear-btn-md">
-                            <i class="layui-icon layui-icon-refresh"></i>
-                            重置
-                        </button>
+                            <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                     </div>
                 </div>
             </form>
@@ -210,9 +206,7 @@
                         批量删除
                     </button>
                     <button class="pear-btn pear-btn-warm pear-btn-sm" lay-event="refresh">
-                        <i class="layui-icon layui-icon-refresh"></i>
-                        刷新
-                    </button>
+                        <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.refresh') }}</button>
                 </div>
             </script>
 
@@ -238,7 +232,7 @@
                     <button class="table-action-btn table-action-edit" lay-event="download" title="下载">
                         <i class="layui-icon layui-icon-download-circle"></i>
                     </button>
-                    <button class="table-action-btn table-action-delete" lay-event="remove" title="删除">
+                    <button class="table-action-btn table-action-delete" lay-event="remove" title="{{ __('admin.delete') }}">
                         <i class="layui-icon layui-icon-delete"></i>
                     </button>
                 </div>
@@ -286,7 +280,7 @@
                     {title: '标签', field: 'tags_string', width: 120, align: 'center'},
                     {title: '上传者', field: 'admin_name', width: 100, align: 'center'},
                     {title: '上传时间', field: 'created_at', width: 160, align: 'center'},
-                    {title: '操作', width: 120, align: 'center', toolbar: '#upload-toolbar-right', fixed: 'right'}
+                    {title: '{{ __('admin.actions_col') }}', width: 120, align: 'center', toolbar: '#upload-toolbar-right', fixed: 'right'}
                 ]
             ];
 
@@ -296,7 +290,7 @@
                 method: 'GET',
                 toolbar: '#upload-toolbar',
                 defaultToolbar: [{
-                    title: '刷新',
+                    title: '{{ __('admin.refresh') }}',
                     layEvent: 'refresh',
                     icon: 'layui-icon-refresh',
                 }, 'filter', 'print', 'exports'],

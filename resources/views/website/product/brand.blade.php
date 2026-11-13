@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
     <head>
         <meta charset="UTF-8">
         <title>新增管理员</title>
@@ -14,7 +14,7 @@
                 <div class="main-container mr-5">
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">原品牌名称</label>
+                        <label class="layui-form-label required">{{ __('admin.old_brand') }}</label>
                         <div class="layui-input-block">
                             <select name="oldBrand" id="oldBrand" >
                                 @foreach($brandList as $brand)
@@ -25,7 +25,7 @@
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">新品牌名称</label>
+                        <label class="layui-form-label required">{{ __('admin.new_brand') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="newBrand" value="" required lay-verify="required" class="layui-input">
                         </div>
@@ -36,12 +36,8 @@
             <div class="bottom">
                 <div class="button-container">
                     <button type="submit" class="pear-btn pear-btn-primary pear-btn-md" lay-submit=""
-                        lay-filter="save">
-                        提交
-                    </button>
-                    <button type="reset" class="pear-btn pear-btn-md">
-                        重置
-                    </button>
+                        lay-filter="save">{{ __('admin.submit') }}</button>
+                    <button type="reset" class="pear-btn pear-btn-md">{{ __('admin.reset') }}</button>
                 </div>
             </div>
 
@@ -84,7 +80,7 @@
                             if (res.code !== 0) {
                                 return layui.popup.failure(res.message);
                             }
-                            return layui.popup.success("操作成功", function () {
+                            return layui.popup.success("{{ __('admin.success') }}", function () {
                                 parent.refreshTable();
                                 parent.layer.close(parent.layer.getFrameIndex(window.name));
                             });

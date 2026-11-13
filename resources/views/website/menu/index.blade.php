@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
     <head>
         <meta charset="utf-8">
         <title>管理员管理</title>
@@ -15,7 +15,7 @@
                 <form class="layui-form top-search-from">
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">分类名称</label>
+                        <label class="layui-form-label">{{ __('admin.category_name') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="menu_name" value="" class="layui-input">
                         </div>
@@ -24,12 +24,12 @@
 
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">创建时间</label>
+                        <label class="layui-form-label">{{ __('admin.created_at') }}</label>
                         <div class="layui-input-block">
                             <div class="layui-input-block" id="created_at">
-                                <input type="text" autocomplete="off" name="created_at[]" id="created_at-date-start" class="layui-input inline-block" placeholder="开始时间">
+                                <input type="text" autocomplete="off" name="created_at[]" id="created_at-date-start" class="layui-input inline-block" placeholder="{{ __('admin.start_time') }}">
                                 -
-                                <input type="text" autocomplete="off" name="created_at[]" id="created_at-date-end" class="layui-input inline-block" placeholder="结束时间">
+                                <input type="text" autocomplete="off" name="created_at[]" id="created_at-date-end" class="layui-input inline-block" placeholder="{{ __('admin.end_time') }}">
                             </div>
                         </div>
                     </div>
@@ -37,15 +37,13 @@
                     <div class="layui-form-item layui-inline">
                         <label class="layui-form-label"></label>
                         <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="table-query">
-                            <i class="layui-icon layui-icon-search"></i>查询
-                        </button>
+                            <i class="layui-icon layui-icon-search"></i>{{ __('admin.search') }}</button>
                         <button type="reset" class="pear-btn pear-btn-md" lay-submit lay-filter="table-reset">
-                            <i class="layui-icon layui-icon-refresh"></i>重置
-                        </button>
+                            <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                     </div>
                     <div class="toggle-btn">
-                        <a class="layui-hide">展开<i class="layui-icon layui-icon-down"></i></a>
-                        <a class="layui-hide">收起<i class="layui-icon layui-icon-up"></i></a>
+                        <a class="layui-hide">{{ __('admin.expand') }}<i class="layui-icon layui-icon-down"></i></a>
+                        <a class="layui-hide">{{ __('admin.collapse') }}<i class="layui-icon layui-icon-up"></i></a>
                     </div>
                 </form>
             </div>
@@ -61,20 +59,18 @@
         <!-- 表格顶部工具栏 -->
         <script type="text/html" id="table-toolbar">
             <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
-                <i class="layui-icon layui-icon-add-1"></i>新增
-            </button>
+                <i class="layui-icon layui-icon-add-1"></i>{{ __('admin.create') }}</button>
             <button class="pear-btn pear-btn-danger pear-btn-md" lay-event="batchRemove">
-                <i class="layui-icon layui-icon-delete"></i>删除
-            </button>
+                <i class="layui-icon layui-icon-delete"></i>{{ __('admin.delete') }}</button>
         </script>
 
         <!-- 表格行工具栏 -->
         <script type="text/html" id="table-bar">
             <div style="white-space: nowrap; display: flex; gap: 4px; justify-content: center;">
-                <button class="table-action-btn table-action-edit" lay-event="edit" title="编辑">
+                <button class="table-action-btn table-action-edit" lay-event="edit" title="{{ __('admin.edit') }}">
                     <i class="layui-icon layui-icon-edit"></i>
                 </button>
-                <button class="table-action-btn table-action-delete" lay-event="remove" title="删除">
+                <button class="table-action-btn table-action-delete" lay-event="remove" title="{{ __('admin.delete') }}">
                     <i class="layui-icon layui-icon-delete"></i>
                 </button>
             </div>
@@ -118,46 +114,46 @@
                         width: 100,
                         sort: true,
 					},{
-						title: "分类名称",
+						title: "{{ __('admin.category_name') }}",
 						field: "menu_name",
 					},{
-						title: "分类名称EN",
+						title: "{{ __('admin.category_name_en') }}",
 						field: "menu_name_en",
 					},{
-                        title: "分类URL",
+                        title: "{{ __('admin.category_url') }}",
                         field: "menu_url",
                     },{
-                        title: "分类顺序",
+                        title: "{{ __('admin.category_sort') }}",
                         field: "range",
                     },{
-                        title: "分类类型",
+                        title: "{{ __('admin.category_type') }}",
                         field: "type_name",
                     },{
-						title: "分类关键字",
+						title: "{{ __('admin.category_keywords') }}",
 						field: "meta_keyword",
                         hide: true,
 					},{
-                        title: "分类描述",
+                        title: "{{ __('admin.category_description') }}",
                         field: "meta_description",
                         hide: true,
                     },{
-                        title: "分类标题",
+                        title: "{{ __('admin.category_title') }}",
                         field: "meta_title",
                         hide: true,
                     },{
-						title: "创建时间",
+						title: "{{ __('admin.created_at') }}",
 						field: "created_at",
 						hide: true,
 					},{
-						title: "更新时间",
+						title: "{{ __('admin.updated_at') }}",
 						field: "updated_at",
 						hide: true,
 					},{
-                        title: "状态",
+                        title: "{{ __('admin.status') }}",
                         field: "status",
                         width: 90,
                     },{
-						title: "操作",
+						title: "{{ __('admin.actions_col') }}",
 						toolbar: "#table-bar",
 						align: "center",
 						fixed: "right",
@@ -183,7 +179,7 @@
 				        toolbar: "#table-toolbar",
 				        autoSort: false,
 				        defaultToolbar: [{
-				            title: "刷新",
+				            title: "{{ __('admin.refresh') }}",
 				            layEvent: "refresh",
 				            icon: "layui-icon-refresh",
 				        }, "filter", "print", "exports"],
@@ -284,7 +280,7 @@
                 let add = function() {
                     layer.open({
                         type: 2,
-                        title: "新增",
+                        title: "{{ __('admin.create') }}",
                         shade: 0.1,
                         area: [common.isModile()?"100%":"70%", common.isModile()?"100%":"80%"],
                         content: INSERT_URL
@@ -297,7 +293,7 @@
                     let url = UPDATE_URL.replace(':id', value);
                     layer.open({
                         type: 2,
-                        title: "修改",
+                        title: "{{ __('admin.update') }}",
                         shade: 0.1,
                         area: [common.isModile()?"100%":"70%", common.isModile()?"100%":"80%"],
                         content: url+'?id='+value
@@ -313,7 +309,7 @@
                 let batchRemove = function(obj) {
                     let checkIds = common.checkField(obj, PRIMARY_KEY);
                     if (checkIds === "") {
-                        layui.popup.warning("未选中数据");
+                        layui.popup.warning("{{ __('admin.no_selection') }}");
                         return false;
                     }
                     doRemove(checkIds.split(","));
@@ -321,9 +317,9 @@
 
                 // 执行删除
                 let doRemove = function (ids) {
-                    layer.confirm("确定删除?", {
+                    layer.confirm("{{ __('admin.confirm_delete') }}", {
                         icon: 3,
-                        title: "提示"
+                        title: "{{ __('admin.tip') }}"
                     }, function(index) {
                         layer.close(index);
                         let loading = layer.load();
@@ -344,7 +340,7 @@
                                     if (res.code !== 0) {
                                         return layui.popup.failure(res.message);
                                     }
-                                    return layui.popup.success("操作成功", refreshTable);
+                                    return layui.popup.success("{{ __('admin.success') }}", refreshTable);
                                 }
                             });
                         } else {
@@ -363,7 +359,7 @@
                                     if (res.code !== 0) {
                                         return layui.popup.failure(res.message);
                                     }
-                                    return layui.popup.success("操作成功", refreshTable);
+                                    return layui.popup.success("{{ __('admin.success') }}", refreshTable);
                                 }
                             });
                         }

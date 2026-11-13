@@ -387,7 +387,7 @@ class RuleController extends BaseController
             if ($item['parent_id'] == $parentId) {
                 $node = [
                     'id' => $item['id'],
-                    'title' => $item['title'],
+                    'title' => menu_title($item['name'] ?? null, $item['title'] ?? ''),
                     'parentId' => $item['parent_id'],
                     'checkArr' => '0',
                     'spread' => false
@@ -417,7 +417,7 @@ class RuleController extends BaseController
             if ($item['parent_id'] == $parentId) {
                 $menuItem = [
                     'id' => $item['id'],
-                    'title' => $item['title'],
+                    'title' => menu_title($item['name'] ?? null, $item['title'] ?? ''),
                     'icon' => 'layui-icon ' . ($item['icon'] ?: 'layui-icon-app'),
                     'href' => $item['url'] ?: '',
                     'spread' => false,

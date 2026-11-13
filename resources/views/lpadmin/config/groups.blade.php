@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -21,13 +21,9 @@
                     </div>
                     <div class="layui-inline">
                         <button type="submit" class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="group-query">
-                            <i class="layui-icon layui-icon-search"></i>
-                            查询
-                        </button>
+                            <i class="layui-icon layui-icon-search"></i>{{ __('admin.search') }}</button>
                         <button type="reset" class="pear-btn pear-btn-md">
-                            <i class="layui-icon layui-icon-refresh"></i>
-                            重置
-                        </button>
+                            <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                     </div>
                 </div>
             </form>
@@ -43,22 +39,18 @@
     <script type="text/html" id="group-toolbar">
         <div class="layui-btn-group">
             <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="add">
-                <i class="layui-icon layui-icon-add-1"></i>
-                新增
-            </button>
+                <i class="layui-icon layui-icon-add-1"></i>{{ __('admin.create') }}</button>
             <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="batchRemove">
-                <i class="layui-icon layui-icon-delete"></i>
-                删除
-            </button>
+                <i class="layui-icon layui-icon-delete"></i>{{ __('admin.delete') }}</button>
         </div>
     </script>
 
     <script type="text/html" id="group-toolbar-right">
         <div style="white-space: nowrap; display: flex; gap: 3px; justify-content: center;">
-            <button class="table-action-btn table-action-edit" lay-event="edit" title="编辑">
+            <button class="table-action-btn table-action-edit" lay-event="edit" title="{{ __('admin.edit') }}">
                 <i class="layui-icon layui-icon-edit"></i>
             </button>
-            <button class="table-action-btn table-action-delete" lay-event="remove" title="删除">
+            <button class="table-action-btn table-action-delete" lay-event="remove" title="{{ __('admin.delete') }}">
                 <i class="layui-icon layui-icon-delete"></i>
             </button>
         </div>
@@ -87,7 +79,7 @@
                     {title: '分组标题', field: 'title', width: 200},
                     {title: '分组描述', field: 'description', width: 250},
                     {title: '配置数量', field: 'config_count', width: 120, align: 'center'},
-                    {title: '操作', width: 100, align: 'center', toolbar: '#group-toolbar-right', fixed: 'right'}
+                    {title: '{{ __('admin.actions_col') }}', width: 100, align: 'center', toolbar: '#group-toolbar-right', fixed: 'right'}
                 ]
             ];
 
@@ -97,7 +89,7 @@
                 method: 'GET',
                 toolbar: '#group-toolbar',
                 defaultToolbar: [{
-                    title: '刷新',
+                    title: '{{ __('admin.refresh') }}',
                     layEvent: 'refresh',
                     icon: 'layui-icon-refresh',
                 }, 'filter', 'print', 'exports'],
@@ -137,7 +129,7 @@
 
                     layer.confirm('确定要删除选中的 ' + checkStatus.data.length + ' 个分组吗？', {
                         icon: 3,
-                        title: '提示'
+                        title: '{{ __('admin.tip') }}'
                     }, function(index) {
                         const names = checkStatus.data.map(item => item[PRIMARY_KEY]);
                         batchDelete(names);
@@ -157,7 +149,7 @@
                 } else if (obj.event === 'remove') {
                     layer.confirm('确定要删除分组 "' + data.title + '" 吗？', {
                         icon: 3,
-                        title: '提示'
+                        title: '{{ __('admin.tip') }}'
                     }, function(index) {
                         deleteGroup(data.name, obj);
                         layer.close(index);

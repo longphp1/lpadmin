@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>登录 - {{ config('lpadmin.system.name', 'LPadmin') }}</title>
+    <title>{{ __('admin.login') }} - {{ config('lpadmin.system.name', 'LPadmin') }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- 样式文件 -->
     <link rel="stylesheet" href="/static/admin/component/pear/css/pear.css" />
@@ -27,7 +27,12 @@
                             <img class="top-log" src="/static/admin/images/logo.png" alt="Logo" />
                             <span>{{ config('lpadmin.system.name', 'LPadmin') }}</span>
                         </div>
-                        <div class="top-desc">以超平凡的速度构建内部工具</div>
+                        <div style="text-align:right;margin:8px 0 12px;">
+                            @foreach(config('lpadmin.languages') as $code => $label)
+                                <a href="{{ route('lpadmin.locale', $code) }}" style="margin-left:10px;{{ app()->getLocale() === $code ? 'font-weight:700;color:#2d8cf0;' : 'color:#666;' }}">{{ $label }}</a>
+                            @endforeach
+                        </div>
+                        <div class="top-desc">{{ __('admin.login_desc') }}</div>
 
                         <!-- 登录表单 -->
                         <form class="layui-form login-form-box" id="loginForm">
@@ -37,7 +42,7 @@
                                     <div class="layui-input-prefix">
                                         <i class="layui-icon layui-icon-username"></i>
                                     </div>
-                                    <input lay-verify="required" class="layui-input" type="text" name="username" value="{{ old('username') }}" placeholder="账户" />
+                                    <input lay-verify="required" class="layui-input" type="text" name="username" value="{{ old('username') }}" placeholder="{{ __('admin.account') }}" />
                                 </div>
                             </div>
 
@@ -46,7 +51,7 @@
                                     <div class="layui-input-prefix">
                                         <i class="layui-icon layui-icon-password"></i>
                                     </div>
-                                    <input lay-verify="required|minLength" minlength="6" class="layui-input" type="password" name="password" value="" placeholder="密码" />
+                                    <input lay-verify="required|minLength" minlength="6" class="layui-input" type="password" name="password" value="" placeholder="{{ __('admin.password') }}" />
                                 </div>
                             </div>
 
@@ -55,7 +60,7 @@
                                     <div class="layui-input-prefix">
                                         <i class="layui-icon layui-icon-vercode"></i>
                                     </div>
-                                    <input lay-verify="required" class="layui-input captcha-input" name="captcha" placeholder="验证码" />
+                                    <input lay-verify="required" class="layui-input captcha-input" name="captcha" placeholder="{{ __('admin.captcha') }}" />
                                     <div class="captcha-image-wrap">
                                         <img class="codeImage" onclick="switchCaptcha()" style="cursor: pointer;" />
                                     </div>
@@ -63,12 +68,12 @@
                             </div>
 
                             <div class="layui-form-item">
-                                <input type="checkbox" name="remember" lay-skin="primary" title="自动登录">
+                                <input type="checkbox" name="remember" lay-skin="primary" title="{{ __('admin.remember') }}">
                             </div>
 
                             <div class="layui-form-item">
                                 <button type="submit" class="layui-btn layui-btn-fluid login-btn" lay-submit lay-filter="login">
-                                    登录
+                                    {{ __('admin.login') }}
                                 </button>
                             </div>
                         </form>
@@ -106,7 +111,7 @@
                 minLength: function(value, item) {
                     var minLength = parseInt(item.getAttribute('minlength')) || 6;
                     if (value.length < minLength) {
-                        return '密码至少' + minLength + '位';
+                        return '{{ __('admin.password_at_least', ['min' => ':min']) }}'.replace(':min', minLength);
                     }
                 }
             });
@@ -129,7 +134,7 @@
                     success: function (res) {
                         layer.closeAll('loading');
                         if (!res.code) {
-                            layui.popup.success('登录成功', function () {
+                            layui.popup.success('{{ __('admin.login_success') }}', function () {
                                 location.href = res.data.redirect || '{{ route('lpadmin.index') }}';
                             })
                         } else {
@@ -140,7 +145,7 @@
                     error: function(xhr) {
                         layer.closeAll('loading');
                         var res = xhr.responseJSON;
-                        layui.popup.failure(res ? (res.message || res.msg) : '登录失败');
+                        layui.popup.failure(res ? (res.message || res.msg) : '{{ __('admin.login_failed') }}');
                         switchCaptcha();
                     }
                 });

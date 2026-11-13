@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="UTF-8">
     <title>新增菜单</title>
@@ -96,7 +96,7 @@
                 @include('lpadmin.components.radio-group', [
                     'type' => 'status',
                     'name' => 'status',
-                    'label' => '状态',
+                    'label' => __('admin.status'),
                     'required' => true,
                     'default' => '1'
                 ])
@@ -121,13 +121,9 @@
         <div class="bottom">
             <div class="button-container">
                 <button type="submit" class="pear-btn pear-btn-primary pear-btn-md" lay-submit lay-filter="save">
-                    <i class="layui-icon layui-icon-ok"></i>
-                    提交
-                </button>
+                    <i class="layui-icon layui-icon-ok"></i>{{ __('admin.submit') }}</button>
                 <button type="reset" class="pear-btn pear-btn-md">
-                    <i class="layui-icon layui-icon-refresh"></i>
-                    重置
-                </button>
+                    <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
             </div>
         </div>
 

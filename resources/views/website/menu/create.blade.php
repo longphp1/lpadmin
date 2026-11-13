@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
     <head>
         <meta charset="UTF-8">
         <title>新增管理员</title>
@@ -14,7 +14,7 @@
                 <div class="main-container mr-5">
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">网站</label>
+                        <label class="layui-form-label required">{{ __('admin.website') }}</label>
                         <div class="layui-input-block">
                             <select name="site_id" id="site_id" >
                                 @foreach($siteConfigList as $site)
@@ -24,31 +24,31 @@
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">网站分类名称</label>
+                        <label class="layui-form-label required">{{ __('admin.site_category_name') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="menu_name" value="" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label">网站分类名称EN</label>
+                        <label class="layui-form-label">{{ __('admin.site_category_name_en') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="menu_name_en" value=""  class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label">网站分类URL</label>
+                        <label class="layui-form-label">{{ __('admin.site_category_url') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="menu_url" value=""  class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label">网站分类顺序</label>
+                        <label class="layui-form-label">{{ __('admin.site_category_sort') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="range" value=""  class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label">网站分类类型</label>
+                        <label class="layui-form-label">{{ __('admin.site_category_type') }}</label>
                         <div class="layui-input-block">
                             <select name="type" id="type" >
                                 @foreach($menuType as $menu)
@@ -58,28 +58,28 @@
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label ">网站分类关键字</label>
+                        <label class="layui-form-label ">{{ __('admin.site_category_keywords') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="meta_keyword" value=""  class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label ">网站分类描述</label>
+                        <label class="layui-form-label ">{{ __('admin.site_category_description') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="meta_description" value=""  class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label ">网站分类标题</label>
+                        <label class="layui-form-label ">{{ __('admin.site_category_title') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="meta_title" value=""  class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">状态</label>
+                        <label class="layui-form-label required">{{ __('admin.status') }}</label>
                         <div class="layui-input-block">
-                            <input type="radio" name="status" data-value="0" title="启用" lay-filter="status" checked>
-                            <input type="radio" name="status" data-value="1" title="禁用" lay-filter="status">
+                            <input type="radio" name="status" data-value="0" title="{{ __('admin.enabled') }}" lay-filter="status" checked>
+                            <input type="radio" name="status" data-value="1" title="{{ __('admin.disabled') }}" lay-filter="status">
                         </div>
                     </div>
 
@@ -89,12 +89,8 @@
             <div class="bottom">
                 <div class="button-container">
                     <button type="submit" class="pear-btn pear-btn-primary pear-btn-md" lay-submit=""
-                        lay-filter="save">
-                        提交
-                    </button>
-                    <button type="reset" class="pear-btn pear-btn-md">
-                        重置
-                    </button>
+                        lay-filter="save">{{ __('admin.submit') }}</button>
+                    <button type="reset" class="pear-btn pear-btn-md">{{ __('admin.reset') }}</button>
                 </div>
             </div>
 
@@ -142,7 +138,7 @@
                             if (res.code !== 0) {
                                 return layui.popup.failure(res.message);
                             }
-                            return layui.popup.success("操作成功", function () {
+                            return layui.popup.success("{{ __('admin.success') }}", function () {
                                 parent.refreshTable();
                                 parent.layer.close(parent.layer.getFrameIndex(window.name));
                             });

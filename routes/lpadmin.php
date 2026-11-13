@@ -58,6 +58,9 @@ Route::group($groupConfig, function () {
     |--------------------------------------------------------------------------
     */
 
+    // 切换后台语言
+    Route::get('locale/{locale}', [\App\Http\Controllers\LPadmin\LocaleController::class, 'switch'])->name('locale');
+
     // 显示登录页面
     Route::get('login', [AuthController::class, 'showLogin'])->name('login');
 
@@ -94,6 +97,7 @@ Route::group($groupConfig, function () {
         */
         // 后台主页面（框架页面）
         Route::get('/', [AdminController::class, 'main'])->name('index');
+        Route::get('pear-config', [AdminController::class, 'pearConfig'])->name('pear_config');
 
         Route::prefix('dashboard')->name('dashboard.')->group(function () {
             Route::get('/', [DashboardController::class, 'index'])->name('index'); // 仪表盘首页

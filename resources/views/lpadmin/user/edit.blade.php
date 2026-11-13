@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -16,14 +16,14 @@
             <div class="main-container mr-5">
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">用户名</label>
+                        <label class="layui-form-label required">{{ __('admin.username') }}</label>
                         <div class="layui-input-block">
-                            <input type="text" name="username" value="{{ $user->username }}" class="layui-input" placeholder="请输入用户名" lay-verify="required">
+                            <input type="text" name="username" value="{{ $user->username }}" class="layui-input" placeholder="{{ __('admin.username_required') }}" lay-verify="required">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">密码</label>
+                        <label class="layui-form-label">{{ __('admin.password') }}</label>
                         <div class="layui-input-block">
                             <input type="password" name="password" value="" class="layui-input" placeholder="不修改密码请留空">
                         </div>
@@ -44,14 +44,14 @@
                         'default' => $user->gender
                     ])
                     <div class="layui-form-item">
-                        <label class="layui-form-label">昵称</label>
+                        <label class="layui-form-label">{{ __('admin.nickname') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="nickname" value="{{ $user->nickname }}" class="layui-input" placeholder="请输入昵称">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">邮箱</label>
+                        <label class="layui-form-label">{{ __('admin.email') }}</label>
                         <div class="layui-input-block">
                             <input type="email" name="email" value="{{ $user->email }}" class="layui-input" placeholder="请输入邮箱">
                         </div>
@@ -65,7 +65,7 @@
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">头像</label>
+                        <label class="layui-form-label">{{ __('admin.avatar') }}</label>
                         <div class="layui-input-block">
                             <div class="avatar-selector">
                                 <div class="avatar-preview-container" style="margin-bottom: 10px;">
@@ -78,8 +78,7 @@
                                         <i class="layui-icon layui-icon-picture"></i> 选择头像
                                     </button>
                                     <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" onclick="clearUserAvatar()">
-                                        <i class="layui-icon layui-icon-delete"></i> 清除
-                                    </button>
+                                        <i class="layui-icon layui-icon-delete"></i>{{ __('admin.clear') }}</button>
                                 </div>
                                 <input type="hidden" name="avatar" id="avatar-input" value="{{ $user->avatar }}">
                                 <div class="layui-form-mid layui-word-aux">点击图片或按钮选择头像，支持jpg、png格式</div>
@@ -101,13 +100,9 @@
             <div class="bottom">
                 <div class="button-container">
                     <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit lay-filter="save">
-                        <i class="layui-icon layui-icon-ok"></i>
-                        提交
-                    </button>
+                        <i class="layui-icon layui-icon-ok"></i>{{ __('admin.submit') }}</button>
                     <button type="reset" class="pear-btn pear-btn-sm">
-                        <i class="layui-icon layui-icon-refresh"></i>
-                        重置
-                    </button>
+                        <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                 </div>
             </div>
 

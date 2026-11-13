@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
     <head>
         <meta charset="utf-8">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>数据字典管理</title>
+        <title>{{ __('admin.dictionary_desc') }}</title>
         <link rel="stylesheet" href="/static/admin/component/pear/css/pear.css" />
         <link rel="stylesheet" href="/static/admin/css/reset.css" />
         <link rel="stylesheet" href="/static/admin/css/table-common.css" />
@@ -42,12 +42,12 @@
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">状态</label>
+                        <label class="layui-form-label">{{ __('admin.status') }}</label>
                         <div class="layui-input-block">
                             <select name="status">
                                 <option value="">请选择状态</option>
-                                <option value="1">启用</option>
-                                <option value="0">禁用</option>
+                                <option value="1">{{ __('admin.enabled') }}</option>
+                                <option value="0">{{ __('admin.disabled') }}</option>
                             </select>
                         </div>
                     </div>
@@ -57,8 +57,7 @@
                             <i class="layui-icon layui-icon-search"></i> 搜索
                         </button>
                         <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">
-                            <i class="layui-icon layui-icon-refresh"></i> 重置
-                        </button>
+                            <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                     </div>
                 </form>
             </div>
@@ -74,11 +73,9 @@
         <!-- 表格顶部工具栏 -->
         <script type="text/html" id="table-toolbar">
             <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
-                <i class="layui-icon layui-icon-add-1"></i>新增
-            </button>
+                <i class="layui-icon layui-icon-add-1"></i>{{ __('admin.create') }}</button>
             <button class="pear-btn pear-btn-danger pear-btn-md" lay-event="batchRemove">
-                <i class="layui-icon layui-icon-delete"></i>删除
-            </button>
+                <i class="layui-icon layui-icon-delete"></i>{{ __('admin.delete') }}</button>
         </script>
 
         <!-- 表格行工具栏 -->
@@ -87,10 +84,10 @@
                 <button class="table-action-btn table-action-view" lay-event="items" title="字典项">
                     <i class="layui-icon layui-icon-list"></i>
                 </button>
-                <button class="table-action-btn table-action-edit" lay-event="edit" title="编辑">
+                <button class="table-action-btn table-action-edit" lay-event="edit" title="{{ __('admin.edit') }}">
                     <i class="layui-icon layui-icon-edit"></i>
                 </button>
-                <button class="table-action-btn table-action-delete" lay-event="remove" title="删除">
+                <button class="table-action-btn table-action-delete" lay-event="remove" title="{{ __('admin.delete') }}">
                     <i class="layui-icon layui-icon-delete"></i>
                 </button>
             </div>
@@ -164,7 +161,7 @@
                         width: 80,
                         align: 'center',
 					},{
-                        title: "状态",
+                        title: "{{ __('admin.status') }}",
                         field: "status",
                         width: 100,
                         templet: function (d) {
@@ -190,17 +187,17 @@
                             return '<input type="checkbox" name="'+field+'" value="'+d[PRIMARY_KEY]+'" lay-skin="switch" lay-text="启用|禁用" lay-filter="'+field+'" '+checked+' />';
                         }
                     },{
-						title: "创建时间",
+						title: "{{ __('admin.created_at') }}",
 						field: "created_at",
                         width: 160,
                         hide: true,
 					},{
-						title: "更新时间",
+						title: "{{ __('admin.updated_at') }}",
 						field: "updated_at",
                         width: 160,
                         hide: true,
 					},{
-						title: "操作",
+						title: "{{ __('admin.actions_col') }}",
 						toolbar: "#table-bar",
 						align: "center",
 						width: 130,
@@ -214,7 +211,7 @@
 					url: SELECT_API,
 					toolbar: "#table-toolbar",
 					defaultToolbar: [{
-                        title: '刷新',
+                        title: '{{ __('admin.refresh') }}',
                         layEvent: 'refresh',
                         icon: 'layui-icon-refresh',
                     }, "filter", "exports", "print"],
@@ -266,7 +263,7 @@
                         let ids = data.map(item => item[PRIMARY_KEY]);
                         layer.confirm("确定要删除选中的数据吗？", {
                             icon: 3,
-                            title: "提示"
+                            title: "{{ __('admin.tip') }}"
                         }, function(index) {
                             let load = layer.load();
                             $.post(BATCH_DELETE_API, {
@@ -302,7 +299,7 @@
                     } else if (obj.event === "remove") {
                         layer.confirm("确定要删除这条数据吗？", {
                             icon: 3,
-                            title: "提示"
+                            title: "{{ __('admin.tip') }}"
                         }, function(index) {
                             let load = layer.load();
                             let url = DELETE_API.replace(':id', obj.data[PRIMARY_KEY]);

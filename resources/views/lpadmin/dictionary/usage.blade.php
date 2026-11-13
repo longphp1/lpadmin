@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -61,8 +61,8 @@
 
                                 <div class="layui-form-item">
                                     <div class="layui-input-block">
-                                        <button class="layui-btn" lay-submit lay-filter="demo-submit">提交</button>
-                                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                        <button class="layui-btn" lay-submit lay-filter="demo-submit">{{ __('admin.submit') }}</button>
+                                        <button type="reset" class="layui-btn layui-btn-primary">{{ __('admin.reset') }}</button>
                                     </div>
                                 </div>
                             </form>
@@ -256,7 +256,7 @@
                 // 用户状态示例
                 $('#status-badges').html(`
                     <span class="layui-badge layui-bg-green">正常</span>
-                    <span class="layui-badge layui-bg-red">禁用</span>
+                    <span class="layui-badge layui-bg-red">{{ __('admin.disabled') }}</span>
                     <span class="layui-badge layui-bg-orange">待审核</span>
                 `);
 

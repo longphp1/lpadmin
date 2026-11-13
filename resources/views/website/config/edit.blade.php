@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
     <head>
         <meta charset="UTF-8">
         <title>编辑管理员</title>
@@ -14,34 +14,34 @@
                 <div class="main-container mr-5">
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">网站名称</label>
+                        <label class="layui-form-label required">{{ __('admin.site_name') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="name" id="name" value="" required lay-verify="required" class="layui-input">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">网站域名</label>
+                        <label class="layui-form-label">{{ __('admin.site_domain') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="domain" id="domain" value="" required class="layui-input">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">网站关键字</label>
+                        <label class="layui-form-label">{{ __('admin.site_keywords') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="meta_keyword" value="" required class="layui-input">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">网站描述</label>
+                        <label class="layui-form-label">{{ __('admin.site_description') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="meta_description" value=""  class="layui-input" placeholder="">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label">网站标题</label>
+                        <label class="layui-form-label">{{ __('admin.site_title') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="title" value=""  class="layui-input" placeholder="">
                         </div>
@@ -49,7 +49,7 @@
 
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">网站LOGO</label>
+                        <label class="layui-form-label">{{ __('admin.site_logo') }}</label>
                         <div class="layui-input-block">
                             <div class="avatar-selector">
                                 <div class="avatar-preview-container" style="margin-bottom: 10px;">
@@ -62,8 +62,7 @@
                                         <i class="layui-icon layui-icon-picture"></i> 选择网站LOGO
                                     </button>
                                     <button type="button" class="pear-btn pear-btn-warm pear-btn-sm" onclick="clearAdminAvatar()">
-                                        <i class="layui-icon layui-icon-delete"></i> 清除
-                                    </button>
+                                        <i class="layui-icon layui-icon-delete"></i>{{ __('admin.clear') }}</button>
                                 </div>
                                 <input type="hidden" name="avatar" id="avatar-input" value="/static/images/default-avatar.png">
                                 <div class="layui-form-mid layui-word-aux">点击图片或按钮选择头像，支持jpg、png格式</div>
@@ -76,12 +75,8 @@
 
             <div class="bottom">
                 <div class="button-container">
-                    <button type="submit" class="pear-btn pear-btn-primary pear-btn-md" lay-submit="" lay-filter="save">
-                        提交
-                    </button>
-                    <button type="reset" class="pear-btn pear-btn-md">
-                        重置
-                    </button>
+                    <button type="submit" class="pear-btn pear-btn-primary pear-btn-md" lay-submit="" lay-filter="save">{{ __('admin.submit') }}</button>
+                    <button type="reset" class="pear-btn pear-btn-md">{{ __('admin.reset') }}</button>
                 </div>
             </div>
 
@@ -225,7 +220,7 @@
                             if (res.code !== 0) {
                                 return layui.popup.failure(res.message);
                             }
-                            return layui.popup.success("操作成功", function () {
+                            return layui.popup.success("{{ __('admin.success') }}", function () {
                                 parent.refreshTable();
                                 parent.layer.close(parent.layer.getFrameIndex(window.name));
                             });

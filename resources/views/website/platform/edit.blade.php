@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
     <head>
         <meta charset="UTF-8">
         <title>编辑管理员</title>
@@ -14,7 +14,7 @@
                 <div class="main-container mr-5">
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">网站选择</label>
+                        <label class="layui-form-label required">{{ __('admin.choose_site') }}</label>
                         <div class="layui-input-block">
                             <select name="site_id" id="site_id" >
                                 @foreach($siteConfigList as $site)
@@ -25,19 +25,19 @@
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">平台</label>
+                        <label class="layui-form-label">{{ __('admin.platform') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="platform" id="platform" value=""  class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label">平台名称</label>
+                        <label class="layui-form-label">{{ __('admin.platform_name') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="platform_name" id="platform_name" value=""  class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label">平台URL</label>
+                        <label class="layui-form-label">{{ __('admin.platform_url') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="platform_url" id="platform_url" value=""  class="layui-input">
                         </div>
@@ -50,20 +50,20 @@
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">网站关键字</label>
+                        <label class="layui-form-label">{{ __('admin.site_keywords') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="meta_keyword" value=""  class="layui-input">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">网站描述</label>
+                        <label class="layui-form-label">{{ __('admin.site_description') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="meta_description" value=""  class="layui-input" placeholder="">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label">网站标题</label>
+                        <label class="layui-form-label">{{ __('admin.site_title') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="meta_title" value=""  class="layui-input" placeholder="">
                         </div>
@@ -74,12 +74,8 @@
 
             <div class="bottom">
                 <div class="button-container">
-                    <button type="submit" class="pear-btn pear-btn-primary pear-btn-md" lay-submit="" lay-filter="save">
-                        提交
-                    </button>
-                    <button type="reset" class="pear-btn pear-btn-md">
-                        重置
-                    </button>
+                    <button type="submit" class="pear-btn pear-btn-primary pear-btn-md" lay-submit="" lay-filter="save">{{ __('admin.submit') }}</button>
+                    <button type="reset" class="pear-btn pear-btn-md">{{ __('admin.reset') }}</button>
                 </div>
             </div>
 
@@ -173,7 +169,7 @@
                             if (res.code !== 0) {
                                 return layui.popup.failure(res.message);
                             }
-                            return layui.popup.success("操作成功", function () {
+                            return layui.popup.success("{{ __('admin.success') }}", function () {
                                 parent.refreshTable();
                                 parent.layer.close(parent.layer.getFrameIndex(window.name));
                             });

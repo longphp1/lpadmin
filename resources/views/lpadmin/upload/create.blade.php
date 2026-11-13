@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -52,8 +52,8 @@
                                         <tr>
                                             <th>文件名</th>
                                             <th>大小</th>
-                                            <th>状态</th>
-                                            <th>操作</th>
+                                            <th>{{ __('admin.status') }}</th>
+                                            <th>{{ __('admin.actions_col') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody id="upload-list"></tbody>
@@ -90,9 +90,7 @@
                     开始上传
                 </button>
                 <button type="button" class="pear-btn pear-btn-warm" onclick="parent.layer.closeAll()">
-                    <i class="layui-icon layui-icon-close"></i>
-                    关闭
-                </button>
+                    <i class="layui-icon layui-icon-close"></i>{{ __('admin.off') }}</button>
             </div>
         </div>
     </form>
@@ -148,7 +146,7 @@
                             '<td>等待上传</td>',
                             '<td>',
                                 '<button class="layui-btn layui-btn-xs upload-reload layui-hide">重传</button>',
-                                '<button class="layui-btn layui-btn-xs layui-btn-danger upload-delete">删除</button>',
+                                '<button class="layui-btn layui-btn-xs layui-btn-danger upload-delete">{{ __('admin.delete') }}</button>',
                             '</td>',
                         '</tr>'].join(''));
                         
@@ -198,7 +196,7 @@
                     let tds = tr.children();
 
                     // 获取错误信息
-                    let errorMsg = '上传失败';
+                    let errorMsg = '{{ __('admin.upload_failed') }}';
                     if (res && res.message) {
                         errorMsg = res.message;
                     } else if (res && res.msg) {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
     <head>
         <meta charset="utf-8">
         <title>权限规则管理</title>
@@ -121,24 +121,20 @@
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">状态</label>
+                            <label class="layui-form-label">{{ __('admin.status') }}</label>
                             <div class="layui-input-inline">
                                 <select name="status">
                                     <option value="">全部状态</option>
-                                    <option value="1">启用</option>
-                                    <option value="0">禁用</option>
+                                    <option value="1">{{ __('admin.enabled') }}</option>
+                                    <option value="0">{{ __('admin.disabled') }}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="layui-inline">
                             <button type="submit" class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="rule-query">
-                                <i class="layui-icon layui-icon-search"></i>
-                                查询
-                            </button>
+                                <i class="layui-icon layui-icon-search"></i>{{ __('admin.search') }}</button>
                             <button type="reset" class="pear-btn pear-btn-md">
-                                <i class="layui-icon layui-icon-refresh"></i>
-                                重置
-                            </button>
+                                <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                         </div>
                     </div>
                 </form>
@@ -152,9 +148,7 @@
                 <script type="text/html" id="rule-toolbar">
                     <div class="layui-btn-group" style="margin-right: 10px;">
                         <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="add" style="margin-right: 5px;">
-                            <i class="layui-icon layui-icon-add-1"></i>
-                            新增
-                        </button>
+                            <i class="layui-icon layui-icon-add-1"></i>{{ __('admin.create') }}</button>
                         <button class="pear-btn pear-btn-success pear-btn-sm" lay-event="expand" style="margin-right: 5px;">
                             <i class="layui-icon layui-icon-spread-left"></i>
                             展开全部
@@ -164,9 +158,7 @@
                             收起全部
                         </button>
                         <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="batchRemove">
-                            <i class="layui-icon layui-icon-delete"></i>
-                            删除
-                        </button>
+                            <i class="layui-icon layui-icon-delete"></i>{{ __('admin.delete') }}</button>
                     </div>
                 </script>
 
@@ -199,13 +191,13 @@
 
                 <script type="text/html" id="rule-toolbar-right">
                     <div style="white-space: nowrap; display: flex; gap: 3px; justify-content: center;">
-                        <button class="table-action-btn table-action-edit" lay-event="edit" title="编辑">
+                        <button class="table-action-btn table-action-edit" lay-event="edit" title="{{ __('admin.edit') }}">
                             <i class="layui-icon layui-icon-edit"></i>
                         </button>
                         <button class="table-action-btn table-action-add" lay-event="add-child" title="添加子权限">
                             <i class="layui-icon layui-icon-add-1"></i>
                         </button>
-                        <button class="table-action-btn table-action-delete" lay-event="remove" title="删除">
+                        <button class="table-action-btn table-action-delete" lay-event="remove" title="{{ __('admin.delete') }}">
                             <i class="layui-icon layui-icon-delete"></i>
                         </button>
                     </div>
@@ -243,9 +235,9 @@
                         {title: '路由/URL', field: 'url', width: 160, align: 'left'},
                         {title: '图标', field: 'icon', width: 120, align: 'center', templet: '#rule-icon'},
                         {title: '排序', field: 'sort', width: 60, align: 'center'},
-                        {title: '状态', field: 'status', width: 90, align: 'center', templet: '#rule-status'},
-                        {title: '创建时间', field: 'created_at', width: 180, align: 'center'},
-                        {title: '操作', width: 100, align: 'center', toolbar: '#rule-toolbar-right', fixed: 'right'}
+                        {title: '{{ __('admin.status') }}', field: 'status', width: 90, align: 'center', templet: '#rule-status'},
+                        {title: '{{ __('admin.created_at') }}', field: 'created_at', width: 180, align: 'center'},
+                        {title: '{{ __('admin.actions_col') }}', width: 100, align: 'center', toolbar: '#rule-toolbar-right', fixed: 'right'}
                     ]
                 ];
 
@@ -255,7 +247,7 @@
                     method: 'GET',
                     toolbar: '#rule-toolbar',
                     defaultToolbar: [{
-                        title: '刷新',
+                        title: '{{ __('admin.refresh') }}',
                         layEvent: 'refresh',
                         icon: 'layui-icon-refresh',
                     }, 'filter', 'print', 'exports'],
@@ -287,7 +279,7 @@
                         where: data.field,
                         toolbar: '#rule-toolbar',
                         defaultToolbar: [{
-                            title: '刷新',
+                            title: '{{ __('admin.refresh') }}',
                             layEvent: 'refresh',
                             icon: 'layui-icon-refresh',
                         }, 'filter', 'print', 'exports'],

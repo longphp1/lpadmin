@@ -120,6 +120,22 @@ if (!function_exists('lpadmin_url_prefix')) {
         return '/' . lpadmin_route_prefix();
     }
 }
+if (!function_exists('menu_title')) {
+    /**
+     * 按当前语言显示后台菜单标题，没有译文时用数据库里的原文。
+     */
+    function menu_title(?string $name, ?string $title): string
+    {
+        $fallback = (string) $title;
+        if ($name === null || $name === '') {
+            return $fallback;
+        }
+        $key = 'menu.' . str_replace('.', '_', $name);
+        $line = __($key);
+        return $line === $key ? $fallback : (string) $line;
+    }
+}
+
 if (!function_exists('shellToRegex')) {
     // 将shell通配符模式转换为正则表达式
     function shellToRegex($pattern) {

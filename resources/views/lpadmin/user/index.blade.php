@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
     <head>
         <meta charset="utf-8">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>用户管理</title>
+        <title>{{ __('admin.user_mgmt') }}</title>
         <link rel="stylesheet" href="/static/admin/component/pear/css/pear.css" />
         <link rel="stylesheet" href="/static/admin/css/reset.css" />
         <link rel="stylesheet" href="/static/admin/css/table-common.css" />
@@ -78,13 +78,13 @@
                 <form class="layui-form" action="">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">用户名</label>
+                            <label class="layui-form-label">{{ __('admin.username') }}</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="username" placeholder="请输入用户名" class="layui-input">
+                                <input type="text" name="username" placeholder="{{ __('admin.username_required') }}" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">邮箱</label>
+                            <label class="layui-form-label">{{ __('admin.email') }}</label>
                             <div class="layui-input-inline">
                                 <input type="text" name="email" placeholder="请输入邮箱" class="layui-input">
                             </div>
@@ -96,24 +96,20 @@
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">状态</label>
+                            <label class="layui-form-label">{{ __('admin.status') }}</label>
                             <div class="layui-input-inline">
                                 <select name="status">
                                     <option value="">全部状态</option>
                                     <option value="1">正常</option>
-                                    <option value="0">禁用</option>
+                                    <option value="0">{{ __('admin.disabled') }}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="layui-inline">
                             <button type="submit" class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="user-query">
-                                <i class="layui-icon layui-icon-search"></i>
-                                查询
-                            </button>
+                                <i class="layui-icon layui-icon-search"></i>{{ __('admin.search') }}</button>
                             <button type="reset" class="pear-btn pear-btn-md">
-                                <i class="layui-icon layui-icon-refresh"></i>
-                                重置
-                            </button>
+                                <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                         </div>
                     </div>
                 </form>
@@ -127,19 +123,15 @@
                 <script type="text/html" id="user-toolbar">
                     <div class="layui-btn-group">
                         <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="add">
-                            <i class="layui-icon layui-icon-add-1"></i>
-                            新增
-                        </button>
+                            <i class="layui-icon layui-icon-add-1"></i>{{ __('admin.create') }}</button>
                         <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="batchRemove">
-                            <i class="layui-icon layui-icon-delete"></i>
-                            删除
-                        </button>
+                            <i class="layui-icon layui-icon-delete"></i>{{ __('admin.delete') }}</button>
                     </div>
                 </script>
 
                 <script type="text/html" id="user-avatar">
                     @{{# if(d.avatar) { }}
-                        <img src="@{{d.avatar}}" alt="头像" style="width: 40px; height: 40px; border-radius: 50%;">
+                        <img src="@{{d.avatar}}" alt="{{ __('admin.avatar') }}" style="width: 40px; height: 40px; border-radius: 50%;">
                     @{{# } else { }}
                         <img src="/static/admin/images/avatar.jpg" alt="默认头像" style="width: 40px; height: 40px; border-radius: 50%;">
                     @{{# } }}
@@ -151,13 +143,13 @@
 
                 <script type="text/html" id="user-toolbar-right">
                     <div style="white-space: nowrap; display: flex; gap: 3px; justify-content: center;">
-                        <button class="table-action-btn table-action-edit" lay-event="edit" title="编辑">
+                        <button class="table-action-btn table-action-edit" lay-event="edit" title="{{ __('admin.edit') }}">
                             <i class="layui-icon layui-icon-edit"></i>
                         </button>
                         <button class="table-action-btn table-action-view" lay-event="view" title="查看">
                             <i class="layui-icon layui-icon-eye"></i>
                         </button>
-                        <button class="table-action-btn table-action-delete" lay-event="remove" title="删除">
+                        <button class="table-action-btn table-action-delete" lay-event="remove" title="{{ __('admin.delete') }}">
                             <i class="layui-icon layui-icon-delete"></i>
                         </button>
                     </div>
@@ -190,10 +182,10 @@
                     [
                         {type: 'checkbox'},
                         {title: 'ID', field: 'id', width: 80, align: 'center'},
-                        {title: '头像', field: 'avatar', width: 80, align: 'center', templet: '#user-avatar'},
-                        {title: '用户名', field: 'username', width: 120, align: 'center'},
-                        {title: '昵称', field: 'nickname', width: 120, align: 'center'},
-                        {title: '邮箱', field: 'email', width: 180, align: 'center'},
+                        {title: '{{ __('admin.avatar') }}', field: 'avatar', width: 80, align: 'center', templet: '#user-avatar'},
+                        {title: '{{ __('admin.username') }}', field: 'username', width: 120, align: 'center'},
+                        {title: '{{ __('admin.nickname') }}', field: 'nickname', width: 120, align: 'center'},
+                        {title: '{{ __('admin.email') }}', field: 'email', width: 180, align: 'center'},
                         {title: '手机号', field: 'phone', width: 120, align: 'center'},
                         {title: '性别', field: 'gender', width: 80, align: 'center',
                         templet: function (d) {
@@ -204,10 +196,10 @@
                             };
                             return sexs[d.gender];
                         }},
-                        {title: '状态', field: 'status', width: 100, align: 'center', templet: '#user-status'},
+                        {title: '{{ __('admin.status') }}', field: 'status', width: 100, align: 'center', templet: '#user-status'},
                         {title: '注册时间', field: 'created_at', width: 180, align: 'center'},
                         {title: '最后登录', field: 'last_login_at', width: 180, align: 'center'},
-                        {title: '操作', width: 100, align: 'center', toolbar: '#user-toolbar-right', fixed: 'right'}
+                        {title: '{{ __('admin.actions_col') }}', width: 100, align: 'center', toolbar: '#user-toolbar-right', fixed: 'right'}
                     ]
                 ];
 
@@ -217,7 +209,7 @@
                     method: 'GET',
                     toolbar: '#user-toolbar',
                     defaultToolbar: [{
-                        title: '刷新',
+                        title: '{{ __('admin.refresh') }}',
                         layEvent: 'refresh',
                         icon: 'layui-icon-refresh',
                     }, 'filter', 'print', 'exports'],

@@ -60,10 +60,10 @@ class AuthController extends BaseController
             'password' => 'required|string|min:6',
             'captcha' => 'required|string',
         ], [
-            'username.required' => '请输入用户名',
-            'password.required' => '请输入密码',
-            'password.min' => '密码至少6位',
-            'captcha.required' => '请输入验证码',
+            'username.required' => __('admin.username_required'),
+            'password.required' => __('admin.password_required'),
+            'password.min' => __('admin.password_at_least', ['min' => 6]),
+            'captcha.required' => __('admin.captcha_required'),
         ]);
 
         if ($validator->fails()) {
@@ -76,7 +76,7 @@ class AuthController extends BaseController
         // 验证验证码
         $captchaController = new \App\Http\Controllers\LPadmin\CaptchaController();
         if (!$captchaController->verify($request->captcha)) {
-            $message = '验证码错误';
+            $message = __('admin.captcha_invalid');
             if ($request->expectsJson()) {
                 return $this->error($message);
             }
@@ -102,13 +102,13 @@ class AuthController extends BaseController
             if ($request->expectsJson()) {
                 return $this->success([
                     'redirect' => route('lpadmin.index')
-                ], '登录成功');
+                ], __('admin.login_success'));
             }
 
             return redirect()->intended(route('lpadmin.index'));
         }
 
-        $message = '用户名或密码错误';
+        $message = __('admin.credentials_invalid');
         if ($request->expectsJson()) {
             return $this->error($message);
         }
@@ -129,12 +129,14 @@ class AuthController extends BaseController
             $this->log('logout', '管理员登出');
         }
 
+        $locale = $request->session()->get('locale', $request->cookie('admin_locale', 'zh_CN'));
         Auth::guard('lpadmin')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        $request->session()->put('locale', $locale);
 
         if ($request->expectsJson()) {
-            return $this->success(null, '登出成功');
+            return $this->success(null, __('admin.logout_ok'));
         }
 
         return redirect()->route('lpadmin.login');
