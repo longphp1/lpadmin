@@ -3,10 +3,95 @@
 namespace App\Services\Website;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 use RuntimeException;
 
 class HiobuyProductService
 {
+    public function fetchByUrls(array $urls, int $concurrency = 10): array
+    {
+        $apiKey = config('services.hiobuy.key');
+        if (empty($apiKey)) {
+            throw new RuntimeException('未配置 HIOBUY_API_KEY，无法查询商品信息');
+        }
+        $endpoint = rtrim((string) config('services.hiobuy.base_url'), '/') . '/v1/products/detail';
+
+        $validUrls = [];
+        $skipped = [];
+        foreach ($urls as $url) {
+            $url = trim((string) $url);
+            if ($url === '') {
+                continue;
+            }
+            if (!preg_match('/^https?:\/\//i', $url)) {
+                $url = 'https://' . $url;
+            }
+            $channel = $this->detectChannel($url);
+            if ($channel === null) {
+                $skipped[] = ['url' => $url, 'error' => '无法识别商品链接'];
+                continue;
+            }
+            $hash = md5($url);
+            if (!isset($validUrls[$hash])) {
+                $validUrls[$hash] = ['url' => $url, 'channel' => $channel];
+            }
+        }
+
+        $results = [];
+        foreach (array_chunk($validUrls, $concurrency) as $chunk) {
+            $pool = Http::pool(function ($pool) use ($apiKey, $endpoint, $chunk) {
+                foreach ($chunk as $item) {
+                    $pool->withToken($apiKey)
+                        ->acceptJson()
+                        ->asJson()
+                        ->timeout(40)
+                        ->post($endpoint, [
+                            'channel'         => $item['channel'],
+                            'url'             => $item['url'],
+                            'language'        => 'en',
+                            'response_format' => 'standard',
+                        ]);
+                }
+            });
+
+            foreach ($chunk as $idx => $item) {
+                $response = $pool[$idx] ?? null;
+                $results[] = $this->parsePoolResponse($item['url'], $response);
+            }
+        }
+
+        return [
+            'results' => $results,
+            'skipped' => $skipped,
+        ];
+    }
+
+    private function parsePoolResponse(string $url, $response): array
+    {
+        if ($response === null) {
+            return ['url' => $url, 'success' => false, 'error' => '请求失败（无响应）'];
+        }
+        if ($response instanceof \Throwable) {
+            return ['url' => $url, 'success' => false, 'error' => '请求异常：' . $response->getMessage()];
+        }
+        if (!$response->successful()) {
+            $message = $response->json('message')
+                ?? $response->json('error')
+                ?? $response->json('msg')
+                ?? ('接口返回 ' . $response->status());
+            return ['url' => $url, 'success' => false, 'error' => is_string($message) ? $message : '商品接口查询失败'];
+        }
+        $product = $response->json('product');
+        if (!is_array($product) || empty($product)) {
+            return ['url' => $url, 'success' => false, 'error' => '接口未返回商品信息'];
+        }
+        try {
+            return ['url' => $url, 'success' => true, 'product' => $this->mapProduct($product, $url)];
+        } catch (\Throwable $e) {
+            return ['url' => $url, 'success' => false, 'error' => $e->getMessage()];
+        }
+    }
+
     public function fetchByUrl(string $url): array
     {
         $url = trim($url);

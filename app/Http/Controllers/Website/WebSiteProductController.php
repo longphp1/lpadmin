@@ -270,11 +270,15 @@ class WebSiteProductController extends BaseController
     public function import(Request $request)
     {
         $data = $request->all();
-        Log::info('import data:' . json_encode($data));
+        Log::info('import raw data:' . json_encode($data, JSON_UNESCAPED_UNICODE));
+        Log::info('import site_id=' . var_export($data['site_id'] ?? null, true) . ', menu_id=' . var_export($data['menu_id'] ?? null, true));
+
+        $siteId = (int) trim((string) ($data['site_id'] ?? ''));
+        $menuId = (int) trim((string) ($data['menu_id'] ?? ''));
+        Log::info('import parsed site_id=' . $siteId . ', menu_id=' . $menuId);
+
         validator($data, [
             'file'    => 'required|file|mimes:xlsx,xls|max:20480',
-            'site_id' => 'sometimes|nullable|integer',
-            'menu_id' => 'sometimes|nullable|integer'
         ])->validate();
 
         $requestFile = $data['file'];
@@ -289,6 +293,8 @@ class WebSiteProductController extends BaseController
         if ($importProductList === [] || !is_array($importProductList[0] ?? null)) {
             return $this->error('文件内容为空', 200);
         }
+        $data['site_id'] = $siteId;
+        $data['menu_id'] = $menuId;
         $header = $importProductList[0];
         if ($this->isSourceUrlImport($header)) {
             return $this->importBySourceUrl($importProductList, $data);
@@ -415,86 +421,149 @@ class WebSiteProductController extends BaseController
 
     private function importBySourceUrl(array $rows, array $data)
     {
-        ini_set('max_execution_time', '1200');
-        $siteId = (int) ($data['site_id'] ?? 1);
+        ini_set('max_execution_time', '1800');
+        ini_set('memory_limit', '512M');
+
+        $siteId = max(1, (int) ($data['site_id'] ?? 0));
         $menuId = (int) ($data['menu_id'] ?? 0);
+        Log::info('importBySourceUrl site_id=' . $siteId . ', menu_id=' . $menuId);
+
         if ($menuId <= 0 || !MenuConfig::query()->where('id', $menuId)->exists()) {
             return $this->error('链接导入请先选择商品分类', 200);
         }
 
         unset($rows[0]);
-        $hiobuy = app(HiobuyProductService::class);
+
+        $allUrls = [];
+        foreach ($rows as $cells) {
+            $url = trim((string) ($cells[0] ?? ''));
+            if ($url !== '') {
+                $allUrls[] = $url;
+            }
+        }
+        $totalUrls = count($allUrls);
+        Log::info('importBySourceUrl total unique urls=' . $totalUrls);
+
+        if ($totalUrls === 0) {
+            return $this->error('没有可导入的商品链接', 200);
+        }
+
+        $existingProducts = ProductMenu::query()
+            ->where('site_id', $siteId)
+            ->where('menu_id', $menuId)
+            ->select(['id', 'source_product_id', 'source_product_url'])
+            ->get();
+
+        $existById = [];
+        $existBySourceId = [];
+        $existBySourceUrl = [];
+        foreach ($existingProducts as $ep) {
+            $existById[$ep->id] = $ep->id;
+            if ($ep->source_product_id) {
+                $existBySourceId[$ep->source_product_id] = $ep->id;
+            }
+            if ($ep->source_product_url) {
+                $existBySourceUrl[$ep->source_product_url] = $ep->id;
+            }
+        }
+        Log::info('importBySourceUrl existing products=' . count($existingProducts));
+
         $range = (int) ProductMenu::query()
             ->where('site_id', $siteId)
             ->where('menu_id', $menuId)
             ->max('range');
-        $created = 0;
-        $updated = 0;
-        $failed = [];
-        $seen = [];
 
-        foreach ($rows as $index => $cells) {
-            $url = trim((string) ($cells[0] ?? ''));
-            if ($url === '') {
-                continue;
-            }
-            $rowNo = $index + 1;
-            if (isset($seen[$url])) {
-                continue;
-            }
-            $seen[$url] = true;
-            try {
-                $product = $hiobuy->fetchByUrl($url);
-            } catch (\Throwable $e) {
-                $failed[] = '第' . $rowNo . '行：' . $e->getMessage();
-                Log::warning('source url import failed', ['row' => $rowNo, 'url' => $url, 'error' => $e->getMessage()]);
-                continue;
-            }
+        $hiobuy = app(HiobuyProductService::class);
+        $concurrency = min(10, max(5, (int) ceil($totalUrls / 20)));
+        Log::info('importBySourceUrl fetching with concurrency=' . $concurrency);
 
-            $existProduct = null;
-            if ($product['source_product_id'] !== '') {
-                $existProduct = ProductMenu::query()
-                    ->where('source_product_id', $product['source_product_id'])
-                    ->first();
-            }
-            if (!$existProduct) {
-                $existProduct = ProductMenu::query()
-                    ->where('source_product_url', $product['source_product_url'])
-                    ->first();
-            }
+        $startedAt = microtime(true);
+        $batchResult = $hiobuy->fetchByUrls($allUrls, $concurrency);
+        $elapsed = round(microtime(true) - $startedAt, 2);
+        Log::info('importBySourceUrl fetch completed in ' . $elapsed . 's');
 
-            $now = Carbon::now()->toDateTimeString();
-            if ($existProduct && $existProduct->id) {
-                ProductMenu::query()->where('id', $existProduct->id)->update(array_merge($product, [
-                    'updated_at' => $now,
-                ]));
-                $updated++;
+        $results = $batchResult['results'] ?? [];
+        $skipped = $batchResult['skipped'] ?? [];
+
+        $toInsert = [];
+        $updates = [];
+        $failed = $skipped;
+        $now = Carbon::now()->toDateTimeString();
+
+        foreach ($results as $r) {
+            if (empty($r['success']) || !isset($r['product'])) {
+                $failed[] = ['url' => $r['url'] ?? '', 'error' => $r['error'] ?? '未知错误'];
                 continue;
             }
 
-            $range++;
-            ProductMenu::query()->insert(array_merge($product, [
-                'site_id'    => $siteId,
-                'menu_id'    => $menuId,
-                'page'       => (int) ceil($range / 100),
-                'range'      => $range,
-                'created_at' => $now,
-                'updated_at' => $now,
-            ]));
-            $created++;
+            $product = $r['product'];
+            $sourceId = $product['source_product_id'] ?? '';
+            $sourceUrl = $product['source_product_url'] ?? '';
+
+            $existId = null;
+            if ($sourceId !== '' && isset($existBySourceId[$sourceId])) {
+                $existId = $existBySourceId[$sourceId];
+            } elseif ($sourceUrl !== '' && isset($existBySourceUrl[$sourceUrl])) {
+                $existId = $existBySourceUrl[$sourceUrl];
+            }
+
+            if ($existId !== null) {
+                $updates[$existId] = array_merge($product, ['updated_at' => $now]);
+            } else {
+                $range++;
+                $product['site_id'] = $siteId;
+                $product['menu_id'] = $menuId;
+                $product['page'] = (int) ceil($range / 100);
+                $product['range'] = $range;
+                $product['created_at'] = $now;
+                $product['updated_at'] = $now;
+                $toInsert[] = $product;
+
+                if ($sourceId !== '') {
+                    $existBySourceId[$sourceId] = true;
+                }
+                if ($sourceUrl !== '') {
+                    $existBySourceUrl[$sourceUrl] = true;
+                }
+            }
         }
+
+        if (!empty($updates)) {
+            Log::info('importBySourceUrl updating ' . count($updates) . ' products');
+            foreach (array_chunk($updates, 200) as $chunk) {
+                foreach ($chunk as $id => $data) {
+                    ProductMenu::query()->where('id', $id)->update($data);
+                }
+            }
+        }
+
+        if (!empty($toInsert)) {
+            Log::info('importBySourceUrl inserting ' . count($toInsert) . ' products');
+            foreach (array_chunk($toInsert, 500) as $chunk) {
+                ProductMenu::query()->insert($chunk);
+            }
+        }
+
+        $created = count($toInsert);
+        $updated = count($updates);
+        $failedCount = count($failed);
 
         $message = '新增 ' . $created . ' 条，更新 ' . $updated . ' 条';
-        if (!empty($failed)) {
-            $message .= '，失败 ' . count($failed) . ' 条：' . implode('；', array_slice($failed, 0, 5));
+        if ($failedCount > 0) {
+            $preview = array_slice(array_map(function ($f) {
+                return ($f['url'] ?? '') . '：' . ($f['error'] ?? '未知');
+            }, $failed), 0, 5);
+            $message .= '，失败 ' . $failedCount . ' 条：' . implode('；', $preview);
         }
+        Log::info('importBySourceUrl done: created=' . $created . ', updated=' . $updated . ', failed=' . $failedCount);
+
         if ($created === 0 && $updated === 0) {
             return $this->error($message === '新增 0 条，更新 0 条' ? '没有可导入的商品链接' : $message, 200);
         }
         return $this->success([
             'created' => $created,
             'updated' => $updated,
-            'failed'  => count($failed),
+            'failed'  => $failedCount,
         ], $message);
     }
 
