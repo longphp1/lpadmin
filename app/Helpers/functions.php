@@ -120,6 +120,21 @@ if (!function_exists('lpadmin_url_prefix')) {
         return '/' . lpadmin_route_prefix();
     }
 }
+if (!function_exists('admin_text')) {
+    /**
+     * 取后台文案。没有对应语言时，沿用传入的原文。
+     */
+    function admin_text(string $key, ?string $fallback = null): string
+    {
+        $full = str_starts_with($key, 'admin.') ? $key : 'admin.'.$key;
+        $line = __($full);
+        if ($line === $full) {
+            return $fallback ?? $key;
+        }
+        return (string) $line;
+    }
+}
+
 if (!function_exists('menu_title')) {
     /**
      * 按当前语言显示后台菜单标题，没有译文时用数据库里的原文。

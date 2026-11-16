@@ -149,35 +149,35 @@
             <form class="layui-form" action="">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">文件名</label>
+                        <label class="layui-form-label">{{ __('admin.file_name') }}</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="original_name" placeholder="请输入文件名" class="layui-input">
+                            <input type="text" name="original_name" placeholder="{{ __('admin.enter_filename') }}" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">文件类型</label>
+                        <label class="layui-form-label">{{ __('admin.file_type') }}</label>
                         <div class="layui-input-inline">
                             <select name="type">
-                                <option value="">全部类型</option>
-                                <option value="image">图片</option>
-                                <option value="document">文档</option>
-                                <option value="video">视频</option>
-                                <option value="audio">音频</option>
+                                <option value="">{{ __('admin.all_types') }}</option>
+                                <option value="image">{{ __('admin.image_file') }}</option>
+                                <option value="document">{{ __('admin.document') }}</option>
+                                <option value="video">{{ __('admin.video') }}</option>
+                                <option value="audio">{{ __('admin.audio') }}</option>
                             </select>
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">文件分类</label>
+                        <label class="layui-form-label">{{ __('admin.file_category') }}</label>
                         <div class="layui-input-inline">
                             <select name="category" id="category-select">
-                                <option value="">全部分类</option>
+                                <option value="">{{ __('admin.all_categories') }}</option>
                             </select>
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">扩展名</label>
+                        <label class="layui-form-label">{{ __('admin.extension') }}</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="extension" placeholder="请输入扩展名" class="layui-input">
+                            <input type="text" name="extension" placeholder="{{ __('admin.enter_extension') }}" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
@@ -226,7 +226,7 @@
 
             <script type="text/html" id="upload-toolbar-right">
                 <div style="white-space: nowrap; display: flex; gap: 3px; justify-content: center;">
-                    <button class="table-action-btn table-action-view" lay-event="preview" title="预览">
+                    <button class="table-action-btn table-action-view" lay-event="preview" title="{{ __('admin.preview') }}">
                         <i class="layui-icon layui-icon-eye"></i>
                     </button>
                     <button class="table-action-btn table-action-edit" lay-event="download" title="下载">
@@ -272,14 +272,14 @@
                 [
                     {type: 'checkbox', fixed: 'left'},
                     {title: 'ID', field: 'id', width: 80, align: 'center', sort: true},
-                    {title: '预览', field: 'preview', width: 100, align: 'center', templet: '#upload-preview'},
-                    {title: '文件名', field: 'original_name', width: 180, align: 'left'},
-                    {title: '分类', field: 'category_label', width: 100, align: 'center'},
-                    {title: '类型', field: 'type_label', width: 80, align: 'center'},
-                    {title: '大小', field: 'size', width: 100, align: 'center', templet: '#upload-size'},
-                    {title: '标签', field: 'tags_string', width: 120, align: 'center'},
-                    {title: '上传者', field: 'admin_name', width: 100, align: 'center'},
-                    {title: '上传时间', field: 'created_at', width: 160, align: 'center'},
+                    {title: '{{ __('admin.preview') }}', field: 'preview', width: 100, align: 'center', templet: '#upload-preview'},
+                    {title: '{{ __('admin.file_name') }}', field: 'original_name', width: 180, align: 'left'},
+                    {title: '{{ __('admin.col_category') }}', field: 'category_label', width: 100, align: 'center'},
+                    {title: '{{ __('admin.type') }}', field: 'type_label', width: 80, align: 'center'},
+                    {title: '{{ __('admin.size') }}', field: 'size', width: 100, align: 'center', templet: '#upload-size'},
+                    {title: '{{ __('admin.tags') }}', field: 'tags_string', width: 120, align: 'center'},
+                    {title: '{{ __('admin.uploader') }}', field: 'admin_name', width: 100, align: 'center'},
+                    {title: '{{ __('admin.uploaded_at') }}', field: 'created_at', width: 160, align: 'center'},
                     {title: '{{ __('admin.actions_col') }}', width: 120, align: 'center', toolbar: '#upload-toolbar-right', fixed: 'right'}
                 ]
             ];

@@ -14,9 +14,9 @@
             <form class="layui-form" action="">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">分组名称</label>
+                        <label class="layui-form-label">{{ __('admin.group_name') }}</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="name" placeholder="请输入分组名称" class="layui-input">
+                            <input type="text" name="name" placeholder="{{ __('admin.enter_group_name') }}" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
@@ -75,10 +75,10 @@
             let cols = [
                 [
                     {type: 'checkbox'},
-                    {title: '分组名称', field: 'name', width: 150},
-                    {title: '分组标题', field: 'title', width: 200},
-                    {title: '分组描述', field: 'description', width: 250},
-                    {title: '配置数量', field: 'config_count', width: 120, align: 'center'},
+                    {title: '{{ __('admin.group_name') }}', field: 'name', width: 150},
+                    {title: '{{ __('admin.group_title') }}', field: 'title', width: 200},
+                    {title: '{{ __('admin.group_description') }}', field: 'description', width: 250},
+                    {title: '{{ __('admin.config_count') }}', field: 'config_count', width: 120, align: 'center'},
                     {title: '{{ __('admin.actions_col') }}', width: 100, align: 'center', toolbar: '#group-toolbar-right', fixed: 'right'}
                 ]
             ];
@@ -165,24 +165,24 @@
                 const formHtml = `
                     <form class="layui-form" lay-filter="group-form" style="padding: 20px;">
                         <div class="layui-form-item">
-                            <label class="layui-form-label">分组名称</label>
+                            <label class="layui-form-label">{{ __('admin.group_name') }}</label>
                             <div class="layui-input-block">
                                 <input type="text" name="name" value="${data ? data.name : ''}" 
-                                       placeholder="请输入分组名称（英文）" class="layui-input" 
+                                       placeholder="{{ __('admin.enter_group_key') }}" class="layui-input" 
                                        lay-verify="required" ${isEdit ? 'readonly' : ''}>
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">分组标题</label>
+                            <label class="layui-form-label">{{ __('admin.group_title') }}</label>
                             <div class="layui-input-block">
                                 <input type="text" name="title" value="${data ? data.title : ''}" 
-                                       placeholder="请输入分组标题（中文）" class="layui-input" lay-verify="required">
+                                       placeholder="{{ __('admin.enter_group_title') }}" class="layui-input" lay-verify="required">
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">分组描述</label>
+                            <label class="layui-form-label">{{ __('admin.group_description') }}</label>
                             <div class="layui-input-block">
-                                <textarea name="description" placeholder="请输入分组描述" 
+                                <textarea name="description" placeholder="{{ __('admin.enter_group_description') }}" 
                                           class="layui-textarea">${data ? data.description : ''}</textarea>
                             </div>
                         </div>
@@ -192,7 +192,7 @@
                                     <i class="layui-icon layui-icon-ok"></i> 保存
                                 </button>
                                 <button type="button" class="layui-btn layui-btn-primary" onclick="layer.closeAll()">
-                                    <i class="layui-icon layui-icon-close"></i> 取消
+                                    <i class="layui-icon layui-icon-close"></i> {{ __('admin.cancel') }}
                                 </button>
                             </div>
                         </div>

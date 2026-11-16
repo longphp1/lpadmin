@@ -86,21 +86,21 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">{{ __('admin.email') }}</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="email" placeholder="请输入邮箱" class="layui-input">
+                                <input type="text" name="email" placeholder="{{ __('admin.enter_email') }}" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">手机号</label>
+                            <label class="layui-form-label">{{ __('admin.phone_number') }}</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="phone" placeholder="请输入手机号" class="layui-input">
+                                <input type="text" name="phone" placeholder="{{ __('admin.enter_phone') }}" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
                             <label class="layui-form-label">{{ __('admin.status') }}</label>
                             <div class="layui-input-inline">
                                 <select name="status">
-                                    <option value="">全部状态</option>
-                                    <option value="1">正常</option>
+                                    <option value="">{{ __('admin.all_status') }}</option>
+                                    <option value="1">{{ __('admin.normal') }}</option>
                                     <option value="0">{{ __('admin.disabled') }}</option>
                                 </select>
                             </div>
@@ -138,7 +138,7 @@
                 </script>
 
                 <script type="text/html" id="user-status">
-                    <input type="checkbox" name="status" value="@{{d.id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="user-status" @{{# if(d.status == 1) { }} checked @{{# } }}>
+                    <input type="checkbox" name="status" value="@{{d.id}}" lay-skin="switch" lay-text="{{ __('admin.normal') }}|{{ __('admin.disabled') }}" lay-filter="user-status" @{{# if(d.status == 1) { }} checked @{{# } }}>
                 </script>
 
                 <script type="text/html" id="user-toolbar-right">
@@ -186,19 +186,19 @@
                         {title: '{{ __('admin.username') }}', field: 'username', width: 120, align: 'center'},
                         {title: '{{ __('admin.nickname') }}', field: 'nickname', width: 120, align: 'center'},
                         {title: '{{ __('admin.email') }}', field: 'email', width: 180, align: 'center'},
-                        {title: '手机号', field: 'phone', width: 120, align: 'center'},
-                        {title: '性别', field: 'gender', width: 80, align: 'center',
+                        {title: '{{ __('admin.phone_number') }}', field: 'phone', width: 120, align: 'center'},
+                        {title: '{{ __('admin.gender') }}', field: 'gender', width: 80, align: 'center',
                         templet: function (d) {
                             let sexs = {
-                                0: '女',
-                                1: '男', 
-                                2: '保密'
+                                0: '{{ __('admin.female') }}',
+                                1: '{{ __('admin.male') }}', 
+                                2: '{{ __('admin.unspecified') }}'
                             };
                             return sexs[d.gender];
                         }},
                         {title: '{{ __('admin.status') }}', field: 'status', width: 100, align: 'center', templet: '#user-status'},
-                        {title: '注册时间', field: 'created_at', width: 180, align: 'center'},
-                        {title: '最后登录', field: 'last_login_at', width: 180, align: 'center'},
+                        {title: '{{ __('admin.registered_at') }}', field: 'created_at', width: 180, align: 'center'},
+                        {title: '{{ __('admin.last_login') }}', field: 'last_login_at', width: 180, align: 'center'},
                         {title: '{{ __('admin.actions_col') }}', width: 100, align: 'center', toolbar: '#user-toolbar-right', fixed: 'right'}
                     ]
                 ];

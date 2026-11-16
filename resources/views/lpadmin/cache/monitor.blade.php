@@ -132,7 +132,7 @@
             </div>
             <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="search-keys">
                 <i class="layui-icon layui-icon-search"></i>
-                搜索
+                {{ __('admin.search_menu') }}
             </button>
         </div>
     </div>
@@ -313,13 +313,13 @@ layui.use(['layer', 'table', 'form', 'echarts', 'jquery'], function(){
             limits: [10, 20, 50, 100],
             height: 'full-100',
             cols: [[
-                {field: 'name', title: '缓存键', width: 400, templet: function(d) {
+                {field: 'name', title: '{{ __('admin.cache_key') }}', width: 400, templet: function(d) {
                     return '<span style="word-break: break-all;">' + (d.name || 'N/A') + '</span>';
                 }},
-                {field: 'type', title: '类型', align: 'center', templet: function(d) {
+                {field: 'type', title: '{{ __('admin.type') }}', align: 'center', templet: function(d) {
                     return d.type || 'N/A';
                 }},
-                {field: 'size', title: '大小', align: 'center', templet: function(d) {
+                {field: 'size', title: '{{ __('admin.size') }}', align: 'center', templet: function(d) {
                     return d.size || 'N/A';
                 }},
                 {field: 'ttl', title: 'TTL', align: 'center', templet: function(d) {
@@ -565,7 +565,7 @@ layui.use(['layer', 'table', 'form', 'echarts', 'jquery'], function(){
         layer.confirm('确定要删除缓存键 "' + key + '" 吗？', {
             icon: 3,
             title: '确认删除',
-            btn: ['确定', '取消']
+            btn: ['确定', '{{ __('admin.cancel') }}']
         }, function(index) {
             $.ajax({
                 url: '{{ route("lpadmin.cache.deleteKey") }}',

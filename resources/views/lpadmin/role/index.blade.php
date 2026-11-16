@@ -13,16 +13,16 @@
                 <form class="layui-form" action="">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">角色名称</label>
+                            <label class="layui-form-label">{{ __('admin.role_name') }}</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="name" placeholder="请输入角色名称" class="layui-input">
+                                <input type="text" name="name" placeholder="{{ __('admin.enter_role_name') }}" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
                             <label class="layui-form-label">{{ __('admin.status') }}</label>
                             <div class="layui-input-inline">
                                 <select name="status">
-                                    <option value="">全部状态</option>
+                                    <option value="">{{ __('admin.all_status') }}</option>
                                     <option value="1">{{ __('admin.enabled') }}</option>
                                     <option value="0">{{ __('admin.disabled') }}</option>
                                 </select>
@@ -53,7 +53,7 @@
                 </script>
 
                 <script type="text/html" id="role-status">
-                    <input type="checkbox" name="status" value="@{{d.id}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="role-status" @{{# if(d.status == 1) { }} checked @{{# } }}>
+                    <input type="checkbox" name="status" value="@{{d.id}}" lay-skin="switch" lay-text="{{ __('admin.enabled') }}|{{ __('admin.disabled') }}" lay-filter="role-status" @{{# if(d.status == 1) { }} checked @{{# } }}>
                 </script>
 
                 <script type="text/html" id="role-toolbar-right">
@@ -96,9 +96,9 @@
                     [
                         {type: 'checkbox'},
                         {title: 'ID', field: 'id', width: 80, align: 'center'},
-                        {title: '角色名称', field: 'name', align: 'center'},
-                        {title: '显示名称', field: 'display_name', align: 'center'},
-                        {title: '描述', field: 'description', align: 'center'},
+                        {title: '{{ __('admin.role_name') }}', field: 'name', align: 'center'},
+                        {title: '{{ __('admin.display_name') }}', field: 'display_name', align: 'center'},
+                        {title: '{{ __('admin.description') }}', field: 'description', align: 'center'},
                         {title: '{{ __('admin.rule_count') }}', field: 'permission_count', width: 100, align: 'center'},
                         {title: '{{ __('admin.admin_count') }}', field: 'admin_count', width: 120, align: 'center'},
                         {title: '{{ __('admin.status') }}', field: 'status', width: 100, align: 'center', templet: '#role-status'},

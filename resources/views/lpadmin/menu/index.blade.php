@@ -62,14 +62,14 @@
             <form class="layui-form top-search-from">
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">菜单标题</label>
+                    <label class="layui-form-label">{{ __('admin.menu_title') }}</label>
                     <div class="layui-input-block">
                         <input type="text" name="title" value="" class="layui-input">
                     </div>
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">菜单标识</label>
+                    <label class="layui-form-label">{{ __('admin.menu_key') }}</label>
                     <div class="layui-input-block">
                         <input type="text" name="name" value="" class="layui-input">
                     </div>
@@ -79,7 +79,7 @@
                     <label class="layui-form-label">{{ __('admin.status') }}</label>
                     <div class="layui-input-block">
                         <select name="status">
-                            <option value="">全部状态</option>
+                            <option value="">{{ __('admin.all_status') }}</option>
                             <option value="1">{{ __('admin.enabled') }}</option>
                             <option value="0">{{ __('admin.disabled') }}</option>
                         </select>
@@ -87,13 +87,13 @@
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">类型</label>
+                    <label class="layui-form-label">{{ __('admin.type') }}</label>
                     <div class="layui-input-block">
                         <select name="type">
-                            <option value="">全部类型</option>
-                            <option value="0">目录</option>
-                            <option value="1">菜单</option>
-                            <option value="2">按钮</option>
+                            <option value="">{{ __('admin.all_types') }}</option>
+                            <option value="directory">{{ __('admin.directory') }}</option>
+                            <option value="menu">{{ __('admin.menu_type') }}</option>
+                            <option value="button">{{ __('admin.button') }}</option>
                         </select>
                     </div>
                 </div>
@@ -101,7 +101,7 @@
                 <div class="layui-form-item">
                     <button type="submit" class="pear-btn pear-btn-primary pear-btn-md" lay-submit lay-filter="search">
                         <i class="layui-icon layui-icon-search"></i>
-                        搜索
+                        {{ __('admin.search_menu') }}
                     </button>
                     <button type="reset" class="pear-btn pear-btn-md">
                         <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
@@ -125,11 +125,11 @@
                 <i class="layui-icon layui-icon-add-1"></i>{{ __('admin.create') }}</button>
             <button class="pear-btn pear-btn-success pear-btn-sm" lay-event="expand" style="margin-right: 5px;">
                 <i class="layui-icon layui-icon-spread-left"></i>
-                展开全部
+                {{ __('admin.expand_all') }}
             </button>
             <button class="pear-btn pear-btn-warning pear-btn-sm" lay-event="collapse" style="margin-right: 5px;">
                 <i class="layui-icon layui-icon-shrink-right"></i>
-                收起全部
+                {{ __('admin.collapse_all') }}
             </button>
             <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="batchRemove">
                 <i class="layui-icon layui-icon-delete"></i>{{ __('admin.delete') }}</button>
@@ -179,7 +179,7 @@
                     {type: "checkbox"},
                     {title: "ID", field: "id", width: 80, align: "center"},
                     {
-                        title: "菜单标题",
+                        title: "{{ __('admin.menu_title') }}",
                         field: "title",
                         width: 200,
                         templet: function(d) {
@@ -190,9 +190,9 @@
                             return iconHtml + d.title;
                         }
                     },
-                    {title: "菜单标识", field: "name", width: 180},
+                    {title: "{{ __('admin.menu_key') }}", field: "name", width: 180},
                     {
-                        title: "排序",
+                        title: "{{ __('admin.sort') }}",
                         field: "sort",
                         width: 100,
                         align: "center",
@@ -200,33 +200,33 @@
                         edit: true
                     },
                     {
-                        title: "类型",
+                        title: "{{ __('admin.type') }}",
                         field: "type",
                         width: 80,
                         align: "center",
                         templet: function(d) {
-                            if (d.type == 0) {
-                                return '<span class="layui-badge layui-bg-blue">目录</span>';
-                            } else if (d.type == 1) {
-                                return '<span class="layui-badge layui-bg-green">菜单</span>';
-                            } else if (d.type == 2) {
-                                return '<span class="layui-badge layui-bg-orange">按钮</span>';
+                            if (d.type == 'directory' || d.type == 0) {
+                                return '<span class="layui-badge layui-bg-blue">{{ __('admin.directory') }}</span>';
+                            } else if (d.type == 'menu' || d.type == 1) {
+                                return '<span class="layui-badge layui-bg-green">{{ __('admin.menu_type') }}</span>';
+                            } else if (d.type == 'button' || d.type == 2) {
+                                return '<span class="layui-badge layui-bg-orange">{{ __('admin.button') }}</span>';
                             } else {
-                                return '<span class="layui-badge layui-bg-gray">未知</span>';
+                                return '<span class="layui-badge layui-bg-gray">{{ __('admin.unknown') }}</span>';
                             }
                         }
                     },
                     {title: "{{ __('admin.link') }}", field: "url", width: 200},
                     {
-                        title: "显示",
+                        title: "{{ __('admin.visible') }}",
                         field: "is_show",
                         width: 80,
                         align: "center",
                         templet: function(d) {
                             if (d.is_show == 1) {
-                                return '<span class="layui-badge layui-bg-green">显示</span>';
+                                return '<span class="layui-badge layui-bg-green">{{ __('admin.visible') }}</span>';
                             } else {
-                                return '<span class="layui-badge layui-bg-orange">隐藏</span>';
+                                return '<span class="layui-badge layui-bg-orange">{{ __('admin.hidden') }}</span>';
                             }
                         }
                     },

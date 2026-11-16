@@ -36,28 +36,28 @@
 
             case 'gender':
                 $options = [
-                    ['value' => '2', 'title' => '保密'],
-                    ['value' => '1', 'title' => '男'],
-                    ['value' => '0', 'title' => '女']
+                    ['value' => '2', 'title' => __('admin.unspecified')],
+                    ['value' => '1', 'title' => __('admin.male')],
+                    ['value' => '0', 'title' => __('admin.female')]
                 ];
-                $label = $label ?: '性别';
+                $label = $label ?: __('admin.gender');
                 break;
 
             case 'show':
                 $options = [
-                    ['value' => '1', 'title' => '显示'],
-                    ['value' => '0', 'title' => '隐藏']
+                    ['value' => '1', 'title' => __('admin.visible')],
+                    ['value' => '0', 'title' => __('admin.hidden')]
                 ];
-                $label = $label ?: '显示';
+                $label = $label ?: __('admin.visible');
                 $default = $default ?: '1';
                 break;
 
             case 'menu_type':
                 $options = [
-                    ['value' => '1', 'title' => '菜单'],
-                    ['value' => '2', 'title' => '按钮']
+                    ['value' => '1', 'title' => __('admin.menu_type')],
+                    ['value' => '2', 'title' => __('admin.button')]
                 ];
-                $label = $label ?: '类型';
+                $label = $label ?: __('admin.type');
                 $required = $required ?: true;
                 $default = $default ?: '1';
                 break;

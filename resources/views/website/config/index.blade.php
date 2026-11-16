@@ -116,24 +116,24 @@
 						title: "{{ __('admin.site_domain') }}",
 						field: "domain",
 					},{
-						title: "网站logo",
+						title: "{{ __('admin.site_logo_col') }}",
 						field: "min_logo",
 						templet: function (d) {
 							return '<img src="'+(d['min_logo'] || '/static/admin/images/avatar.png')+'" style="max-width:32px;max-height:32px;" alt="" />'
 						},
                         width: 90,
 					},{
-                        title: "网站tab栏logo",
+                        title: "{{ __('admin.site_tab_logo') }}",
                         field: "apple_touch_logo",
                         templet: function (d) {
                             return '<img src="'+(d['apple_touch_logo'] || '/static/admin/images/avatar.png')+'" style="max-width:32px;max-height:32px;" alt="" />'
                         },
                         width: 90,
                     },{
-						title: "网站页面keyword",
+						title: "{{ __('admin.page_keyword') }}",
 						field: "meta_keyword",
 					},{
-						title: "网站页面description",
+						title: "{{ __('admin.page_description') }}",
 						field: "meta_description",
 					},{
                         title: "{{ __('admin.site_title') }}",
