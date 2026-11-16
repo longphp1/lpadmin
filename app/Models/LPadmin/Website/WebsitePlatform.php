@@ -12,7 +12,7 @@ class WebsitePlatform extends Model
 
     protected $table = 'my_website_platform';
 
-    protected $fillable = ['site_id', 'platform', 'platform_name', 'platform_url', 'discord_url', 'meta_keyword', 'meta_description', 'meta_title', 'status', 'push_at', 'created_at', 'updated_at'];
+    protected $fillable = ['site_id', 'site_name', 'domain', 'min_logo', 'platform', 'platform_name', 'platform_url', 'discord_url', 'meta_keyword', 'meta_description', 'meta_title', 'status', 'push_at', 'created_at', 'updated_at'];
 
     public function siteConfig()
     {

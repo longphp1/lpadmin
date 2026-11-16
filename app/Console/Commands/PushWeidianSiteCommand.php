@@ -29,7 +29,6 @@ class PushWeidianSiteCommand extends Command
 
     public $fileName = '';
     public $site_id = 1;
-    public $siteConfig = [];
 
     public $initProductImage = false;
 

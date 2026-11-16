@@ -14,26 +14,50 @@
                 <div class="main-container mr-5">
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">{{ __('admin.choose_site') }}</label>
+                        <label class="layui-form-label required">{{ __('admin.site_name') }}</label>
                         <div class="layui-input-block">
-                            <select name="site_id" id="site_id" >
-                                @foreach($siteConfigList as $site)
-                                    <option value="{{ $site['id'] }}">{{ $site['name'] }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">{{ __('admin.platform') }}</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="platform" id="platform" value=""  class="layui-input">
+                            <input type="text" name="site_name" required lay-verify="required" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label">{{ __('admin.platform_name') }}</label>
+                        <label class="layui-form-label">{{ __('admin.site_domain') }}</label>
                         <div class="layui-input-block">
-                            <input type="text" name="platform_name" id="platform_name" value=""  class="layui-input">
+                            <input type="text" name="domain" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{{ __('admin.site_keywords') }}</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="meta_keyword" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{{ __('admin.site_description') }}</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="meta_description" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{{ __('admin.site_title') }}</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="meta_title" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{{ __('admin.site_logo') }}</label>
+                        <div class="layui-input-block">
+                            <img id="avatar-preview" src="/static/images/default-avatar.png" style="width:64px;height:64px;border:1px solid #e6e6e6;cursor:pointer;" onclick="selectAdminAvatar()">
+                            <div style="margin-top:8px;">
+                                <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" onclick="selectAdminAvatar()">{{ __('admin.choose_image') }}</button>
+                                <button type="button" class="pear-btn pear-btn-sm" onclick="clearAdminAvatar()">{{ __('admin.clear') }}</button>
+                            </div>
+                            <input type="hidden" name="min_logo" id="avatar-input" value="">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label required">{{ __('admin.platform_name') }}</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="platform_name" id="platform_name" value="" required lay-verify="required" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -46,26 +70,6 @@
                         <label class="layui-form-label">Discord URL</label>
                         <div class="layui-input-block">
                             <input type="text" name="discord_url" id="discord_url" value=""  class="layui-input">
-                        </div>
-                    </div>
-
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">{{ __('admin.site_keywords') }}</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="meta_keyword" value=""  class="layui-input">
-                        </div>
-                    </div>
-
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">{{ __('admin.site_description') }}</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="meta_description" value=""  class="layui-input" placeholder="">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">{{ __('admin.site_title') }}</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="meta_title" value=""  class="layui-input" placeholder="">
                         </div>
                     </div>
 
@@ -95,8 +99,27 @@
 
             // 相关接口
             const PRIMARY_KEY = "id";
-            const SELECT_API = "{{ route('lpadmin.website.platform.show', $admin->id ?? ':id') }}";
-            const UPDATE_API = "{{ route('lpadmin.website.platform.update', $admin->id ?? ':id') }}";
+            const SELECT_API = "{{ route('lpadmin.website.platform.show', $data->id ?? ':id') }}";
+            const UPDATE_API = "{{ route('lpadmin.website.platform.update', $data->id ?? ':id') }}";
+
+            function selectAdminAvatar() {
+                layui.layer.open({
+                    type: 2,
+                    title: "{{ __('admin.choose_image') }}",
+                    area: ['80%', '70%'],
+                    content: '/lpadmin/upload/selector?type=image&mode=single&callback=setAdminAvatar'
+                });
+            }
+            function setAdminAvatar(selectedFiles) {
+                if (selectedFiles.length > 0) {
+                    layui.$('#avatar-preview').attr('src', selectedFiles[0].url);
+                    layui.$('#avatar-input').val(selectedFiles[0].url);
+                }
+            }
+            function clearAdminAvatar() {
+                layui.$('#avatar-preview').attr('src', '/static/images/default-avatar.png');
+                layui.$('#avatar-input').val('');
+            }
 
 
 
@@ -105,7 +128,7 @@
                 let $ = layui.$;
                 // 从URL获取ID
                 let urlParams = new URLSearchParams(window.location.search);
-                let adminId = urlParams.get('id') || '{{ $admin->id ?? "" }}';
+                let adminId = urlParams.get('id') || '{{ $data->id ?? "" }}';
                 if (adminId) {
                     let apiUrl = SELECT_API.replace(':id', adminId);
 
@@ -126,11 +149,14 @@
                                 if (obj[0].nodeName.toLowerCase() === "textarea") {
                                     obj.val(layui.util.escape(value));
                                 } else {
-                                    obj.attr("value", value);
+                                    obj.val(value);
                                 }
                             });
 
                             // 重新渲染表单
+                            let logo = adminData.min_logo || '';
+                            layui.$('#avatar-preview').attr('src', logo || '/static/images/default-avatar.png');
+                            layui.$('#avatar-input').val(logo);
                             layui.form.render();
 
                             // ajax产生错误
@@ -148,7 +174,7 @@
 
                 layui.form.on("submit(save)", function (data) {
                     let urlParams = new URLSearchParams(window.location.search);
-                    let adminId = urlParams.get('id') || '{{ $admin->id ?? "" }}';
+                    let adminId = urlParams.get('id') || '{{ $data->id ?? "" }}';
 
                     data.field._token = '{{ csrf_token() }}';
                     data.field._method = 'PUT';

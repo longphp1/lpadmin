@@ -23,8 +23,6 @@ return [
     'cache_settings' => '缓存设置',
     'websiteManage' => '网站管理',
     'website_manage' => '网站管理',
-    'website_home' => '网站首页',
-    'website_config' => '网站配置',
     'website_menu' => '网站菜单',
     'website_product' => '网站商品',
     'website_platform' => '网站平台',

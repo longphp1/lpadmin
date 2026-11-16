@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Models\LPadmin\Website\MenuConfig;
 use App\Models\LPadmin\Website\ProductMenu;
 use App\Models\LPadmin\Website\ProductMenuLocal;
-use App\Models\LPadmin\Website\WebSiteConfig;
 use App\Models\LPadmin\Website\WebsitePlatform;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
@@ -32,7 +31,6 @@ class GenerateWebSiteCommandNew extends Command
 
     public $fileName = '';
     public $site_id = 1;
-    public $siteConfig = [];
 
     public $initProductImage = false;
 
@@ -71,7 +69,6 @@ class GenerateWebSiteCommandNew extends Command
             $this->websiteName = $platform->platform_name;
             $this->websiteUrl  = $platform->platform_url;
             $this->websiteTitle  = $platform->meta_title;
-            $this->siteConfig  = WebSiteConfig::query()->find($platform->site_id);
             if (empty($this->websiteName) || empty($this->websiteUrl)){
                 $this->error('请输入网站名称和网站URL');
                 return 0;

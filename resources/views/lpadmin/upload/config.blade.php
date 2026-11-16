@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>文件上传配置</title>
+    <title>{{ __('admin.upload_config') }}</title>
     <link rel="stylesheet" href="/static/admin/component/pear/css/pear.css" />
     <link rel="stylesheet" href="/static/admin/css/reset.css" />
 </head>
@@ -11,112 +11,112 @@
 
     <div class="layui-card">
         <div class="layui-card-header">
-            <h2 class="header-title">文件上传配置</h2>
+            <h2 class="header-title">{{ __('admin.upload_config') }}</h2>
         </div>
         <div class="layui-card-body">
             <form class="layui-form" lay-filter="upload-config-form">
                 
                 <!-- 基础配置 -->
                 <fieldset class="layui-elem-field layui-field-title">
-                    <legend>基础配置</legend>
+                    <legend>{{ __('admin.basic_config') }}</legend>
                 </fieldset>
                 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">最大文件大小</label>
+                    <label class="layui-form-label">{{ __('admin.option_upload_max_size') }}</label>
                     <div class="layui-input-inline" style="width: 200px;">
-                        <input type="number" name="max_size" placeholder="请输入文件大小" class="layui-input" min="1" max="102400">
+                        <input type="number" name="max_size" placeholder="{{ __('admin.enter_file_size') }}" class="layui-input" min="1" max="102400">
                     </div>
                     <div class="layui-form-mid layui-word-aux">KB (1KB - 100MB)</div>
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">存储方式</label>
+                    <label class="layui-form-label">{{ __('admin.option_upload_disk') }}</label>
                     <div class="layui-input-inline" style="width: 200px;">
                         <select name="disk">
-                            <option value="public">本地公共存储</option>
-                            <option value="local">本地私有存储</option>
+                            <option value="public">{{ __('admin.option_upload_disk_public') }}</option>
+                            <option value="local">{{ __('admin.option_upload_disk_local') }}</option>
                         </select>
                     </div>
-                    <div class="layui-form-mid layui-word-aux">选择文件存储位置</div>
+                    <div class="layui-form-mid layui-word-aux">{{ __('admin.storage_location_hint') }}</div>
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">存储路径</label>
+                    <label class="layui-form-label">{{ __('admin.option_upload_path') }}</label>
                     <div class="layui-input-inline" style="width: 300px;">
-                        <input type="text" name="path" placeholder="请输入存储路径" class="layui-input">
+                        <input type="text" name="path" placeholder="{{ __('admin.enter_storage_path') }}" class="layui-input">
                     </div>
-                    <div class="layui-form-mid layui-word-aux">相对于存储磁盘的路径</div>
+                    <div class="layui-form-mid layui-word-aux">{{ __('admin.option_desc_upload_path') }}</div>
                 </div>
 
                 <!-- 文件类型配置 -->
                 <fieldset class="layui-elem-field layui-field-title">
-                    <legend>允许的文件类型</legend>
+                    <legend>{{ __('admin.allowed_types') }}</legend>
                 </fieldset>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">图片文件</label>
+                    <label class="layui-form-label">{{ __('admin.image_files') }}</label>
                     <div class="layui-input-block">
                         <input type="text" name="extensions_image" placeholder="jpg,jpeg,png,gif,webp,bmp,svg" class="layui-input" style="width: 500px;">
-                        <div class="layui-form-mid layui-word-aux">用逗号分隔，如：jpg,png,gif</div>
+                        <div class="layui-form-mid layui-word-aux">{{ __('admin.comma_example', ['example' => 'jpg,png,gif']) }}</div>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">文档文件</label>
+                    <label class="layui-form-label">{{ __('admin.document_files') }}</label>
                     <div class="layui-input-block">
                         <input type="text" name="extensions_document" placeholder="pdf,doc,docx,xls,xlsx,ppt,pptx,txt,rtf" class="layui-input" style="width: 500px;">
-                        <div class="layui-form-mid layui-word-aux">用逗号分隔，如：pdf,doc,docx</div>
+                        <div class="layui-form-mid layui-word-aux">{{ __('admin.comma_example', ['example' => 'pdf,doc,docx']) }}</div>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">视频文件</label>
+                    <label class="layui-form-label">{{ __('admin.video_files') }}</label>
                     <div class="layui-input-block">
                         <input type="text" name="extensions_video" placeholder="mp4,avi,mov,wmv,flv,mkv,webm" class="layui-input" style="width: 500px;">
-                        <div class="layui-form-mid layui-word-aux">用逗号分隔，如：mp4,avi,mov</div>
+                        <div class="layui-form-mid layui-word-aux">{{ __('admin.comma_example', ['example' => 'mp4,avi,mov']) }}</div>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">音频文件</label>
+                    <label class="layui-form-label">{{ __('admin.audio_files') }}</label>
                     <div class="layui-input-block">
                         <input type="text" name="extensions_audio" placeholder="mp3,wav,flac,aac,ogg,wma" class="layui-input" style="width: 500px;">
-                        <div class="layui-form-mid layui-word-aux">用逗号分隔，如：mp3,wav,flac</div>
+                        <div class="layui-form-mid layui-word-aux">{{ __('admin.comma_example', ['example' => 'mp3,wav,flac']) }}</div>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">压缩文件</label>
+                    <label class="layui-form-label">{{ __('admin.archive_files') }}</label>
                     <div class="layui-input-block">
                         <input type="text" name="extensions_archive" placeholder="zip,rar,7z,tar,gz" class="layui-input" style="width: 500px;">
-                        <div class="layui-form-mid layui-word-aux">用逗号分隔，如：zip,rar,7z</div>
+                        <div class="layui-form-mid layui-word-aux">{{ __('admin.comma_example', ['example' => 'zip,rar,7z']) }}</div>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">代码文件</label>
+                    <label class="layui-form-label">{{ __('admin.code_files') }}</label>
                     <div class="layui-input-block">
                         <input type="text" name="extensions_code" placeholder="js,css,html,php,py,java,cpp,c,json,xml" class="layui-input" style="width: 500px;">
-                        <div class="layui-form-mid layui-word-aux">用逗号分隔，如：js,css,html</div>
+                        <div class="layui-form-mid layui-word-aux">{{ __('admin.comma_example', ['example' => 'js,css,html']) }}</div>
                     </div>
                 </div>
 
                 <!-- 安全配置 -->
                 <fieldset class="layui-elem-field layui-field-title">
-                    <legend>安全配置</legend>
+                    <legend>{{ __('admin.security_config') }}</legend>
                 </fieldset>
 
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <input type="checkbox" name="enable_security_check" title="启用安全检查" >
-                        <div class="layui-form-mid layui-word-aux">检查文件内容是否包含恶意代码</div>
+                        <input type="checkbox" name="enable_security_check" title="{{ __('admin.enable_security_check') }}" >
+                        <div class="layui-form-mid layui-word-aux">{{ __('admin.security_check_hint') }}</div>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <input type="checkbox" name="enable_duplicate_check" title="启用重复文件检查" >
-                        <div class="layui-form-mid layui-word-aux">通过MD5哈希检查重复文件</div>
+                        <input type="checkbox" name="enable_duplicate_check" title="{{ __('admin.enable_duplicate_check') }}" >
+                        <div class="layui-form-mid layui-word-aux">{{ __('admin.duplicate_check_hint') }}</div>
                     </div>
                 </div>
 
@@ -125,13 +125,13 @@
                     <div class="layui-input-block">
                         <button type="submit" class="pear-btn pear-btn-primary" lay-submit lay-filter="config-submit">
                             <i class="layui-icon layui-icon-ok"></i>
-                            保存配置
+                            {{ __('admin.save_config') }}
                         </button>
                         <button type="reset" class="pear-btn pear-btn-warm">
                             <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                         <button type="button" class="pear-btn pear-btn-normal" id="load-current">
                             <i class="layui-icon layui-icon-download-circle"></i>
-                            加载当前配置
+                            {{ __('admin.load_current_config') }}
                         </button>
                     </div>
                 </div>
@@ -172,7 +172,7 @@
 
                         form.render();
                     } else {
-                        layer.msg('加载配置失败', {icon: 2});
+                        layer.msg('{{ __('admin.load_config_failed') }}', {icon: 2});
                     }
                 });
             }
@@ -183,7 +183,7 @@
             // 手动加载配置按钮
             $('#load-current').click(function() {
                 loadCurrentConfig();
-                layer.msg('配置已重新加载', {icon: 1, time: 1500});
+                layer.msg('{{ __('admin.config_reloaded') }}', {icon: 1, time: 1500});
             });
 
             // 表单提交
@@ -235,13 +235,13 @@
                     },
                     success: function(res) {
                         if (res.code === 0) {
-                            layer.msg('配置保存成功', {icon: 1, time: 2000});
+                            layer.msg('{{ __('admin.config_saved') }}', {icon: 1, time: 2000});
                         } else {
                             layer.msg(res.message, {icon: 2});
                         }
                     },
                     error: function() {
-                        layer.msg('网络错误，请稍后重试', {icon: 2});
+                        layer.msg('{{ __('admin.network_retry') }}', {icon: 2});
                     }
                 });
 

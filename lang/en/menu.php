@@ -23,8 +23,6 @@ return [
     'cache_settings' => 'Cache settings',
     'websiteManage' => 'Websites',
     'website_manage' => 'Websites',
-    'website_home' => 'Site home',
-    'website_config' => 'Site config',
     'website_menu' => 'Site menus',
     'website_product' => 'Products',
     'website_platform' => 'Platforms',

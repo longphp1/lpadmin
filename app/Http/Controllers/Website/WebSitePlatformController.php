@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Website;
 use App\Events\GenerateNextWebSiteEvent;
 use App\Events\GenerateWebSiteEvent;
 use App\Http\Controllers\LPadmin\BaseController;
-use App\Models\LPadmin\Website\HomeMenu;
 use App\Models\LPadmin\Website\WebSiteConfig;
 use App\Models\LPadmin\Website\WebsitePlatform;
 use Carbon\Carbon;
@@ -31,11 +30,13 @@ class WebSitePlatformController extends BaseController
         if ($request->expectsJson()) {
             $query = WebsitePlatform::query()->with('siteConfig');
             // 搜索条件
-            if ($request->filled('platform')) {
-                $query->where('platform', 'like', '%' . $request->websiteName . '%');
-            }
-            if ($request->filled('platform_name')) {
-                $query->where('platform_name', 'like', '%' . $request->websiteName . '%');
+            if ($request->filled('websiteName')) {
+                $name = $request->websiteName;
+                $query->where(function ($builder) use ($name) {
+                    $builder->where('site_name', 'like', '%' . $name . '%')
+                        ->orWhere('platform_name', 'like', '%' . $name . '%')
+                        ->orWhere('platform', 'like', '%' . $name . '%');
+                });
             }
             // 创建时间范围搜索
             if ($request->filled('created_at') && is_array($request->created_at)) {
@@ -60,8 +61,10 @@ class WebSitePlatformController extends BaseController
             foreach ($websiteList as $website) {
                 $item   = [
                     'id'               => $website->id,
-                    'site_id'          => $website->siteConfig->site_id,
-                    'site_name'        => $this->cleanUtf8($website->siteConfig->name),
+                    'site_id'          => $website->site_id,
+                    'site_name'        => $this->cleanUtf8($website->site_name ?: optional($website->siteConfig)->name),
+                    'domain'           => $this->cleanUtf8($website->domain ?: optional($website->siteConfig)->domain),
+                    'min_logo'         => $website->min_logo ?: optional($website->siteConfig)->min_logo,
                     'platform'         => $this->cleanUtf8($website->platform),
                     'platform_name'    => $this->cleanUtf8($website->platform_name),
                     'platform_url'     => $this->cleanUtf8($website->platform_url),
@@ -92,8 +95,7 @@ class WebSitePlatformController extends BaseController
      */
     public function create()
     {
-        $siteConfigList = WebSiteConfig::query()->select(['id', 'name'])->get();
-        return view('website.platform.create', compact('siteConfigList'));
+        return view('website.platform.create');
     }
 
     /**
@@ -105,8 +107,11 @@ class WebSitePlatformController extends BaseController
     {
         $data   = $request->validate([
             'site_id'          => 'sometimes|nullable|integer',
-            'platform'         => 'required|string',
-            'platform_name'    => 'sometimes|nullable|string',
+            'site_name'        => 'required|string|max:255',
+            'domain'           => 'sometimes|nullable|string|max:255',
+            'min_logo'         => 'sometimes|nullable|string|max:500',
+            'platform'         => 'sometimes|nullable|string',
+            'platform_name'    => 'required|string',
             'platform_url'     => 'sometimes|nullable|string',
             'discord_url'      => 'sometimes|nullable|string',
             'meta_keyword'     => 'sometimes|nullable|string',
@@ -115,6 +120,7 @@ class WebSitePlatformController extends BaseController
             'status'           => 'sometimes|string',
             'push_at'          => 'sometimes|string',
         ]);
+        $data = $this->normalizePlatform($data);
         $data['created_at'] = date('Y-m-d H:i:s');
         $data['updated_at'] = date('Y-m-d H:i:s');
         $result = WebsitePlatform::create($data);
@@ -139,9 +145,8 @@ class WebSitePlatformController extends BaseController
      */
     public function edit(Request $request, $id)
     {
-        $data           = WebsitePlatform::query()->find($id);
-        $siteConfigList = WebSiteConfig::query()->select(['id', 'name'])->get();
-        return view('website.platform.edit', compact('data', 'siteConfigList'));
+        $data = WebsitePlatform::query()->find($id);
+        return view('website.platform.edit', compact('data'));
     }
 
     /**
@@ -154,8 +159,11 @@ class WebSitePlatformController extends BaseController
     {
         $data     = $request->validate([
             'site_id'          => 'sometimes|nullable|integer',
-            'platform'         => 'required|string',
-            'platform_name'    => 'sometimes|nullable|string',
+            'site_name'        => 'required|string|max:255',
+            'domain'           => 'sometimes|nullable|string|max:255',
+            'min_logo'         => 'sometimes|nullable|string|max:500',
+            'platform'         => 'sometimes|nullable|string',
+            'platform_name'    => 'required|string',
             'platform_url'     => 'sometimes|nullable|string',
             'discord_url'      => 'sometimes|nullable|string',
             'meta_keyword'     => 'sometimes|nullable|string',
@@ -165,6 +173,7 @@ class WebSitePlatformController extends BaseController
             'push_at'          => 'sometimes|string',
 
         ]);
+        $data = $this->normalizePlatform($data);
         $data['updated_at'] = date('Y-m-d H:i:s');
         $homeData = WebsitePlatform::query()->find($id);
         if ($homeData) {
@@ -232,6 +241,27 @@ class WebSitePlatformController extends BaseController
             $platform->save();
         }
         return $this->success([]);
+    }
+
+    private function normalizePlatform(array $data): array
+    {
+        $name = trim((string) ($data['platform_name'] ?? ''));
+        $platform = trim((string) ($data['platform'] ?? ''));
+        if ($name === '') {
+            $name = $platform;
+        }
+        if ($platform === '') {
+            $platform = $name;
+        }
+        $data['platform_name'] = $name;
+        $data['platform'] = $platform;
+        if (empty($data['site_id'])) {
+            $data['site_id'] = WebSiteConfig::query()->orderBy('id')->value('id');
+        }
+        if (empty($data['discord_url']) && !empty($data['platform_url'])) {
+            $data['discord_url'] = $data['platform_url'];
+        }
+        return $data;
     }
 
     public function pushCode($platformName)

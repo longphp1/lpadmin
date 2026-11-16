@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Website;
 
 use App\Http\Controllers\LPadmin\BaseController;
+use App\Models\LPadmin\Website\MenuConfig;
+use App\Models\LPadmin\Website\ProductMenu;
 use App\Models\LPadmin\Website\WebSiteConfig;
+use App\Models\LPadmin\Website\WebsitePlatform;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
@@ -152,6 +155,12 @@ class WebSiteConfigController extends BaseController
      */
     public function destroy(Request $request, $id)
     {
+        $used = WebsitePlatform::query()->where('site_id', $id)->exists()
+            || MenuConfig::query()->where('site_id', $id)->exists()
+            || ProductMenu::query()->where('site_id', $id)->exists();
+        if ($used) {
+            return $this->error('该站点仍被平台、菜单或商品使用');
+        }
         WebSiteConfig::query()->where('id', $id)->delete();
         return $this->success(null, '删除成功');
     }

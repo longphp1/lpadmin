@@ -107,10 +107,10 @@
     <!-- 统计信息展示 -->
     <div class="layui-card">
         <div class="layui-card-header">
-            <span>文件统计信息</span>
+            <span>{{ __('admin.file_stats') }}</span>
             <div class="layui-card-header-extra">
                 <button type="button" class="layui-btn layui-btn-xs" id="refresh-stats">
-                    <i class="layui-icon layui-icon-refresh"></i> 刷新统计
+                    <i class="layui-icon layui-icon-refresh"></i> {{ __('admin.refresh_stats') }}
                 </button>
             </div>
         </div>
@@ -119,19 +119,19 @@
                 <div class="stats-row">
                     <div class="stat-item">
                         <div class="stat-number" id="total-files">-</div>
-                        <div class="stat-label">总文件数</div>
+                        <div class="stat-label">{{ __('admin.total_files') }}</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-number" id="total-size">-</div>
-                        <div class="stat-label">总大小</div>
+                        <div class="stat-label">{{ __('admin.total_size') }}</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-number" id="today-files">-</div>
-                        <div class="stat-label">今日上传</div>
+                        <div class="stat-label">{{ __('admin.today_uploads') }}</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-number" id="this-week-files">-</div>
-                        <div class="stat-label">本周上传</div>
+                        <div class="stat-label">{{ __('admin.week_uploads') }}</div>
                     </div>
                 </div>
                 <div class="stats-row">
@@ -199,11 +199,11 @@
                 <div class="layui-btn-group">
                     <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="add">
                         <i class="layui-icon layui-icon-add-1"></i>
-                        上传文件
+                        {{ __('admin.upload_file') }}
                     </button>
                     <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="batchRemove">
                         <i class="layui-icon layui-icon-delete"></i>
-                        批量删除
+                        {{ __('admin.batch_delete') }}
                     </button>
                     <button class="pear-btn pear-btn-warm pear-btn-sm" lay-event="refresh">
                         <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.refresh') }}</button>
@@ -229,7 +229,7 @@
                     <button class="table-action-btn table-action-view" lay-event="preview" title="{{ __('admin.preview') }}">
                         <i class="layui-icon layui-icon-eye"></i>
                     </button>
-                    <button class="table-action-btn table-action-edit" lay-event="download" title="下载">
+                    <button class="table-action-btn table-action-edit" lay-event="download" title="{{ __('admin.download') }}">
                         <i class="layui-icon layui-icon-download-circle"></i>
                     </button>
                     <button class="table-action-btn table-action-delete" lay-event="remove" title="{{ __('admin.delete') }}">
@@ -321,7 +321,7 @@
                 if (obj.event === 'add') {
                     layer.open({
                         type: 2,
-                        title: '上传文件',
+                        title: '{{ __('admin.upload_file') }}',
                         shade: 0.1,
                         area: ['800px', '600px'],
                         content: UPLOAD_URL
@@ -330,11 +330,11 @@
                     let checkStatus = table.checkStatus('upload-table');
                     let data = checkStatus.data;
                     if (data.length === 0) {
-                        layer.msg('请选择要删除的数据');
+                        layer.msg('{{ __('admin.select_to_delete') }}');
                         return;
                     }
                     let ids = data.map(item => item[PRIMARY_KEY]);
-                    layer.confirm('确定删除选中的文件吗？', function (index) {
+                    layer.confirm('{{ __('admin.confirm_delete_selected') }}', function (index) {
                         $.ajax({
                             url: BATCH_REMOVE_API,
                             type: 'POST',
@@ -383,36 +383,36 @@
                             } else if (previewData.preview_type === 'video') {
                                 layer.open({
                                     type: 1,
-                                    title: '视频预览 - ' + previewData.original_name,
+                                    title: '{{ __('admin.video_preview') }} - ' + previewData.original_name,
                                     area: ['800px', '600px'],
-                                    content: '<video controls style="width:100%;height:100%;"><source src="' + previewData.url + '" type="' + previewData.mime_type + '">您的浏览器不支持视频播放。</video>'
+                                    content: '<video controls style="width:100%;height:100%;"><source src="' + previewData.url + '" type="' + previewData.mime_type + '">{{ __('admin.video_unsupported') }}</video>'
                                 });
                             } else if (previewData.preview_type === 'audio') {
                                 layer.open({
                                     type: 1,
-                                    title: '音频预览 - ' + previewData.original_name,
+                                    title: '{{ __('admin.audio_preview') }} - ' + previewData.original_name,
                                     area: ['400px', '200px'],
-                                    content: '<audio controls style="width:100%;"><source src="' + previewData.url + '" type="' + previewData.mime_type + '">您的浏览器不支持音频播放。</audio>'
+                                    content: '<audio controls style="width:100%;"><source src="' + previewData.url + '" type="' + previewData.mime_type + '">{{ __('admin.audio_unsupported') }}</audio>'
                                 });
                             } else if (previewData.preview_type === 'text') {
                                 layer.open({
                                     type: 1,
-                                    title: '文本预览 - ' + previewData.original_name,
+                                    title: '{{ __('admin.text_preview') }} - ' + previewData.original_name,
                                     area: ['800px', '600px'],
-                                    content: '<pre style="padding:20px;max-height:500px;overflow:auto;">' + (previewData.content || '无法读取文件内容') + '</pre>'
+                                    content: '<pre style="padding:20px;max-height:500px;overflow:auto;">' + (previewData.content || '{{ __('admin.cannot_read_content') }}') + '</pre>'
                                 });
                             } else {
                                 window.open(previewData.url, '_blank');
                             }
                         } else {
-                            layer.msg('预览失败：' + res.message, {icon: 2});
+                            layer.msg('{{ __('admin.preview_failed') }}：' + res.message, {icon: 2});
                         }
                     });
                 } else if (obj.event === 'download') {
                     // 使用新的下载API
                     window.open('{{ route("lpadmin.upload.download", ":id") }}'.replace(':id', data.id), '_blank');
                 } else if (obj.event === 'remove') {
-                    layer.confirm('确定删除该文件吗？', function (index) {
+                    layer.confirm('{{ __('admin.confirm_delete_one') }}', function (index) {
                         $.ajax({
                             url: REMOVE_API.replace(':id', data[PRIMARY_KEY]),
                             type: 'DELETE',
@@ -478,7 +478,7 @@
             // 刷新统计按钮事件
             $('#refresh-stats').on('click', function() {
                 loadStatistics();
-                layer.msg('统计信息已刷新', {icon: 1, time: 1000});
+                layer.msg('{{ __('admin.stats_refreshed') }}', {icon: 1, time: 1000});
             });
 
             // 页面加载时获取统计信息

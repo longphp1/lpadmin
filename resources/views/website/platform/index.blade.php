@@ -123,33 +123,44 @@
             }, {
                 title: "{{ __('admin.site_name') }}",
                 field: "site_name",
+                width: 140,
             }, {
-                title: "{{ __('admin.platform') }}",
-                field: "platform",
+                title: "{{ __('admin.site_domain') }}",
+                field: "domain",
+                width: 180,
+            }, {
+                title: "{{ __('admin.site_logo_col') }}",
+                field: "min_logo",
+                width: 90,
+                templet: function (d) {
+                    return '<img src="' + (d.min_logo || '/static/admin/images/avatar.png') + '" style="max-width:32px;max-height:32px;" alt="" />';
+                }
+            }, {
+                title: "{{ __('admin.site_keywords') }}",
+                field: "meta_keyword",
+                width: 180,
+            }, {
+                title: "{{ __('admin.site_description') }}",
+                field: "meta_description",
+                width: 180,
+            }, {
+                title: "{{ __('admin.site_title') }}",
+                field: "meta_title",
+                width: 180,
             }, {
                 title: "{{ __('admin.platform_name') }}",
                 field: "platform_name",
+                width: 120,
             }, {
                 title: "{{ __('admin.platform_url') }}",
                 field: "platform_url",
+                width: 180,
             }, {
                 title: "{{ __('admin.status') }}",
                 field: "status",
             }, {
                 title: "{{ __('admin.push_at') }}",
                 field: "push_at",
-            }, {
-                title: "Discord URL",
-                field: "discord_url",
-            }, {
-                title: "{{ __('admin.platform_keywords') }}",
-                field: "meta_keyword",
-            }, {
-                title: "{{ __('admin.platform_description') }}",
-                field: "meta_description",
-            }, {
-                title: "{{ __('admin.platform_title') }}",
-                field: "meta_title",
             }, {
                 title: "{{ __('admin.created_at') }}",
                 field: "created_at",
@@ -193,44 +204,7 @@
             });
         }
 
-        // 获取表格中下拉或树形组件数据
-        let apis = [];
-        apis.push(["roles", "{{ route('lpadmin.website.config.index') }}?format=select"]);
-        let apiResults = {};
-        apiResults["roles"] = [];
-        let count = apis.length;
-        layui.each(apis, function (k, item) {
-            let [field, url] = item;
-            $.ajax({
-                url: url,
-                dateType: "json",
-                success: function (res) {
-                    if (res.code) {
-                        return layui.popup.failure(res.msg);
-                    }
-
-                    function travel(items) {
-                        for (let k in items) {
-                            let item = items[k];
-                            apiResults[field][item.value] = item.name;
-                            if (item.children) {
-                                travel(item.children);
-                            }
-                        }
-                    }
-
-                    travel(res.data);
-                },
-                complete: function () {
-                    if (--count === 0) {
-                        render();
-                    }
-                }
-            });
-        });
-        if (!count) {
-            render();
-        }
+        render();
 
         // 编辑或删除行事件
         table.on("tool(data-table)", function (obj) {

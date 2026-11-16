@@ -16,7 +16,6 @@ use App\Http\Controllers\LPadmin\RuleController;
 use App\Http\Controllers\LPadmin\UploadController;
 use App\Http\Controllers\LPadmin\UserController;
 use App\Http\Controllers\Website\WebSiteConfigController;
-use App\Http\Controllers\Website\WebSiteHomeController;
 use App\Http\Controllers\Website\WebSiteMenuController;
 use App\Http\Controllers\Website\WebSitePlatformController;
 use App\Http\Controllers\Website\WebSiteProductController;
@@ -341,17 +340,6 @@ Route::group($groupConfig, function () {
         });
 
         Route::prefix('website')->name('website.')->group(function () {
-            Route::prefix('home')->name('home.')->group(function () {
-                //Route::resource('/', WebSiteHomeController::class)->parameters(['' => 'website.home'])->except(['show']); // 角色资源路由
-                Route::get('/', [WebSiteHomeController::class, 'index'])->name('index');
-                Route::get('/show/{id}', [WebSiteHomeController::class, 'show'])->name('show');
-                Route::get('/edit/{id}', [WebSiteHomeController::class, 'edit'])->name('edit');
-                Route::put('/update/{id}', [WebSiteHomeController::class, 'update'])->name('update');
-                Route::get('/create', [WebSiteHomeController::class, 'create'])->name('create');
-                Route::post('/store', [WebSiteHomeController::class, 'store'])->name('store');
-                Route::delete('{id}', [WebSiteHomeController::class, 'destroy'])->name('destroy');
-            });
-
             Route::prefix('config')->name('config.')->group(function () {
                 /* -站点配置- */
                 Route::get('/', [WebSiteConfigController::class, 'index'])->name('index');
