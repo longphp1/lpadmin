@@ -80,103 +80,99 @@ class PushWebSiteCommand extends Command
 
 
 
-
     public function pushCode($platformName)
     {
         //ini_set('max_execution_time', '1200');
 
-        $sourceDir = 'D:/phpstudy_pro/WWW/lpadmin/public/'.$platformName;
+        $sourceBaseDir = config('lpadmin.push.source_base_dir');
+        $destinationDir = config('lpadmin.push.destination_dir');
+
+        $sourceDir = rtrim($sourceBaseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $platformName;
 
         if(!file_exists($sourceDir)){
             Log::info('平台目录不存在:'.$sourceDir);
             return false;
         }
 
-        $destinationDir='D:\phpstudy_pro\WWW\taoobuy';
+        if(!file_exists($destinationDir)){
+            throw new \RuntimeException('目标Git仓库目录不存在: '.$destinationDir);
+        }
+
         $gitBranch= strtolower($platformName);
         $this->info('推送分支:'.$platformName);
-        // 定位到 Git 仓库的目录
-        chdir($destinationDir); // 修改为你的项目路径
 
-        //$gitBranch='test';
+        chdir($destinationDir);
 
-        exec('git reset --hard HEAD');
-        Log::info('重置本地仓库到最新提交');
-        $this->info('重置本地仓库到最新提交');
-        exec('git clean -fd');
-        Log::info('清除本地未跟踪文件');
-        $this->info('清除本地未跟踪文件');
-        exec('git checkout '.$gitBranch);
-        Log::info('切换到分支:'.$gitBranch);
-        $this->info('切换到分支:'.$gitBranch);
-        exec('git clean -fd');
-        Log::info('清除本地未跟踪文件');
-        $this->info('清除本地未跟踪文件');
-        exec('git pull origin '.$gitBranch);
-        Log::info('拉取远程仓库最新代码');
-        $this->info('拉取远程仓库最新代码');
+        $this->execGitCommand('git reset --hard HEAD', '重置本地仓库到最新提交');
+        $this->execGitCommand('git clean -fd', '清除本地未跟踪文件');
+        $this->execGitCommand('git checkout '.$gitBranch, '切换到分支:'.$gitBranch);
+        $this->execGitCommand('git clean -fd', '清除本地未跟踪文件');
+        $this->execGitCommand('git pull origin '.$gitBranch, '拉取远程仓库最新代码');
 
         $this->deleteDirectory($destinationDir);
         $this->info('删除原始数据成功');
-        exec('git add .');
-        Log::info('删除原始数据成功,添加所有更改到暂存区');
-        $this->info('删除原始数据成功,添加所有更改到暂存区');
+
+        $this->execGitCommand('git add .', '添加所有更改到暂存区');
+
         $commitText='System auto delete platform code time:'.date('Y-m-d H:i:s');
-        // 提交更改到本地仓库
-        exec('git commit -m "'.$commitText.'"');
-        Log::info('删除原始数据成功,提交更改到本地仓库:'.$commitText);
-        $this->info('删除原始数据成功,提交更改到本地仓库:'.$commitText);
-        // 推送到远程仓库，例如 origin 的 $gitBranch 分支
-        exec('git push origin '.$gitBranch);
-        Log::info('删除原始数据成功,推送到远程仓库:'.$gitBranch);
-        $this->info('删除原始数据成功,推送到远程仓库:'.$gitBranch);
+        $this->execGitCommand('git commit -m "'.$commitText.'"', '提交更改到本地仓库');
+        $this->execGitCommand('git push origin '.$gitBranch, '推送到远程仓库');
 
         $this->info('复制最新的数据到目标目录');
-        $this->copyFile($sourceDir,$destinationDir);
-        // 添加所有更改到暂存区
-        exec('git add .');
-        Log::info('添加所有更改到暂存区');
-        $this->info('添加所有更改到暂存区');
+        $this->copyFile($sourceDir, $destinationDir);
+
+        $this->execGitCommand('git add .', '添加所有更改到暂存区');
+
         $commitText='System auto update platform code time:'.date('Y-m-d H:i:s');
-        // 提交更改到本地仓库
-        exec('git commit -m "'.$commitText.'"');
-        Log::info('提交更改到本地仓库:'.$commitText);
-        $this->info('提交更改到本地仓库:'.$commitText);
-        // 推送到远程仓库，例如 origin 的 $gitBranch 分支
-        exec('git push origin '.$gitBranch);
-        Log::info('推送到远程仓库:'.$gitBranch);
-        $this->info('推送到远程仓库:'.$gitBranch);
+        $this->execGitCommand('git commit -m "'.$commitText.'"', '提交更改到本地仓库');
+        $this->execGitCommand('git push origin '.$gitBranch, '推送到远程仓库');
+
         return 'Code pushed successfully.';
+    }
+
+    protected function execGitCommand(string $command, string $description): string
+    {
+        $output = [];
+        $returnCode = 0;
+        exec($command . ' 2>&1', $output, $returnCode);
+
+        $outputStr = implode("\n", $output);
+
+        if ($returnCode !== 0) {
+            $errorMsg = "执行失败 [{$description}]: command={$command}, output={$outputStr}";
+            Log::error($errorMsg);
+            $this->error($errorMsg);
+            throw new \RuntimeException($errorMsg);
+        }
+
+        Log::info($description . ' => ' . $command);
+        $this->info($description);
+        Log::info('输出: ' . $outputStr);
+
+        return $outputStr;
     }
 
     public function copyFile($sourcePath, $destinationPath) {
         $files = new Filesystem();
-        // 确保源文件夹存在
         if (!$files->isDirectory($sourcePath)) {
             throw new \InvalidArgumentException("源文件夹不存在: {$sourcePath}");
         }
 
-        // 创建目标文件夹（如果不存在）
         if (!$files->exists($destinationPath)) {
             $files->makeDirectory($destinationPath, 0755, true);
         }
 
-        // 获取源文件夹中的所有文件和子文件夹
         $items = $files->allFiles($sourcePath);
 
         foreach ($items as $item) {
-            // 构建目标文件路径
             $target = str_replace($sourcePath, $destinationPath, $item->getPathname());
-            // 确保目标文件所在目录存在（关键修复：创建父目录）
             $targetDir = dirname($target);
             $files->ensureDirectoryExists($targetDir, 0755, true);
-            // 如果是文件夹，先创建目标文件夹
             if ($item->isDir()) {
                 if (!$files->exists($target)) {
                     $files->makeDirectory($target, 0755, true);
                 }
             } else {
-                // 如果是文件，直接复制（会覆盖已存在的文件）
                 $files->copy($item->getPathname(), $target);
                 Log::info('文件复制成功:'.$target);
                 $this->info('文件复制成功:'.$target);
@@ -184,27 +180,25 @@ class PushWebSiteCommand extends Command
         }
         Log::info('文件复制完成');
         $this->info('文件复制完成');
-        return true; // 复制成功
+        return true;
     }
 
     function deleteDirectory($dirPath) {
-        $files = new \Illuminate\Filesystem\Filesystem(); // 使用 Laravel Filesystem 类
+        $files = new \Illuminate\Filesystem\Filesystem();
 
         if (!$files->exists($dirPath)) {
             return true;
         }
 
-        // 先删除所有非 .git 的子目录（递归删除目录及内容）
         foreach ($files->directories($dirPath) as $subDir) {
             $subDirName = basename($subDir);
             if ($subDirName === '.git') {
-                continue; // 跳过 .git 目录
+                continue;
             }
             $this->info('删除目录: ' . $subDir);
-            $files->deleteDirectory($subDir); // 递归删除子目录及所有内容
+            $files->deleteDirectory($subDir);
         }
 
-        // 再删除根目录下的所有文件
         foreach ($files->files($dirPath) as $file) {
             $this->info('删除文件: ' . $file->getPathname());
             $files->delete($file->getPathname());
@@ -214,4 +208,3 @@ class PushWebSiteCommand extends Command
     }
 
 }
-

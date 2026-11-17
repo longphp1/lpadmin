@@ -141,4 +141,9 @@ return [
         'zh_CN' => '中文',
         'en' => 'English',
     ],
+
+    'push' => [
+        'source_base_dir' => env('PUSH_SOURCE_BASE_DIR', base_path('public')),
+        'destination_dir' => env('PUSH_DESTINATION_DIR', base_path('..'.DIRECTORY_SEPARATOR.'taoobuy')),
+    ],
 ];
