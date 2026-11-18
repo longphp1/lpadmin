@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -20,9 +20,7 @@
                     </div>
                     <div class="layui-inline">
                         <button type="submit" class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="selector-query">
-                            <i class="layui-icon layui-icon-search"></i>
-                            查询
-                        </button>
+                            <i class="layui-icon layui-icon-search"></i>{{ __('admin.search') }}</button>
                         <button type="button" class="pear-btn pear-btn-md pear-btn-warm" id="upload-new-file">
                             <i class="layui-icon layui-icon-upload"></i>
                             上传新文件
@@ -280,7 +278,7 @@
                             type: '{{ request("type", "") }}'
                         });
                     } else {
-                        layer.msg(res.message || '上传失败', {icon: 2});
+                        layer.msg(res.message || '{{ __('admin.upload_failed') }}', {icon: 2});
                     }
                 },
                 error: function() {

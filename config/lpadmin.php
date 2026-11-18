@@ -115,6 +115,7 @@ return [
     | System Information Configuration
     |--------------------------------------------------------------------------
     |
+
     | These options control the system information displayed on the homepage.
     |
     */
@@ -134,5 +135,15 @@ return [
             'qq' => env('LPADMIN_QQ', '446820025'),
             'wechat' => env('LPADMIN_WECHAT', 'Baron369'),
         ],
+    ],
+
+    'languages' => [
+        'zh_CN' => '中文',
+        'en' => 'English',
+    ],
+
+    'push' => [
+        'source_base_dir' => env('PUSH_SOURCE_BASE_DIR', base_path('public')),
+        'destination_dir' => env('PUSH_DESTINATION_DIR', base_path('..'.DIRECTORY_SEPARATOR.'taoobuy')),
     ],
 ];

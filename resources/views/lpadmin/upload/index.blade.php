@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>文件管理</title>
+    <title>{{ __('admin.file_mgmt') }}</title>
     <link rel="stylesheet" href="/static/admin/component/pear/css/pear.css" />
     <link rel="stylesheet" href="/static/admin/css/reset.css" />
     <link rel="stylesheet" href="/static/admin/css/table-common.css" />
@@ -107,10 +107,10 @@
     <!-- 统计信息展示 -->
     <div class="layui-card">
         <div class="layui-card-header">
-            <span>文件统计信息</span>
+            <span>{{ __('admin.file_stats') }}</span>
             <div class="layui-card-header-extra">
                 <button type="button" class="layui-btn layui-btn-xs" id="refresh-stats">
-                    <i class="layui-icon layui-icon-refresh"></i> 刷新统计
+                    <i class="layui-icon layui-icon-refresh"></i> {{ __('admin.refresh_stats') }}
                 </button>
             </div>
         </div>
@@ -119,19 +119,19 @@
                 <div class="stats-row">
                     <div class="stat-item">
                         <div class="stat-number" id="total-files">-</div>
-                        <div class="stat-label">总文件数</div>
+                        <div class="stat-label">{{ __('admin.total_files') }}</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-number" id="total-size">-</div>
-                        <div class="stat-label">总大小</div>
+                        <div class="stat-label">{{ __('admin.total_size') }}</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-number" id="today-files">-</div>
-                        <div class="stat-label">今日上传</div>
+                        <div class="stat-label">{{ __('admin.today_uploads') }}</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-number" id="this-week-files">-</div>
-                        <div class="stat-label">本周上传</div>
+                        <div class="stat-label">{{ __('admin.week_uploads') }}</div>
                     </div>
                 </div>
                 <div class="stats-row">
@@ -149,46 +149,42 @@
             <form class="layui-form" action="">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">文件名</label>
+                        <label class="layui-form-label">{{ __('admin.file_name') }}</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="original_name" placeholder="请输入文件名" class="layui-input">
+                            <input type="text" name="original_name" placeholder="{{ __('admin.enter_filename') }}" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">文件类型</label>
+                        <label class="layui-form-label">{{ __('admin.file_type') }}</label>
                         <div class="layui-input-inline">
                             <select name="type">
-                                <option value="">全部类型</option>
-                                <option value="image">图片</option>
-                                <option value="document">文档</option>
-                                <option value="video">视频</option>
-                                <option value="audio">音频</option>
+                                <option value="">{{ __('admin.all_types') }}</option>
+                                <option value="image">{{ __('admin.image_file') }}</option>
+                                <option value="document">{{ __('admin.document') }}</option>
+                                <option value="video">{{ __('admin.video') }}</option>
+                                <option value="audio">{{ __('admin.audio') }}</option>
                             </select>
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">文件分类</label>
+                        <label class="layui-form-label">{{ __('admin.file_category') }}</label>
                         <div class="layui-input-inline">
                             <select name="category" id="category-select">
-                                <option value="">全部分类</option>
+                                <option value="">{{ __('admin.all_categories') }}</option>
                             </select>
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">扩展名</label>
+                        <label class="layui-form-label">{{ __('admin.extension') }}</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="extension" placeholder="请输入扩展名" class="layui-input">
+                            <input type="text" name="extension" placeholder="{{ __('admin.enter_extension') }}" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <button type="submit" class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="upload-query">
-                            <i class="layui-icon layui-icon-search"></i>
-                            查询
-                        </button>
+                            <i class="layui-icon layui-icon-search"></i>{{ __('admin.search') }}</button>
                         <button type="reset" class="pear-btn pear-btn-md">
-                            <i class="layui-icon layui-icon-refresh"></i>
-                            重置
-                        </button>
+                            <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                     </div>
                 </div>
             </form>
@@ -203,16 +199,14 @@
                 <div class="layui-btn-group">
                     <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="add">
                         <i class="layui-icon layui-icon-add-1"></i>
-                        上传文件
+                        {{ __('admin.upload_file') }}
                     </button>
                     <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="batchRemove">
                         <i class="layui-icon layui-icon-delete"></i>
-                        批量删除
+                        {{ __('admin.batch_delete') }}
                     </button>
                     <button class="pear-btn pear-btn-warm pear-btn-sm" lay-event="refresh">
-                        <i class="layui-icon layui-icon-refresh"></i>
-                        刷新
-                    </button>
+                        <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.refresh') }}</button>
                 </div>
             </script>
 
@@ -232,13 +226,13 @@
 
             <script type="text/html" id="upload-toolbar-right">
                 <div style="white-space: nowrap; display: flex; gap: 3px; justify-content: center;">
-                    <button class="table-action-btn table-action-view" lay-event="preview" title="预览">
+                    <button class="table-action-btn table-action-view" lay-event="preview" title="{{ __('admin.preview') }}">
                         <i class="layui-icon layui-icon-eye"></i>
                     </button>
-                    <button class="table-action-btn table-action-edit" lay-event="download" title="下载">
+                    <button class="table-action-btn table-action-edit" lay-event="download" title="{{ __('admin.download') }}">
                         <i class="layui-icon layui-icon-download-circle"></i>
                     </button>
-                    <button class="table-action-btn table-action-delete" lay-event="remove" title="删除">
+                    <button class="table-action-btn table-action-delete" lay-event="remove" title="{{ __('admin.delete') }}">
                         <i class="layui-icon layui-icon-delete"></i>
                     </button>
                 </div>
@@ -278,15 +272,15 @@
                 [
                     {type: 'checkbox', fixed: 'left'},
                     {title: 'ID', field: 'id', width: 80, align: 'center', sort: true},
-                    {title: '预览', field: 'preview', width: 100, align: 'center', templet: '#upload-preview'},
-                    {title: '文件名', field: 'original_name', width: 180, align: 'left'},
-                    {title: '分类', field: 'category_label', width: 100, align: 'center'},
-                    {title: '类型', field: 'type_label', width: 80, align: 'center'},
-                    {title: '大小', field: 'size', width: 100, align: 'center', templet: '#upload-size'},
-                    {title: '标签', field: 'tags_string', width: 120, align: 'center'},
-                    {title: '上传者', field: 'admin_name', width: 100, align: 'center'},
-                    {title: '上传时间', field: 'created_at', width: 160, align: 'center'},
-                    {title: '操作', width: 120, align: 'center', toolbar: '#upload-toolbar-right', fixed: 'right'}
+                    {title: '{{ __('admin.preview') }}', field: 'preview', width: 100, align: 'center', templet: '#upload-preview'},
+                    {title: '{{ __('admin.file_name') }}', field: 'original_name', width: 180, align: 'left'},
+                    {title: '{{ __('admin.col_category') }}', field: 'category_label', width: 100, align: 'center'},
+                    {title: '{{ __('admin.type') }}', field: 'type_label', width: 80, align: 'center'},
+                    {title: '{{ __('admin.size') }}', field: 'size', width: 100, align: 'center', templet: '#upload-size'},
+                    {title: '{{ __('admin.tags') }}', field: 'tags_string', width: 120, align: 'center'},
+                    {title: '{{ __('admin.uploader') }}', field: 'admin_name', width: 100, align: 'center'},
+                    {title: '{{ __('admin.uploaded_at') }}', field: 'created_at', width: 160, align: 'center'},
+                    {title: '{{ __('admin.actions_col') }}', width: 120, align: 'center', toolbar: '#upload-toolbar-right', fixed: 'right'}
                 ]
             ];
 
@@ -296,7 +290,7 @@
                 method: 'GET',
                 toolbar: '#upload-toolbar',
                 defaultToolbar: [{
-                    title: '刷新',
+                    title: '{{ __('admin.refresh') }}',
                     layEvent: 'refresh',
                     icon: 'layui-icon-refresh',
                 }, 'filter', 'print', 'exports'],
@@ -327,7 +321,7 @@
                 if (obj.event === 'add') {
                     layer.open({
                         type: 2,
-                        title: '上传文件',
+                        title: '{{ __('admin.upload_file') }}',
                         shade: 0.1,
                         area: ['800px', '600px'],
                         content: UPLOAD_URL
@@ -336,11 +330,11 @@
                     let checkStatus = table.checkStatus('upload-table');
                     let data = checkStatus.data;
                     if (data.length === 0) {
-                        layer.msg('请选择要删除的数据');
+                        layer.msg('{{ __('admin.select_to_delete') }}');
                         return;
                     }
                     let ids = data.map(item => item[PRIMARY_KEY]);
-                    layer.confirm('确定删除选中的文件吗？', function (index) {
+                    layer.confirm('{{ __('admin.confirm_delete_selected') }}', function (index) {
                         $.ajax({
                             url: BATCH_REMOVE_API,
                             type: 'POST',
@@ -389,36 +383,36 @@
                             } else if (previewData.preview_type === 'video') {
                                 layer.open({
                                     type: 1,
-                                    title: '视频预览 - ' + previewData.original_name,
+                                    title: '{{ __('admin.video_preview') }} - ' + previewData.original_name,
                                     area: ['800px', '600px'],
-                                    content: '<video controls style="width:100%;height:100%;"><source src="' + previewData.url + '" type="' + previewData.mime_type + '">您的浏览器不支持视频播放。</video>'
+                                    content: '<video controls style="width:100%;height:100%;"><source src="' + previewData.url + '" type="' + previewData.mime_type + '">{{ __('admin.video_unsupported') }}</video>'
                                 });
                             } else if (previewData.preview_type === 'audio') {
                                 layer.open({
                                     type: 1,
-                                    title: '音频预览 - ' + previewData.original_name,
+                                    title: '{{ __('admin.audio_preview') }} - ' + previewData.original_name,
                                     area: ['400px', '200px'],
-                                    content: '<audio controls style="width:100%;"><source src="' + previewData.url + '" type="' + previewData.mime_type + '">您的浏览器不支持音频播放。</audio>'
+                                    content: '<audio controls style="width:100%;"><source src="' + previewData.url + '" type="' + previewData.mime_type + '">{{ __('admin.audio_unsupported') }}</audio>'
                                 });
                             } else if (previewData.preview_type === 'text') {
                                 layer.open({
                                     type: 1,
-                                    title: '文本预览 - ' + previewData.original_name,
+                                    title: '{{ __('admin.text_preview') }} - ' + previewData.original_name,
                                     area: ['800px', '600px'],
-                                    content: '<pre style="padding:20px;max-height:500px;overflow:auto;">' + (previewData.content || '无法读取文件内容') + '</pre>'
+                                    content: '<pre style="padding:20px;max-height:500px;overflow:auto;">' + (previewData.content || '{{ __('admin.cannot_read_content') }}') + '</pre>'
                                 });
                             } else {
                                 window.open(previewData.url, '_blank');
                             }
                         } else {
-                            layer.msg('预览失败：' + res.message, {icon: 2});
+                            layer.msg('{{ __('admin.preview_failed') }}：' + res.message, {icon: 2});
                         }
                     });
                 } else if (obj.event === 'download') {
                     // 使用新的下载API
                     window.open('{{ route("lpadmin.upload.download", ":id") }}'.replace(':id', data.id), '_blank');
                 } else if (obj.event === 'remove') {
-                    layer.confirm('确定删除该文件吗？', function (index) {
+                    layer.confirm('{{ __('admin.confirm_delete_one') }}', function (index) {
                         $.ajax({
                             url: REMOVE_API.replace(':id', data[PRIMARY_KEY]),
                             type: 'DELETE',
@@ -484,7 +478,7 @@
             // 刷新统计按钮事件
             $('#refresh-stats').on('click', function() {
                 loadStatistics();
-                layer.msg('统计信息已刷新', {icon: 1, time: 1000});
+                layer.msg('{{ __('admin.stats_refreshed') }}', {icon: 1, time: 1000});
             });
 
             // 页面加载时获取统计信息

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -51,7 +51,7 @@
                 <div class="layui-card-body">
                     <div class="layui-row">
                         <div class="layui-col-xs8">
-                            <div style="color: #666; font-size: 14px;">总配置数</div>
+                            <div style="color: #666; font-size: 14px;">{{ __('admin.total_configs') }}</div>
                             <div style="font-size: 24px; font-weight: bold; color: #1890ff;" id="total-configs">-</div>
                         </div>
                         <div class="layui-col-xs4" style="text-align: right;">
@@ -66,7 +66,7 @@
                 <div class="layui-card-body">
                     <div class="layui-row">
                         <div class="layui-col-xs8">
-                            <div style="color: #666; font-size: 14px;">配置分组</div>
+                            <div style="color: #666; font-size: 14px;">{{ __('admin.config_group') }}</div>
                             <div style="font-size: 24px; font-weight: bold; color: #52c41a;" id="total-groups">-</div>
                         </div>
                         <div class="layui-col-xs4" style="text-align: right;">
@@ -81,7 +81,7 @@
                 <div class="layui-card-body">
                     <div class="layui-row">
                         <div class="layui-col-xs8">
-                            <div style="color: #666; font-size: 14px;">系统配置</div>
+                            <div style="color: #666; font-size: 14px;">{{ __('admin.system_config') }}</div>
                             <div style="font-size: 24px; font-weight: bold; color: #13c2c2;" id="system-configs">-</div>
                         </div>
                         <div class="layui-col-xs4" style="text-align: right;">
@@ -96,7 +96,7 @@
                 <div class="layui-card-body">
                     <div class="layui-row">
                         <div class="layui-col-xs8">
-                            <div style="color: #666; font-size: 14px;">自定义配置</div>
+                            <div style="color: #666; font-size: 14px;">{{ __('admin.custom_configs') }}</div>
                             <div style="font-size: 24px; font-weight: bold; color: #fa8c16;" id="custom-configs">-</div>
                         </div>
                         <div class="layui-col-xs4" style="text-align: right;">
@@ -114,54 +114,50 @@
             <form class="layui-form" action="">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">配置分组</label>
+                        <label class="layui-form-label">{{ __('admin.config_group') }}</label>
                         <div class="layui-input-inline">
                             <select name="group" lay-search>
-                                <option value="">全部分组</option>
+                                <option value="">{{ __('admin.all_groups') }}</option>
                             </select>
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">配置类型</label>
+                        <label class="layui-form-label">{{ __('admin.config_type') }}</label>
                         <div class="layui-input-inline">
                             <select name="type">
-                                <option value="">全部类型</option>
-                                <option value="text">文本框</option>
-                                <option value="textarea">文本域</option>
-                                <option value="number">数字</option>
-                                <option value="select">下拉选择</option>
-                                <option value="radio">单选框</option>
-                                <option value="checkbox">复选框</option>
-                                <option value="switch">开关</option>
-                                <option value="image">图片</option>
-                                <option value="file">文件</option>
-                                <option value="color">颜色</option>
-                                <option value="date">日期</option>
-                                <option value="datetime">日期时间</option>
+                                <option value="">{{ __('admin.all_types') }}</option>
+                                <option value="text">{{ __('admin.textbox') }}</option>
+                                <option value="textarea">{{ __('admin.textarea') }}</option>
+                                <option value="number">{{ __('admin.number') }}</option>
+                                <option value="select">{{ __('admin.dropdown') }}</option>
+                                <option value="radio">{{ __('admin.radio') }}</option>
+                                <option value="checkbox">{{ __('admin.checkbox') }}</option>
+                                <option value="switch">{{ __('admin.switch') }}</option>
+                                <option value="image">{{ __('admin.image_file') }}</option>
+                                <option value="file">{{ __('admin.file') }}</option>
+                                <option value="color">{{ __('admin.color') }}</option>
+                                <option value="date">{{ __('admin.date') }}</option>
+                                <option value="datetime">{{ __('admin.datetime') }}</option>
                             </select>
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">配置名称</label>
+                        <label class="layui-form-label">{{ __('admin.config_name') }}</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="name" placeholder="请输入配置名称" class="layui-input">
+                            <input type="text" name="name" placeholder="{{ __('admin.enter_config_name') }}" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">配置标题</label>
+                        <label class="layui-form-label">{{ __('admin.config_title') }}</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="title" placeholder="请输入配置标题" class="layui-input">
+                            <input type="text" name="title" placeholder="{{ __('admin.enter_config_title') }}" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <button type="submit" class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="config-query">
-                            <i class="layui-icon layui-icon-search"></i>
-                            查询
-                        </button>
+                            <i class="layui-icon layui-icon-search"></i>{{ __('admin.search') }}</button>
                         <button type="reset" class="pear-btn pear-btn-md">
-                            <i class="layui-icon layui-icon-refresh"></i>
-                            重置
-                        </button>
+                            <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                     </div>
                 </div>
             </form>
@@ -178,30 +174,22 @@
     <script type="text/html" id="config-toolbar">
         <div class="layui-btn-group">
             <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="add">
-                <i class="layui-icon layui-icon-add-1"></i>
-                新增
-            </button>
+                <i class="layui-icon layui-icon-add-1"></i>{{ __('admin.create') }}</button>
             <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="batchRemove">
-                <i class="layui-icon layui-icon-delete"></i>
-                删除
-            </button>
+                <i class="layui-icon layui-icon-delete"></i>{{ __('admin.delete') }}</button>
             <button class="pear-btn pear-btn-normal pear-btn-sm" lay-event="export">
-                <i class="layui-icon layui-icon-export"></i>
-                导出
-            </button>
+                <i class="layui-icon layui-icon-export"></i>{{ __('admin.export') }}</button>
             <button class="pear-btn pear-btn-warm pear-btn-sm" lay-event="import">
-                <i class="layui-icon layui-icon-upload"></i>
-                导入
-            </button>
+                <i class="layui-icon layui-icon-upload"></i>{{ __('admin.import') }}</button>
         </div>
     </script>
 
     <script type="text/html" id="config-toolbar-right">
         <div style="white-space: nowrap; display: flex; gap: 3px; justify-content: center;">
-            <button class="table-action-btn table-action-edit" lay-event="edit" title="编辑">
+            <button class="table-action-btn table-action-edit" lay-event="edit" title="{{ __('admin.edit') }}">
                 <i class="layui-icon layui-icon-edit"></i>
             </button>
-            <button class="table-action-btn table-action-delete" lay-event="remove" title="删除">
+            <button class="table-action-btn table-action-delete" lay-event="remove" title="{{ __('admin.delete') }}">
                 <i class="layui-icon layui-icon-delete"></i>
             </button>
         </div>
@@ -250,15 +238,15 @@
                 [
                     {type: 'checkbox'},
                     {title: 'ID', field: 'id', width: 80, align: 'center'},
-                    {title: '分组', field: 'group', width: 120, align: 'center', templet: '#group-tpl'},
-                    {title: '配置名称', field: 'name', width: 180},
-                    {title: '配置标题', field: 'title', width: 150},
-                    {title: '配置值', field: 'value', width: 200, templet: '#value-tpl'},
-                    {title: '类型', field: 'type', width: 100, align: 'center', templet: '#type-tpl'},
-                    {title: '排序', field: 'sort', width: 80, align: 'center'},
-                    {title: '描述', field: 'description', width: 200},
-                    {title: '创建时间', field: 'created_at', width: 160, align: 'center'},
-                    {title: '操作', width: 100, align: 'center', toolbar: '#config-toolbar-right', fixed: 'right'}
+                    {title: '{{ __('admin.group') }}', field: 'group', width: 120, align: 'center', templet: '#group-tpl'},
+                    {title: '{{ __('admin.config_name') }}', field: 'name', width: 180},
+                    {title: '{{ __('admin.config_title') }}', field: 'title', width: 150},
+                    {title: '{{ __('admin.config_value') }}', field: 'value', width: 200, templet: '#value-tpl'},
+                    {title: '{{ __('admin.type') }}', field: 'type', width: 100, align: 'center', templet: '#type-tpl'},
+                    {title: '{{ __('admin.sort') }}', field: 'sort', width: 80, align: 'center'},
+                    {title: '{{ __('admin.description') }}', field: 'description', width: 200},
+                    {title: '{{ __('admin.created_at') }}', field: 'created_at', width: 160, align: 'center'},
+                    {title: '{{ __('admin.actions_col') }}', width: 100, align: 'center', toolbar: '#config-toolbar-right', fixed: 'right'}
                 ]
             ];
 
@@ -268,7 +256,7 @@
                 method: 'GET',
                 toolbar: '#config-toolbar',
                 defaultToolbar: [{
-                    title: '刷新',
+                    title: '{{ __('admin.refresh') }}',
                     layEvent: 'refresh',
                     icon: 'layui-icon-refresh',
                 }, 'filter', 'print', 'exports'],
@@ -301,7 +289,7 @@
                     if (res.code === 0 && res.data) {
                         const groupSelect = $('select[name="group"]');
                         groupSelect.empty();
-                        groupSelect.append('<option value="">全部分组</option>');
+                        groupSelect.append('<option value="">{{ __('admin.all_groups') }}</option>');
 
                         // 处理分组数据，可能是数组或对象
                         if (Array.isArray(res.data)) {
@@ -366,7 +354,7 @@
 
                     layer.confirm('确定要删除选中的 ' + checkStatus.data.length + ' 条配置吗？', {
                         icon: 3,
-                        title: '提示'
+                        title: '{{ __('admin.tip') }}'
                     }, function(index) {
                         const ids = checkStatus.data.map(item => item[PRIMARY_KEY]);
 
@@ -429,7 +417,7 @@
                 } else if (obj.event === 'clearCache') {
                     layer.confirm('确定要清除配置缓存吗？', {
                         icon: 3,
-                        title: '提示'
+                        title: '{{ __('admin.tip') }}'
                     }, function(index) {
                         $.post(CLEAR_CACHE_API, {
                             _token: $('meta[name="csrf-token"]').attr('content')
@@ -445,7 +433,7 @@
                 } else if (obj.event === 'systemSettings') {
                     layer.open({
                         type: 2,
-                        title: '系统设置',
+                        title: '{{ __('admin.system_settings') }}',
                         shade: 0.1,
                         area: ['1000px', '700px'],
                         content: SYSTEM_SETTINGS_URL
@@ -480,7 +468,7 @@
                 } else if (obj.event === 'remove') {
                     layer.confirm('确定要删除这个配置吗？', {
                         icon: 3,
-                        title: '提示'
+                        title: '{{ __('admin.tip') }}'
                     }, function(index) {
                         const removeUrl = REMOVE_API.replace(':id', data[PRIMARY_KEY]);
 

@@ -24,6 +24,15 @@ class AdminController extends BaseController
         return view('lpadmin.layouts.main');
     }
 
+    public function pearConfig(): \Illuminate\Http\JsonResponse
+    {
+        $path = public_path('static/admin/config/pear.config.json');
+        $config = json_decode((string) file_get_contents($path), true) ?: [];
+        $config['tab']['index']['title'] = __('admin.dashboard');
+
+        return response()->json($config);
+    }
+
     /**
      * 显示管理员列表
      */

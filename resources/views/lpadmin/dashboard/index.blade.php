@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -178,8 +178,8 @@
 <div class="pear-container dashboard-container">
     <!-- 欢迎横幅 -->
     <div class="welcome-banner">
-        <h1><i class="layui-icon layui-icon-home"></i> 欢迎使用 LPadmin 1.0.1</h1>
-        <p>基于Laravel 10+和PearAdminLayui构建的现代化后台管理系统 - 让管理更简单，让开发更高效</p>
+        <h1><i class="layui-icon layui-icon-home"></i> {{ __('admin.welcome', ['version' => '1.0.1']) }}</h1>
+        <p>{{ __('admin.welcome_desc') }}</p>
     </div>
 
     <!-- 系统统计卡片 -->
@@ -190,7 +190,7 @@
                     <i class="layui-icon layui-icon-user"></i>
                 </div>
                 <div class="stat-number" id="admin-count">{{ $statistics['system']['admin_count'] ?? 0 }}</div>
-                <div class="stat-label">管理员数量</div>
+                <div class="stat-label">{{ __('admin.admin_count') }}</div>
             </div>
         </div>
         <div class="layui-col-xs6 layui-col-md3">
@@ -199,7 +199,7 @@
                     <i class="layui-icon layui-icon-group"></i>
                 </div>
                 <div class="stat-number" id="user-count">{{ $statistics['system']['user_count'] ?? 0 }}</div>
-                <div class="stat-label">用户数量</div>
+                <div class="stat-label">{{ __('admin.user_count') }}</div>
             </div>
         </div>
         <div class="layui-col-xs6 layui-col-md3">
@@ -208,7 +208,7 @@
                     <i class="layui-icon layui-icon-set"></i>
                 </div>
                 <div class="stat-number" id="role-count">{{ $statistics['system']['role_count'] ?? 0 }}</div>
-                <div class="stat-label">角色数量</div>
+                <div class="stat-label">{{ __('admin.role_count') }}</div>
             </div>
         </div>
         <div class="layui-col-xs6 layui-col-md3">
@@ -217,7 +217,7 @@
                     <i class="layui-icon layui-icon-list"></i>
                 </div>
                 <div class="stat-number" id="rule-count">{{ $statistics['system']['rule_count'] ?? 0 }}</div>
-                <div class="stat-label">权限数量</div>
+                <div class="stat-label">{{ __('admin.rule_count') }}</div>
             </div>
         </div>
     </div>
@@ -227,27 +227,26 @@
         <div class="layui-col-md4">
             <div class="system-info-card layui-card">
                 <div class="layui-card-header">
-                    <i class="layui-icon layui-icon-engine"></i> 系统信息
-                </div>
+                    <i class="layui-icon layui-icon-engine"></i>{{ __('admin.system_info') }}</div>
                 <div class="layui-card-body" style="padding: 10px 15px;">
                     <div class="info-item">
-                        <span class="info-label">系统名称</span>
+                        <span class="info-label">{{ __('admin.system_name') }}</span>
                         <span class="info-value">LPadmin</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">Laravel版本</span>
+                        <span class="info-label">{{ __('admin.laravel_version') }}</span>
                         <span class="info-value">{{ app()->version() }}</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">PHP版本</span>
+                        <span class="info-label">{{ __('admin.php_version') }}</span>
                         <span class="info-value">{{ PHP_VERSION }}</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">操作系统</span>
+                        <span class="info-label">{{ __('admin.os') }}</span>
                         <span class="info-value">{{ PHP_OS }}</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">运行环境</span>
+                        <span class="info-label">{{ __('admin.runtime') }}</span>
                         <span class="info-value">{{ app()->environment() }}</span>
                     </div>
                 </div>
@@ -256,28 +255,27 @@
         <div class="layui-col-md4">
             <div class="system-info-card layui-card">
                 <div class="layui-card-header">
-                    <i class="layui-icon layui-icon-component"></i> 开发环境
-                </div>
+                    <i class="layui-icon layui-icon-component"></i>{{ __('admin.dev_env') }}</div>
                 <div class="layui-card-body" style="padding: 10px 15px;">
                     <div class="info-item">
-                        <span class="info-label">数据库</span>
+                        <span class="info-label">{{ __('admin.database') }}</span>
                         <span class="info-value">MySQL</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">缓存驱动</span>
+                        <span class="info-label">{{ __('admin.cache_driver') }}</span>
                         <span class="info-value">{{ config('cache.default') }}</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">队列驱动</span>
+                        <span class="info-label">{{ __('admin.queue_driver') }}</span>
                         <span class="info-value">{{ config('queue.default') }}</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">会话驱动</span>
+                        <span class="info-label">{{ __('admin.session_driver') }}</span>
                         <span class="info-value">{{ config('session.driver') }}</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">调试模式</span>
-                        <span class="info-value">{{ config('app.debug') ? '开启' : '关闭' }}</span>
+                        <span class="info-label">{{ __('admin.debug') }}</span>
+                        <span class="info-value">{{ config('app.debug') ? __('admin.on') : __('admin.off') }}</span>
                     </div>
                 </div>
             </div>
@@ -285,27 +283,26 @@
         <div class="layui-col-md4">
             <div class="system-info-card layui-card">
                 <div class="layui-card-header">
-                    <i class="layui-icon layui-icon-component"></i> 引用扩展
-                </div>
+                    <i class="layui-icon layui-icon-component"></i>{{ __('admin.extensions') }}</div>
                 <div class="layui-card-body" style="padding: 10px 15px;">
                     <div class="info-item">
-                        <span class="info-label">前端框架</span>
+                        <span class="info-label">{{ __('admin.frontend') }}</span>
                         <span class="info-value">PearAdminLayui</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">UI组件</span>
+                        <span class="info-label">{{ __('admin.ui') }}</span>
                         <span class="info-value">Layui 2.8+</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">图表组件</span>
+                        <span class="info-label">{{ __('admin.charts') }}</span>
                         <span class="info-value">ECharts 5.0+</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">HTTP客户端</span>
+                        <span class="info-label">{{ __('admin.http_client') }}</span>
                         <span class="info-value">Guzzle HTTP</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">认证组件</span>
+                        <span class="info-label">{{ __('admin.auth_component') }}</span>
                         <span class="info-value">Laravel Sanctum</span>
                     </div>
                 </div>
@@ -318,64 +315,63 @@
         <div class="layui-col-md6">
             <div class="system-info-card layui-card">
                 <div class="layui-card-header">
-                    <i class="layui-icon layui-icon-app"></i> 系统核心模块
-                </div>
+                    <i class="layui-icon layui-icon-app"></i>{{ __('admin.core_modules') }}</div>
                 <div class="layui-card-body" style="padding: 10px;">
                     <div class="layui-row layui-col-space8">
                         <div class="layui-col-xs6 layui-col-md3">
                             <div class="module-card" onclick="openModule('{{ lpadmin_url_prefix() }}/admin')"
                                 <i class="layui-icon layui-icon-user module-icon"></i>
-                                <span class="module-title">权限管理</span>
-                                <div class="module-desc">管理员、角色、权限</div>
+                                <span class="module-title">{{ __('admin.permission_mgmt') }}</span>
+                                <div class="module-desc">{{ __('admin.permission_desc') }}</div>
                             </div>
                         </div>
                         <div class="layui-col-xs6 layui-col-md3">
                             <div class="module-card" onclick="openModule('{{ lpadmin_url_prefix() }}/user')"
                                 <i class="layui-icon layui-icon-group module-icon"></i>
-                                <span class="module-title">用户管理</span>
-                                <div class="module-desc">前台用户管理</div>
+                                <span class="module-title">{{ __('admin.user_mgmt') }}</span>
+                                <div class="module-desc">{{ __('admin.user_desc') }}</div>
                             </div>
                         </div>
                         <div class="layui-col-xs6 layui-col-md3">
                             <div class="module-card" onclick="openModule('{{ lpadmin_url_prefix() }}/upload')"
                                 <i class="layui-icon layui-icon-upload module-icon"></i>
-                                <span class="module-title">文件管理</span>
-                                <div class="module-desc">文件上传、附件</div>
+                                <span class="module-title">{{ __('admin.file_mgmt') }}</span>
+                                <div class="module-desc">{{ __('admin.file_desc') }}</div>
                             </div>
                         </div>
                         <div class="layui-col-xs6 layui-col-md3">
                             <div class="module-card" onclick="openModule('{{ lpadmin_url_prefix() }}/config')">
                                 <i class="layui-icon layui-icon-set module-icon"></i>
-                                <span class="module-title">系统配置</span>
-                                <div class="module-desc">系统参数配置</div>
+                                <span class="module-title">{{ __('admin.system_config') }}</span>
+                                <div class="module-desc">{{ __('admin.system_config_desc') }}</div>
                             </div>
                         </div>
                         <div class="layui-col-xs6 layui-col-md3">
                             <div class="module-card" onclick="openModule('{{ lpadmin_url_prefix() }}/menu')">
                                 <i class="layui-icon layui-icon-list module-icon"></i>
-                                <span class="module-title">菜单管理</span>
-                                <div class="module-desc">系统菜单配置</div>
+                                <span class="module-title">{{ __('admin.menu_mgmt') }}</span>
+                                <div class="module-desc">{{ __('admin.menu_desc') }}</div>
                             </div>
                         </div>
                         <div class="layui-col-xs6 layui-col-md3">
                             <div class="module-card" onclick="openModule('{{ lpadmin_url_prefix() }}/dictionary')">
                                 <i class="layui-icon layui-icon-template module-icon"></i>
-                                <span class="module-title">字典管理</span>
-                                <div class="module-desc">数据字典管理</div>
+                                <span class="module-title">{{ __('admin.dictionary_mgmt') }}</span>
+                                <div class="module-desc">{{ __('admin.dictionary_desc') }}</div>
                             </div>
                         </div>
                         <div class="layui-col-xs6 layui-col-md3">
                             <div class="module-card" onclick="openModule('{{ lpadmin_url_prefix() }}/cache')">
                                 <i class="layui-icon layui-icon-engine module-icon"></i>
-                                <span class="module-title">缓存管理</span>
-                                <div class="module-desc">缓存配置监控</div>
+                                <span class="module-title">{{ __('admin.cache_mgmt') }}</span>
+                                <div class="module-desc">{{ __('admin.cache_desc') }}</div>
                             </div>
                         </div>
                         <div class="layui-col-xs6 layui-col-md3">
                             <div class="module-card" onclick="openModule('{{ lpadmin_url_prefix() }}/log')"
                                 <i class="layui-icon layui-icon-log module-icon"></i>
-                                <span class="module-title">日志管理</span>
-                                <div class="module-desc">系统操作日志</div>
+                                <span class="module-title">{{ __('admin.log_mgmt') }}</span>
+                                <div class="module-desc">{{ __('admin.log_desc') }}</div>
                             </div>
                         </div>
                     </div>
@@ -386,64 +382,63 @@
         <div class="layui-col-md6">
             <div class="system-info-card layui-card">
                 <div class="layui-card-header">
-                    <i class="layui-icon layui-icon-read"></i> 核心开发文档
-                </div>
+                    <i class="layui-icon layui-icon-read"></i>{{ __('admin.docs') }}</div>
                 <div class="layui-card-body" style="padding: 8px 15px;">
                     <div class="layui-row layui-col-space8">
                         <div class="layui-col-xs6 layui-col-md3">
                             <div class="doc-card" onclick="openDoc('README.md')">
                                 <i class="layui-icon layui-icon-file doc-icon"></i>
-                                <span class="doc-title">项目介绍</span>
-                                <div class="doc-desc">系统简介、特性说明</div>
+                                <span class="doc-title">{{ __('admin.intro') }}</span>
+                                <div class="doc-desc">{{ __('admin.intro_desc') }}</div>
                             </div>
                         </div>
                         <div class="layui-col-xs6 layui-col-md3">
                             <div class="doc-card" onclick="openDoc('INSTALL.md')">
                                 <i class="layui-icon layui-icon-download-circle doc-icon"></i>
-                                <span class="doc-title">安装指南</span>
-                                <div class="doc-desc">环境要求、安装步骤</div>
+                                <span class="doc-title">{{ __('admin.install_guide') }}</span>
+                                <div class="doc-desc">{{ __('admin.install_desc') }}</div>
                             </div>
                         </div>
                         <div class="layui-col-xs6 layui-col-md3">
                             <div class="doc-card" onclick="openDoc('DEVELOPMENT.md')">
                                 <i class="layui-icon layui-icon-code-circle doc-icon"></i>
-                                <span class="doc-title">开发文档</span>
-                                <div class="doc-desc">开发规范、代码结构</div>
+                                <span class="doc-title">{{ __('admin.dev_doc') }}</span>
+                                <div class="doc-desc">{{ __('admin.dev_desc') }}</div>
                             </div>
                         </div>
                         <div class="layui-col-xs6 layui-col-md3">
                             <div class="doc-card" onclick="openDoc('API.md')">
                                 <i class="layui-icon layui-icon-link doc-icon"></i>
-                                <span class="doc-title">API接口</span>
-                                <div class="doc-desc">接口文档、参数说明</div>
+                                <span class="doc-title">{{ __('admin.api_doc') }}</span>
+                                <div class="doc-desc">{{ __('admin.api_desc') }}</div>
                             </div>
                         </div>
                         <div class="layui-col-xs6 layui-col-md3">
                             <div class="doc-card" onclick="openDoc('DEPLOYMENT.md')">
                                 <i class="layui-icon layui-icon-release doc-icon"></i>
-                                <span class="doc-title">部署指南</span>
-                                <div class="doc-desc">生产环境部署</div>
+                                <span class="doc-title">{{ __('admin.deploy_guide') }}</span>
+                                <div class="doc-desc">{{ __('admin.deploy_desc') }}</div>
                             </div>
                         </div>
                         <div class="layui-col-xs6 layui-col-md3">
                             <div class="doc-card" onclick="openDoc('QUICKSTART.md')">
                                 <i class="layui-icon layui-icon-play doc-icon"></i>
-                                <span class="doc-title">快速开始</span>
-                                <div class="doc-desc">快速上手指南</div>
+                                <span class="doc-title">{{ __('admin.quickstart') }}</span>
+                                <div class="doc-desc">{{ __('admin.quickstart_desc') }}</div>
                             </div>
                         </div>
                         <div class="layui-col-xs6 layui-col-md3">
                             <div class="doc-card" onclick="openDoc('CHANGELOG.md')">
                                 <i class="layui-icon layui-icon-log doc-icon"></i>
-                                <span class="doc-title">更新日志</span>
-                                <div class="doc-desc">版本更新记录</div>
+                                <span class="doc-title">{{ __('admin.changelog') }}</span>
+                                <div class="doc-desc">{{ __('admin.changelog_desc') }}</div>
                             </div>
                         </div>
                         <div class="layui-col-xs6 layui-col-md3">
                             <div class="doc-card" onclick="openDoc('architecture/database-design.md')">
                                 <i class="layui-icon layui-icon-template-1 doc-icon"></i>
-                                <span class="doc-title">数据库设计</span>
-                                <div class="doc-desc">数据表结构设计</div>
+                                <span class="doc-title">{{ __('admin.db_design') }}</span>
+                                <div class="doc-desc">{{ __('admin.db_design_desc') }}</div>
                             </div>
                         </div>
                     </div>
@@ -457,16 +452,14 @@
         <div class="layui-col-md8">
             <div class="chart-container">
                 <div class="chart-title">
-                    <i class="layui-icon layui-icon-chart"></i> 系统访问趋势
-                </div>
+                    <i class="layui-icon layui-icon-chart"></i>{{ __('admin.visit_trend') }}</div>
                 <div id="trend-chart" style="height: 250px;"></div>
             </div>
         </div>
         <div class="layui-col-md4">
             <div class="chart-container">
                 <div class="chart-title">
-                    <i class="layui-icon layui-icon-chart-screen"></i> 模块使用分布
-                </div>
+                    <i class="layui-icon layui-icon-chart-screen"></i>{{ __('admin.module_usage') }}</div>
                 <div id="pie-chart" style="height: 250px;"></div>
             </div>
         </div>
@@ -533,7 +526,7 @@ layui.use(['layer', 'element', 'echarts', 'count', 'jquery'], function() {
             }
         },
         legend: {
-            data: ['访问量', '用户数', '操作数']
+            data: ['{{ __('admin.visits') }}', '{{ __('admin.users') }}', '{{ __('admin.actions') }}']
         },
         grid: {
             left: '3%',
@@ -544,16 +537,16 @@ layui.use(['layer', 'element', 'echarts', 'count', 'jquery'], function() {
         xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+            data: ['{{ __('admin.mon') }}', '{{ __('admin.tue') }}', '{{ __('admin.wed') }}', '{{ __('admin.thu') }}', '{{ __('admin.fri') }}', '{{ __('admin.sat') }}', '{{ __('admin.sun') }}']
         },
         yAxis: {
             type: 'value'
         },
         series: [
             {
-                name: '访问量',
+                name: '{{ __('admin.visits') }}',
                 type: 'line',
-                stack: '总量',
+                stack: '{{ __('admin.total') }}',
                 smooth: true,
                 areaStyle: {
                     color: {
@@ -572,9 +565,9 @@ layui.use(['layer', 'element', 'echarts', 'count', 'jquery'], function() {
                 data: [120, 132, 101, 134, 90, 230, 210]
             },
             {
-                name: '用户数',
+                name: '{{ __('admin.users') }}',
                 type: 'line',
-                stack: '总量',
+                stack: '{{ __('admin.total') }}',
                 smooth: true,
                 areaStyle: {
                     color: {
@@ -593,9 +586,9 @@ layui.use(['layer', 'element', 'echarts', 'count', 'jquery'], function() {
                 data: [220, 182, 191, 234, 290, 330, 310]
             },
             {
-                name: '操作数',
+                name: '{{ __('admin.actions') }}',
                 type: 'line',
-                stack: '总量',
+                stack: '{{ __('admin.total') }}',
                 smooth: true,
                 areaStyle: {
                     color: {
@@ -629,15 +622,15 @@ layui.use(['layer', 'element', 'echarts', 'count', 'jquery'], function() {
         },
         series: [
             {
-                name: '模块使用',
+                name: '{{ __('admin.module_use') }}',
                 type: 'pie',
                 radius: '50%',
                 data: [
-                    { value: 1048, name: '用户管理' },
-                    { value: 735, name: '权限管理' },
-                    { value: 580, name: '文件管理' },
-                    { value: 484, name: '系统配置' },
-                    { value: 300, name: '其他模块' }
+                    { value: 1048, name: '{{ __('admin.user_mgmt') }}' },
+                    { value: 735, name: '{{ __('admin.permission_mgmt') }}' },
+                    { value: 580, name: '{{ __('admin.file_mgmt') }}' },
+                    { value: 484, name: '{{ __('admin.system_config') }}' },
+                    { value: 300, name: '{{ __('admin.other_modules') }}' }
                 ],
                 emphasis: {
                     itemStyle: {
@@ -662,7 +655,7 @@ layui.use(['layer', 'element', 'echarts', 'count', 'jquery'], function() {
 function openModule(url) {
     const index = parent.layer.open({
         type: 2,
-        title: '模块管理',
+        title: '{{ __('admin.module_page') }}',
         content: url,
         area: ['90%', '90%'],
         maxmin: true

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
     <head>
         <meta charset="utf-8">
         <title>权限规则管理</title>
@@ -98,47 +98,43 @@
                 <form class="layui-form" action="">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">权限名称</label>
+                            <label class="layui-form-label">{{ __('admin.permission_name') }}</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="title" placeholder="请输入权限名称" class="layui-input">
+                                <input type="text" name="title" placeholder="{{ __('admin.enter_permission_name') }}" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">权限标识</label>
+                            <label class="layui-form-label">{{ __('admin.permission_key') }}</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="name" placeholder="请输入权限标识" class="layui-input">
+                                <input type="text" name="name" placeholder="{{ __('admin.enter_permission_key') }}" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">类型</label>
+                            <label class="layui-form-label">{{ __('admin.type') }}</label>
                             <div class="layui-input-inline">
                                 <select name="type">
-                                    <option value="">全部类型</option>
-                                    <option value="menu">菜单</option>
-                                    <option value="button">按钮</option>
-                                    <option value="api">接口</option>
+                                    <option value="">{{ __('admin.all_types') }}</option>
+                                    <option value="menu">{{ __('admin.menu_type') }}</option>
+                                    <option value="button">{{ __('admin.button') }}</option>
+                                    <option value="api">{{ __('admin.api') }}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">状态</label>
+                            <label class="layui-form-label">{{ __('admin.status') }}</label>
                             <div class="layui-input-inline">
                                 <select name="status">
-                                    <option value="">全部状态</option>
-                                    <option value="1">启用</option>
-                                    <option value="0">禁用</option>
+                                    <option value="">{{ __('admin.all_status') }}</option>
+                                    <option value="1">{{ __('admin.enabled') }}</option>
+                                    <option value="0">{{ __('admin.disabled') }}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="layui-inline">
                             <button type="submit" class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="rule-query">
-                                <i class="layui-icon layui-icon-search"></i>
-                                查询
-                            </button>
+                                <i class="layui-icon layui-icon-search"></i>{{ __('admin.search') }}</button>
                             <button type="reset" class="pear-btn pear-btn-md">
-                                <i class="layui-icon layui-icon-refresh"></i>
-                                重置
-                            </button>
+                                <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                         </div>
                     </div>
                 </form>
@@ -152,33 +148,29 @@
                 <script type="text/html" id="rule-toolbar">
                     <div class="layui-btn-group" style="margin-right: 10px;">
                         <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="add" style="margin-right: 5px;">
-                            <i class="layui-icon layui-icon-add-1"></i>
-                            新增
-                        </button>
+                            <i class="layui-icon layui-icon-add-1"></i>{{ __('admin.create') }}</button>
                         <button class="pear-btn pear-btn-success pear-btn-sm" lay-event="expand" style="margin-right: 5px;">
                             <i class="layui-icon layui-icon-spread-left"></i>
-                            展开全部
+                            {{ __('admin.expand_all') }}
                         </button>
                         <button class="pear-btn pear-btn-warning pear-btn-sm" lay-event="collapse" style="margin-right: 5px;">
                             <i class="layui-icon layui-icon-shrink-right"></i>
-                            收起全部
+                            {{ __('admin.collapse_all') }}
                         </button>
                         <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="batchRemove">
-                            <i class="layui-icon layui-icon-delete"></i>
-                            删除
-                        </button>
+                            <i class="layui-icon layui-icon-delete"></i>{{ __('admin.delete') }}</button>
                     </div>
                 </script>
 
                 <script type="text/html" id="rule-type">
                     @{{# if(d.type === 'menu') { }}
-                        <span class="layui-badge layui-bg-blue">菜单</span>
+                        <span class="layui-badge layui-bg-blue">{{ __('admin.menu_type') }}</span>
                     @{{# } else if(d.type === 'button') { }}
-                        <span class="layui-badge layui-bg-orange">按钮</span>
+                        <span class="layui-badge layui-bg-orange">{{ __('admin.button') }}</span>
                     @{{# } else if(d.type === 'api') { }}
-                        <span class="layui-badge layui-bg-green">接口</span>
+                        <span class="layui-badge layui-bg-green">{{ __('admin.api') }}</span>
                     @{{# } else { }}
-                        <span class="layui-badge layui-bg-gray">未知</span>
+                        <span class="layui-badge layui-bg-gray">{{ __('admin.unknown') }}</span>
                     @{{# } }}
                 </script>
 
@@ -189,23 +181,23 @@
                             <span style="font-size: 11px; color: #999; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="@{{d.icon}}">@{{d.icon}}</span>
                         </div>
                     @{{# } else { }}
-                        <span style="color: #ccc; font-size: 12px;">无图标</span>
+                        <span style="color: #ccc; font-size: 12px;">{{ __('admin.no_icon') }}</span>
                     @{{# } }}
                 </script>
 
                 <script type="text/html" id="rule-status">
-                    <input type="checkbox" name="status" value="@{{d.id}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="rule-status" @{{# if(d.status == 1) { }} checked @{{# } }}>
+                    <input type="checkbox" name="status" value="@{{d.id}}" lay-skin="switch" lay-text="{{ __('admin.enabled') }}|{{ __('admin.disabled') }}" lay-filter="rule-status" @{{# if(d.status == 1) { }} checked @{{# } }}>
                 </script>
 
                 <script type="text/html" id="rule-toolbar-right">
                     <div style="white-space: nowrap; display: flex; gap: 3px; justify-content: center;">
-                        <button class="table-action-btn table-action-edit" lay-event="edit" title="编辑">
+                        <button class="table-action-btn table-action-edit" lay-event="edit" title="{{ __('admin.edit') }}">
                             <i class="layui-icon layui-icon-edit"></i>
                         </button>
                         <button class="table-action-btn table-action-add" lay-event="add-child" title="添加子权限">
                             <i class="layui-icon layui-icon-add-1"></i>
                         </button>
-                        <button class="table-action-btn table-action-delete" lay-event="remove" title="删除">
+                        <button class="table-action-btn table-action-delete" lay-event="remove" title="{{ __('admin.delete') }}">
                             <i class="layui-icon layui-icon-delete"></i>
                         </button>
                     </div>
@@ -237,15 +229,15 @@
                     [
                         {type: 'checkbox'},
                         {title: 'ID', field: 'id', width: 80, align: 'center'},
-                        {title: '权限名称', field: 'title', width: 160},
-                        {title: '权限标识', field: 'name', width: 250, align: 'left', style: 'white-space: nowrap;'},
-                        {title: '类型', field: 'type', width: 80, align: 'center', templet: '#rule-type'},
-                        {title: '路由/URL', field: 'url', width: 160, align: 'left'},
-                        {title: '图标', field: 'icon', width: 120, align: 'center', templet: '#rule-icon'},
-                        {title: '排序', field: 'sort', width: 60, align: 'center'},
-                        {title: '状态', field: 'status', width: 90, align: 'center', templet: '#rule-status'},
-                        {title: '创建时间', field: 'created_at', width: 180, align: 'center'},
-                        {title: '操作', width: 100, align: 'center', toolbar: '#rule-toolbar-right', fixed: 'right'}
+                        {title: '{{ __('admin.permission_name') }}', field: 'title', width: 160},
+                        {title: '{{ __('admin.permission_key') }}', field: 'name', width: 250, align: 'left', style: 'white-space: nowrap;'},
+                        {title: '{{ __('admin.type') }}', field: 'type', width: 80, align: 'center', templet: '#rule-type'},
+                        {title: '{{ __('admin.route_url') }}', field: 'url', width: 160, align: 'left'},
+                        {title: '{{ __('admin.icon') }}', field: 'icon', width: 120, align: 'center', templet: '#rule-icon'},
+                        {title: '{{ __('admin.sort') }}', field: 'sort', width: 60, align: 'center'},
+                        {title: '{{ __('admin.status') }}', field: 'status', width: 90, align: 'center', templet: '#rule-status'},
+                        {title: '{{ __('admin.created_at') }}', field: 'created_at', width: 180, align: 'center'},
+                        {title: '{{ __('admin.actions_col') }}', width: 100, align: 'center', toolbar: '#rule-toolbar-right', fixed: 'right'}
                     ]
                 ];
 
@@ -255,7 +247,7 @@
                     method: 'GET',
                     toolbar: '#rule-toolbar',
                     defaultToolbar: [{
-                        title: '刷新',
+                        title: '{{ __('admin.refresh') }}',
                         layEvent: 'refresh',
                         icon: 'layui-icon-refresh',
                     }, 'filter', 'print', 'exports'],
@@ -287,7 +279,7 @@
                         where: data.field,
                         toolbar: '#rule-toolbar',
                         defaultToolbar: [{
-                            title: '刷新',
+                            title: '{{ __('admin.refresh') }}',
                             layEvent: 'refresh',
                             icon: 'layui-icon-refresh',
                         }, 'filter', 'print', 'exports'],

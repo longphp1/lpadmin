@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -38,7 +38,7 @@
                 <div class="layui-col-md4" style="text-align: right;">
                     <span class="layui-badge layui-bg-blue">{{ $dictionary->type_label }}</span>
                     <span class="layui-badge {{ $dictionary->status ? 'layui-bg-green' : 'layui-bg-gray' }}">
-                        {{ $dictionary->status ? '启用' : '禁用' }}
+                        {{ $dictionary->status ? __('admin.enabled') : __('admin.disabled') }}
                     </span>
                 </div>
             </div>
@@ -50,54 +50,53 @@
         <div class="layui-card-body">
             <form class="layui-form top-search-from">
                 <div class="layui-form-item">
-                    <label class="layui-form-label">显示标签</label>
+                    <label class="layui-form-label">{{ __('admin.dict_label') }}</label>
                     <div class="layui-input-block">
                         <input type="text" name="label" value="" class="layui-input">
                     </div>
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">选项值</label>
+                    <label class="layui-form-label">{{ __('admin.dict_value') }}</label>
                     <div class="layui-input-block">
                         <input type="text" name="value" value="" class="layui-input">
                     </div>
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">颜色</label>
+                    <label class="layui-form-label">{{ __('admin.color') }}</label>
                     <div class="layui-input-block">
                         <select name="color">
-                            <option value="">请选择颜色</option>
-                            <option value="blue">蓝色</option>
-                            <option value="green">绿色</option>
-                            <option value="orange">橙色</option>
-                            <option value="red">红色</option>
-                            <option value="purple">紫色</option>
-                            <option value="cyan">青色</option>
-                            <option value="gray">灰色</option>
-                            <option value="pink">粉色</option>
+                            <option value="">{{ __('admin.select_color') }}</option>
+                            <option value="blue">{{ __('admin.blue') }}</option>
+                            <option value="green">{{ __('admin.green') }}</option>
+                            <option value="orange">{{ __('admin.orange') }}</option>
+                            <option value="red">{{ __('admin.red') }}</option>
+                            <option value="purple">{{ __('admin.purple') }}</option>
+                            <option value="cyan">{{ __('admin.cyan') }}</option>
+                            <option value="gray">{{ __('admin.gray') }}</option>
+                            <option value="pink">{{ __('admin.pink') }}</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">状态</label>
+                    <label class="layui-form-label">{{ __('admin.status') }}</label>
                     <div class="layui-input-block">
                         <select name="status">
-                            <option value="">请选择状态</option>
-                            <option value="1">启用</option>
-                            <option value="0">禁用</option>
+                            <option value="">{{ __('admin.select_status') }}</option>
+                            <option value="1">{{ __('admin.enabled') }}</option>
+                            <option value="0">{{ __('admin.disabled') }}</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
                     <button type="submit" class="layui-btn layui-btn-sm" lay-submit lay-filter="search">
-                        <i class="layui-icon layui-icon-search"></i> 搜索
+                        <i class="layui-icon layui-icon-search"></i> {{ __('admin.search_menu') }}
                     </button>
                     <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">
-                        <i class="layui-icon layui-icon-refresh"></i> 重置
-                    </button>
+                        <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                 </div>
             </form>
         </div>
@@ -128,10 +127,10 @@
     <!-- 表格行工具栏 -->
     <script type="text/html" id="barDemo">
         <div style="white-space: nowrap; display: flex; gap: 4px; justify-content: center;">
-            <button class="table-action-btn table-action-edit" lay-event="edit" title="编辑">
+            <button class="table-action-btn table-action-edit" lay-event="edit" title="{{ __('admin.edit') }}">
                 <i class="layui-icon layui-icon-edit"></i>
             </button>
-            <button class="table-action-btn table-action-delete" lay-event="delete" title="删除">
+            <button class="table-action-btn table-action-delete" lay-event="delete" title="{{ __('admin.delete') }}">
                 <i class="layui-icon layui-icon-delete"></i>
             </button>
         </div>
@@ -184,31 +183,31 @@
                 cols: [[
                     {type: 'checkbox', fixed: 'left', width: 50},
                     {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'},
-                    {field: 'label', title: '显示标签', width: 150},
-                    {field: 'value', title: '选项值', width: 150},
-                    {field: 'color', title: '颜色', width: 100, templet: function(d){
+                    {field: 'label', title: '{{ __('admin.dict_label') }}', width: 150},
+                    {field: 'value', title: '{{ __('admin.dict_value') }}', width: 150},
+                    {field: 'color', title: '{{ __('admin.color') }}', width: 100, templet: function(d){
                         if(!d.color) return '-';
                         var colorNames = {
-                            'blue': '蓝色',
-                            'green': '绿色',
-                            'orange': '橙色',
-                            'red': '红色',
-                            'purple': '紫色',
-                            'cyan': '青色',
-                            'gray': '灰色',
-                            'pink': '粉色'
+                            'blue': '{{ __('admin.blue') }}',
+                            'green': '{{ __('admin.green') }}',
+                            'orange': '{{ __('admin.orange') }}',
+                            'red': '{{ __('admin.red') }}',
+                            'purple': '{{ __('admin.purple') }}',
+                            'cyan': '{{ __('admin.cyan') }}',
+                            'gray': '{{ __('admin.gray') }}',
+                            'pink': '{{ __('admin.pink') }}'
                         };
                         var colorName = colorNames[d.color] || d.color;
                         return '<span class="dict-item-color color-' + d.color + '"></span>' + colorName;
                     }},
-                    {field: 'description', title: '描述', width: 200},
-                    {field: 'sort', title: '排序', width: 80, align: 'center'},
-                    {field: 'status', title: '状态', width: 100, templet: function(d){
+                    {field: 'description', title: '{{ __('admin.description') }}', width: 200},
+                    {field: 'sort', title: '{{ __('admin.sort') }}', width: 80, align: 'center'},
+                    {field: 'status', title: '{{ __('admin.status') }}', width: 100, templet: function(d){
                         var checked = d.status == 1 ? 'checked' : '';
-                        return '<input type="checkbox" name="status" value="'+d.id+'" lay-skin="switch" lay-text="启用|禁用" '+checked+' lay-filter="statusSwitch">';
+                        return '<input type="checkbox" name="status" value="'+d.id+'" lay-skin="switch" lay-text="{{ __('admin.enabled') }}|{{ __('admin.disabled') }}" '+checked+' lay-filter="statusSwitch">';
                     }},
-                    {field: 'created_at', title: '创建时间', width: 160},
-                    {title: '操作', width: 120, align: 'center', toolbar: '#barDemo', fixed: 'right'}
+                    {field: 'created_at', title: '{{ __('admin.created_at') }}', width: 160},
+                    {title: '{{ __('admin.actions_col') }}', width: 120, align: 'center', toolbar: '#barDemo', fixed: 'right'}
                 ]],
                 request: {
                     pageName: 'page',

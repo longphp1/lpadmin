@@ -84,7 +84,12 @@ class Dictionary extends Model
      */
     public function getTypeLabelAttribute(): string
     {
-        return self::$typeLabels[$this->type] ?? '未知';
+        $keys = [
+            self::TYPE_SELECT => 'admin.dropdown',
+            self::TYPE_RADIO => 'admin.radio',
+            self::TYPE_CHECKBOX => 'admin.checkbox',
+        ];
+        return isset($keys[$this->type]) ? __($keys[$this->type]) : __('admin.unknown');
     }
 
     /**

@@ -74,7 +74,7 @@ class MenuApiController extends BaseController
                 
                 $item = [
                     'id' => $menu['id'],
-                    'title' => $menu['title'],
+                    'title' => menu_title($menu['name'] ?? null, $menu['title'] ?? ''),
                     'name' => $menu['name'],
                     'icon' => $menu['icon'],
                     'href' => $menu['url'],
@@ -163,7 +163,7 @@ class MenuApiController extends BaseController
                 $item = [
                     'id' => $rule['id'],
                     'name' => $rule['name'],
-                    'title' => $rule['title'],
+                    'title' => menu_title($rule['name'] ?? null, $rule['title'] ?? ''),
                     'type' => $rule['type'],
                     'icon' => $rule['icon'],
                     'sort' => $rule['sort'],

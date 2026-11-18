@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>系统设置</title>
+    <title>{{ __('admin.system_settings') }}</title>
     <link rel="stylesheet" href="/static/admin/component/pear/css/pear.css" />
     <link rel="stylesheet" href="/static/admin/css/reset.css" />
     <style>
@@ -79,7 +79,7 @@
 <body class="pear-container">
     <div class="layui-card">
         <div class="layui-card-header">
-            <h2>系统设置</h2>
+            <h2>{{ __('admin.system_settings') }}</h2>
         </div>
         <div class="layui-card-body">
             <form class="layui-form" lay-filter="system-form">
@@ -93,7 +93,7 @@
                         @foreach($configs as $config)
                         <div class="layui-form-item">
                             <label class="layui-form-label">
-                                {{ $config->title }}
+                                {{ admin_text('option_'.$config->name, $config->title) }}
                                 <div class="config-name">{{ $config->name }}</div>
                             </label>
                             <div class="layui-input-block">
@@ -116,7 +116,7 @@
                                                 $options = $config->options_array;
                                             @endphp
                                             @foreach($options as $value => $label)
-                                                <option value="{{ $value }}" {{ $config->value == $value ? 'selected' : '' }}>{{ $label }}</option>
+                                                <option value="{{ $value }}" {{ $config->value == $value ? 'selected' : '' }}>{{ admin_text('option_'.$config->name.'_'.$value, $label) }}</option>
                                             @endforeach
                                         </select>
                                         @break
@@ -126,7 +126,7 @@
                                             $options = $config->options_array;
                                         @endphp
                                         @foreach($options as $value => $label)
-                                            <input type="radio" name="{{ $config->name }}" value="{{ $value }}" title="{{ $label }}" {{ $config->value == $value ? 'checked' : '' }}>
+                                            <input type="radio" name="{{ $config->name }}" value="{{ $value }}" title="{{ admin_text('option_'.$config->name.'_'.$value, $label) }}" {{ $config->value == $value ? 'checked' : '' }}>
                                         @endforeach
                                         @break
                                         
@@ -136,17 +136,17 @@
                                             $selectedValues = is_array($config->value) ? $config->value : explode(',', $config->value);
                                         @endphp
                                         @foreach($options as $value => $label)
-                                            <input type="checkbox" name="{{ $config->name }}[]" value="{{ $value }}" title="{{ $label }}" {{ in_array($value, $selectedValues) ? 'checked' : '' }}>
+                                            <input type="checkbox" name="{{ $config->name }}[]" value="{{ $value }}" title="{{ admin_text('option_'.$config->name.'_'.$value, $label) }}" {{ in_array($value, $selectedValues) ? 'checked' : '' }}>
                                         @endforeach
                                         @break
                                         
                                     @case('switch')
-                                        <input type="checkbox" name="{{ $config->name }}" lay-skin="switch" lay-text="开启|关闭" value="1" {{ $config->value ? 'checked' : '' }}>
+                                        <input type="checkbox" name="{{ $config->name }}" lay-skin="switch" lay-text="{{ __('admin.on') }}|{{ __('admin.off') }}" value="1" {{ $config->value ? 'checked' : '' }}>
                                         @break
                                         
                                     @case('image')
                                         <div class="layui-upload">
-                                            <button type="button" class="layui-btn" id="upload-{{ $config->name }}">选择图片</button>
+                                            <button type="button" class="layui-btn" id="upload-{{ $config->name }}">{{ __('admin.choose_image') }}</button>
                                             <input type="hidden" name="{{ $config->name }}" value="{{ $config->value }}" id="input-{{ $config->name }}">
                                             @if($config->value)
                                                 <img src="{{ $config->value }}" class="layui-upload-img" id="preview-{{ $config->name }}">
@@ -158,10 +158,10 @@
                                         
                                     @case('file')
                                         <div class="layui-upload">
-                                            <button type="button" class="layui-btn" id="upload-{{ $config->name }}">选择文件</button>
+                                            <button type="button" class="layui-btn" id="upload-{{ $config->name }}">{{ __('admin.pick_file') }}</button>
                                             <input type="hidden" name="{{ $config->name }}" value="{{ $config->value }}" id="input-{{ $config->name }}">
                                             <div class="layui-upload-list">
-                                                <div id="filename-{{ $config->name }}">{{ $config->value ? basename($config->value) : '未选择文件' }}</div>
+                                                <div id="filename-{{ $config->name }}">{{ $config->value ? basename($config->value) : __('admin.no_file') }}</div>
                                             </div>
                                         </div>
                                         @break
@@ -183,7 +183,7 @@
                                         <input type="text" name="{{ $config->name }}" value="{{ $config->value }}" class="layui-input">
                                 @endswitch
                                 @if($config->description)
-                                <div class="config-description">{{ $config->description }}</div>
+                                <div class="config-description">{{ admin_text('option_desc_'.$config->name, $config->description) }}</div>
                                 @endif
                             </div>
                         </div>
@@ -194,10 +194,10 @@
                 
                 <div class="layui-form-item" style="text-align: center; margin-top: 30px;">
                     <button type="submit" class="layui-btn layui-btn-lg" lay-submit lay-filter="submit">
-                        <i class="layui-icon layui-icon-ok"></i> 保存设置
+                        <i class="layui-icon layui-icon-ok"></i> {{ __('admin.save_settings') }}
                     </button>
                     <button type="button" class="layui-btn layui-btn-primary layui-btn-lg" onclick="parent.layer.closeAll()">
-                        <i class="layui-icon layui-icon-close"></i> 取消
+                        <i class="layui-icon layui-icon-close"></i> {{ __('admin.cancel') }}
                     </button>
                 </div>
             </form>
@@ -297,7 +297,7 @@
                         }
                     },
                     error: function () {
-                        layer.msg('保存失败', {icon: 2});
+                        layer.msg('{{ __('admin.save_failed') }}', {icon: 2});
                     }
                 });
 

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
+    <head>
+        <meta charset="utf-8">
+        <title>管理员管理</title>
+        <link rel="stylesheet" href="/static/admin/component/pear/css/pear.css" />
+        <link rel="stylesheet" href="/static/admin/css/reset.css" />
+        <link rel="stylesheet" href="/static/admin/css/table-common.css" />
+    </head>
+    <body class="pear-container">
+
+        <!-- 顶部查询表单 -->
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <form class="layui-form top-search-from">
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{{ __('admin.product_name') }}</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="name" value="" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{{ __('admin.brand') }}</label>
+                        <div class="layui-input-block">
+                            <select name="brand" id="brand" >
+                                <option value="">{{ __('admin.please_select') }}</option>
+                                @foreach($brandList as $brand)
+                                    <option value="{{ $brand }}">{{ $brand }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{{ __('admin.category') }}</label>
+                        <div class="layui-input-block">
+                            <select name="menu_id" id="menu_id" >
+                                <option value="">{{ __('admin.please_select') }}</option>
+                                @foreach($menuList as $menu)
+                                    <option value="{{ $menu['id'] }}">{{ $menu['menu_name'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{{ __('admin.created_at') }}</label>
+                        <div class="layui-input-block">
+                            <div class="layui-input-block" id="created_at">
+                                <input type="text" autocomplete="off" name="created_at[]" id="created_at-date-start" class="layui-input inline-block" placeholder="{{ __('admin.start_time') }}">
+                                -
+                                <input type="text" autocomplete="off" name="created_at[]" id="created_at-date-end" class="layui-input inline-block" placeholder="{{ __('admin.end_time') }}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item layui-inline">
+                        <label class="layui-form-label"></label>
+                        <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="table-query">
+                            <i class="layui-icon layui-icon-search"></i>{{ __('admin.search') }}</button>
+                        <button type="reset" class="pear-btn pear-btn-md" lay-submit lay-filter="table-reset">
+                            <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
+                    </div>
+                    <div class="toggle-btn">
+                        <a class="layui-hide">{{ __('admin.expand') }}<i class="layui-icon layui-icon-down"></i></a>
+                        <a class="layui-hide">{{ __('admin.collapse') }}<i class="layui-icon layui-icon-up"></i></a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 数据表格 -->
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <table id="data-table" lay-filter="data-table"></table>
+            </div>
+        </div>
+
+        <!-- 表格顶部工具栏 -->
+        <script type="text/html" id="table-toolbar">
+            <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
+                <i class="layui-icon layui-icon-add-1"></i>{{ __('admin.create') }}</button>
+            <button class="pear-btn pear-btn-danger pear-btn-md" lay-event="batchRemove">
+                <i class="layui-icon layui-icon-delete"></i>{{ __('admin.delete') }}</button>
+            <button class="pear-btn pear-btn-normal pear-btn-sm" lay-event="export">
+                <i class="layui-icon layui-icon-export"></i>{{ __('admin.export') }}</button>
+            <button class="pear-btn pear-btn-warm pear-btn-sm" lay-event="import">
+                <i class="layui-icon layui-icon-upload"></i>{{ __('admin.import') }}</button>
+            <button class="pear-btn pear-btn-warm pear-btn-md" lay-event="updateBrand">
+                <i class="layui-icon layui-icon-add-1"></i>{{ __('admin.change_brand') }}</button>
+        </script>
+
+        <!-- 表格行工具栏 -->
+        <script type="text/html" id="table-bar">
+            <div style="white-space: nowrap; display: flex; gap: 4px; justify-content: center;">
+                <button class="table-action-btn table-action-edit" lay-event="edit" title="{{ __('admin.edit') }}">
+                    <i class="layui-icon layui-icon-edit"></i>
+                </button>
+                <button class="table-action-btn table-action-delete" lay-event="remove" title="{{ __('admin.delete') }}">
+                    <i class="layui-icon layui-icon-delete"></i>
+                </button>
+            </div>
+        </script>
+
+        <script src="/static/admin/component/layui/layui.js?v=2.8.12"></script>
+        <script src="/static/admin/component/pear/pear.js"></script>
+        <script>
+
+            // 相关常量
+            const PRIMARY_KEY = "id";
+            const SELECT_API = "{{ route('lpadmin.website.product.index') }}";
+            const UPDATE_API = "{{ route('lpadmin.website.product.update', ':id') }}";
+            const DELETE_API = "{{ route('lpadmin.website.product.destroy', ':id') }}";
+            const INSERT_URL = "{{ route('lpadmin.website.product.create') }}";
+            const UPDATE_URL = "{{ route('lpadmin.website.product.edit', ':id') }}";
+            const UPDATE_BRAND_URL = "{{ route('lpadmin.website.product.brand.show') }}";
+            const EXPORT_API = "{{ route('lpadmin.website.product.export') }}";
+            const IMPORT_URL = "{{ route('lpadmin.website.product.import.show') }}";
+            // 字段 创建时间 created_at
+            layui.use(["laydate"], function() {
+                layui.laydate.render({
+                    elem: "#created_at",
+                    range: ["#created_at-date-start", "#created_at-date-end"],
+                });
+            })
+
+            // 表格渲染
+            layui.use(["table", "form", "common", "popup", "util"], function() {
+                let table = layui.table;
+                let form = layui.form;
+                let $ = layui.$;
+                let common = layui.common;
+                let util = layui.util;
+
+				// 表头参数
+				let cols = [
+					{
+						type: "checkbox"
+					},{
+						title: "ID",
+						field: "id",
+                        width: 100,
+                        sort: true,
+					},{
+						title: "{{ __('admin.menu_category') }}",
+						field: "menu_name",
+					},{
+						title: "{{ __('admin.product_name') }}",
+						field: "name",
+					},{
+                        title: "{{ __('admin.brand') }}",
+                        field: "brand",
+                    },{
+                        title: "{{ __('admin.price') }}",
+                        field: "price",
+                    },{
+                        title: "{{ __('admin.source') }}",
+                        field: "source",
+                    },{
+                        title: "{{ __('admin.product_id') }}",
+                        field: "source_product_id",
+                    },{
+                        title: "{{ __('admin.product_url') }}",
+                        field: "source_product_url",
+                    },{
+						title: "{{ __('admin.image') }}",
+						field: "main_img",
+						templet: function (d) {
+							return '<img src="'+(d['main_img'] || '/static/admin/images/avatar.png')+'" style="max-width:32px;max-height:32px;" alt="" />'
+						},
+                        width: 90,
+					},{
+                        title: "{{ __('admin.buy_platform') }}",
+                        field: "main_buy_platform",
+                        hide: true,
+                    },{
+                        title: "{{ __('admin.buy_link') }}",
+                        field: "main_buy_link",
+                        hide: true,
+                    },{
+                        title: "taoobuy",
+                        field: "tao_buy_platform",
+                        hide: true,
+                    },{
+                        title: "{{ __('admin.tao_link') }}",
+                        field: "tao_buy_link",
+                        hide: true,
+                    },{
+                        title: "{{ __('admin.other_buy_platform') }}",
+                        field: "other_buy_platform",
+                        hide: true,
+                    },{
+                        title: "{{ __('admin.other_buy_link') }}",
+                        field: "other_buy_link",
+                        hide: true,
+                    },{
+						title: "{{ __('admin.created_at') }}",
+						field: "created_at",
+					},{
+						title: "{{ __('admin.updated_at') }}",
+						field: "updated_at",
+						hide: true,
+					},{
+						title: "{{ __('admin.actions_col') }}",
+						toolbar: "#table-bar",
+						align: "center",
+						fixed: "right",
+                        width: 80,
+					}
+				];
+
+				// 渲染表格
+				function render()
+				{
+				    table.render({
+				        elem: "#data-table",
+				        url: SELECT_API,
+				        method: 'GET',
+				        headers: {
+				            'Accept': 'application/json',
+				            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				        },
+				        page: true,
+				        cols: [cols],
+				        skin: "line",
+				        size: "lg",
+				        toolbar: "#table-toolbar",
+				        autoSort: false,
+				        defaultToolbar: [{
+				            title: "{{ __('admin.refresh') }}",
+				            layEvent: "refresh",
+				            icon: "layui-icon-refresh",
+				        }, "filter", "print", "exports"],
+				        done: function () {
+				            layer.photos({photos: 'div[lay-id="data-table"]', anim: 5});
+				        }
+				    });
+				}
+
+                render();
+
+                // 编辑或删除行事件
+                table.on("tool(data-table)", function(obj) {
+                    if (obj.event === "remove") {
+                        remove(obj);
+                    } else if (obj.event === "edit") {
+                        edit(obj);
+                    }
+                });
+
+                // 表格顶部工具栏事件
+                table.on("toolbar(data-table)", function(obj) {
+                    if (obj.event === "add") {
+                        add();
+                    } else if (obj.event === "refresh") {
+                        refreshTable();
+                    } else if (obj.event === "batchRemove") {
+                        batchRemove(obj);
+                    } else if (obj.event === "export") {
+                        doExport(obj);
+                    } else if (obj.event === "import") {
+                        doImport(obj);
+                    } else if (obj.event === "updateBrand") {
+                        doUpdateBrand(obj);
+                    }
+                });
+
+                // 表格顶部搜索事件
+                form.on("submit(table-query)", function(data) {
+                    table.reload("data-table", {
+                        page: {
+                            curr: 1
+                        },
+                        where: data.field
+                    })
+                    return false;
+                });
+
+                // 表格顶部搜索重置事件
+                form.on("submit(table-reset)", function(data) {
+                    table.reload("data-table", {
+                        where: []
+                    })
+                });
+
+                // 表格排序事件
+                table.on("sort(data-table)", function(obj){
+                    table.reload("data-table", {
+                        initSort: obj,
+                        scrollPos: "fixed",
+                        where: {
+                            field: obj.field,
+                            order: obj.type
+                        }
+                    });
+                });
+
+                // 表格新增数据
+                let add = function() {
+                    layer.open({
+                        type: 2,
+                        title: "{{ __('admin.create') }}",
+                        shade: 0.1,
+                        area: [common.isModile()?"100%":"70%", common.isModile()?"100%":"80%"],
+                        content: INSERT_URL
+                    });
+                }
+
+                // 表格编辑数据
+                let edit = function(obj) {
+                    let value = obj.data[PRIMARY_KEY];
+                    let url = UPDATE_URL.replace(':id', value);
+                    layer.open({
+                        type: 2,
+                        title: "{{ __('admin.update') }}",
+                        shade: 0.1,
+                        area: [common.isModile()?"100%":"70%", common.isModile()?"100%":"80%"],
+                        content: url+'?id='+value
+                    });
+                }
+
+                // 删除一行
+                let remove = function(obj) {
+                    return doRemove(obj.data[PRIMARY_KEY]);
+                }
+
+                // 删除多行
+                let batchRemove = function(obj) {
+                    let checkIds = common.checkField(obj, PRIMARY_KEY);
+                    if (checkIds === "") {
+                        layui.popup.warning("{{ __('admin.no_selection') }}");
+                        return false;
+                    }
+                    doRemove(checkIds.split(","));
+                }
+
+                // 执行删除
+                let doRemove = function (ids) {
+                    layer.confirm("{{ __('admin.confirm_delete') }}", {
+                        icon: 3,
+                        title: "{{ __('admin.tip') }}"
+                    }, function(index) {
+                        layer.close(index);
+                        let loading = layer.load();
+
+                        // 处理单个或批量删除
+                        if (Array.isArray(ids)) {
+                            // 批量删除
+                            $.ajax({
+                                url: "{{ route('lpadmin.website.product.batch_delete') }}",
+                                data: {
+                                    ids: ids,
+                                    '_token': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                dataType: "json",
+                                type: "post",
+                                success: function(res) {
+                                    layer.close(loading);
+                                    if (res.code !== 0) {
+                                        return layui.popup.failure(res.message);
+                                    }
+                                    return layui.popup.success("{{ __('admin.success') }}", refreshTable);
+                                }
+                            });
+                        } else {
+                            // 单个删除
+                            let url = DELETE_API.replace(':id', ids);
+                            $.ajax({
+                                url: url,
+                                data: {
+                                    '_method': 'DELETE',
+                                    '_token': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                dataType: "json",
+                                type: "post",
+                                success: function(res) {
+                                    layer.close(loading);
+                                    if (res.code !== 0) {
+                                        return layui.popup.failure(res.message);
+                                    }
+                                    return layui.popup.success("{{ __('admin.success') }}", refreshTable);
+                                }
+                            });
+                        }
+                    });
+                }
+
+                // 表格编辑数据
+                let doExport = function(obj) {
+                    // 导出配置
+                    const searchData = form.val('search');
+                    let exportUrl = EXPORT_API;
+                    if (searchData.group) {
+                        exportUrl += '?group=' + searchData.group;
+                    }
+                    // 创建隐藏的下载链接
+                    const link = document.createElement('a');
+                    link.href = exportUrl;
+                    link.download = 'product_' + new Date().getTime() + '.xlsx'; // 动态生成文件名
+                    document.body.appendChild(link);
+                    // 触发下载
+                    link.click();
+                    // 清理DOM
+                    document.body.removeChild(link);
+                }
+                // 表格编辑数据
+                let doImport = function(obj) {
+                    layer.open({
+                        type: 2,
+                        title: "{{ __('admin.upload_product') }}",
+                        shade: 0.1,
+                        area: [common.isModile()?"100%":"70%", common.isModile()?"100%":"80%"],
+                        content: IMPORT_URL
+                    });
+                }
+
+                let doUpdateBrand = function(obj) {
+                    layer.open({
+                        type: 2,
+                        title: "{{ __('admin.change_brand') }}",
+                        shade: 0.1,
+                        area: [common.isModile()?"100%":"70%", common.isModile()?"100%":"80%"],
+                        content: UPDATE_BRAND_URL
+                    });
+                }
+
+
+                // 刷新表格数据
+                window.refreshTable = function() {
+                    table.reloadData("data-table", {
+                        scrollPos: "fixed",
+                        done: function (res, curr) {
+                            if (curr > 1 && res.data && !res.data.length) {
+                                curr = curr - 1;
+                                table.reloadData("data-table", {
+                                    page: {
+                                        curr: curr
+                                    },
+                                })
+                            }
+                        }
+                    });
+                }
+            })
+
+        </script>
+
+        <!-- CSRF Token -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+    </body>
+</html>

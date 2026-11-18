@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -73,10 +73,10 @@
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label required">状态</label>
+                    <label class="layui-form-label required">{{ __('admin.status') }}</label>
                     <div class="layui-input-block">
-                        <input type="radio" name="status" data-value="1" title="启用" lay-filter="status" {{ $dictionary->status == 1 ? 'checked' : '' }}>
-                        <input type="radio" name="status" data-value="0" title="禁用" lay-filter="status" {{ $dictionary->status == 0 ? 'checked' : '' }}>
+                        <input type="radio" name="status" data-value="1" title="{{ __('admin.enabled') }}" lay-filter="status" {{ $dictionary->status == 1 ? 'checked' : '' }}>
+                        <input type="radio" name="status" data-value="0" title="{{ __('admin.disabled') }}" lay-filter="status" {{ $dictionary->status == 0 ? 'checked' : '' }}>
                         <div class="layui-form-mid layui-word-aux">
                             禁用后字典将不可用
                         </div>
@@ -89,8 +89,7 @@
                             <i class="layui-icon layui-icon-ok"></i> 保存
                         </button>
                         <button type="reset" class="layui-btn layui-btn-primary">
-                            <i class="layui-icon layui-icon-refresh"></i> 重置
-                        </button>
+                            <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                         <button type="button" class="layui-btn layui-btn-primary" onclick="parent.layer.closeAll()">
                             <i class="layui-icon layui-icon-close"></i> 取消
                         </button>

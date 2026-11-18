@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>菜单管理</title>
+    <title>{{ __('admin.menu_mgmt') }}</title>
     <link rel="stylesheet" href="/static/admin/component/pear/css/pear.css" />
     <link rel="stylesheet" href="/static/admin/css/reset.css" />
     <link rel="stylesheet" href="/static/admin/css/table-common.css" />
@@ -62,38 +62,38 @@
             <form class="layui-form top-search-from">
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">菜单标题</label>
+                    <label class="layui-form-label">{{ __('admin.menu_title') }}</label>
                     <div class="layui-input-block">
                         <input type="text" name="title" value="" class="layui-input">
                     </div>
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">菜单标识</label>
+                    <label class="layui-form-label">{{ __('admin.menu_key') }}</label>
                     <div class="layui-input-block">
                         <input type="text" name="name" value="" class="layui-input">
                     </div>
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">状态</label>
+                    <label class="layui-form-label">{{ __('admin.status') }}</label>
                     <div class="layui-input-block">
                         <select name="status">
-                            <option value="">全部状态</option>
-                            <option value="1">启用</option>
-                            <option value="0">禁用</option>
+                            <option value="">{{ __('admin.all_status') }}</option>
+                            <option value="1">{{ __('admin.enabled') }}</option>
+                            <option value="0">{{ __('admin.disabled') }}</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">类型</label>
+                    <label class="layui-form-label">{{ __('admin.type') }}</label>
                     <div class="layui-input-block">
                         <select name="type">
-                            <option value="">全部类型</option>
-                            <option value="0">目录</option>
-                            <option value="1">菜单</option>
-                            <option value="2">按钮</option>
+                            <option value="">{{ __('admin.all_types') }}</option>
+                            <option value="directory">{{ __('admin.directory') }}</option>
+                            <option value="menu">{{ __('admin.menu_type') }}</option>
+                            <option value="button">{{ __('admin.button') }}</option>
                         </select>
                     </div>
                 </div>
@@ -101,12 +101,10 @@
                 <div class="layui-form-item">
                     <button type="submit" class="pear-btn pear-btn-primary pear-btn-md" lay-submit lay-filter="search">
                         <i class="layui-icon layui-icon-search"></i>
-                        搜索
+                        {{ __('admin.search_menu') }}
                     </button>
                     <button type="reset" class="pear-btn pear-btn-md">
-                        <i class="layui-icon layui-icon-refresh"></i>
-                        重置
-                    </button>
+                        <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                 </div>
 
             </form>
@@ -124,34 +122,30 @@
     <script type="text/html" id="table-toolbar">
         <div class="layui-btn-group" style="margin-right: 10px;">
             <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="add" style="margin-right: 5px;">
-                <i class="layui-icon layui-icon-add-1"></i>
-                新增
-            </button>
+                <i class="layui-icon layui-icon-add-1"></i>{{ __('admin.create') }}</button>
             <button class="pear-btn pear-btn-success pear-btn-sm" lay-event="expand" style="margin-right: 5px;">
                 <i class="layui-icon layui-icon-spread-left"></i>
-                展开全部
+                {{ __('admin.expand_all') }}
             </button>
             <button class="pear-btn pear-btn-warning pear-btn-sm" lay-event="collapse" style="margin-right: 5px;">
                 <i class="layui-icon layui-icon-shrink-right"></i>
-                收起全部
+                {{ __('admin.collapse_all') }}
             </button>
             <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="batchRemove">
-                <i class="layui-icon layui-icon-delete"></i>
-                删除
-            </button>
+                <i class="layui-icon layui-icon-delete"></i>{{ __('admin.delete') }}</button>
         </div>
     </script>
 
     <!-- 表格行工具栏 -->
     <script type="text/html" id="table-bar">
         <div style="white-space: nowrap; display: flex; gap: 4px; justify-content: center;">
-            <button class="table-action-btn table-action-edit" lay-event="edit" title="编辑">
+            <button class="table-action-btn table-action-edit" lay-event="edit" title="{{ __('admin.edit') }}">
                 <i class="layui-icon layui-icon-edit"></i>
             </button>
             <button class="table-action-btn table-action-add" lay-event="add-child" title="添加子菜单">
                 <i class="layui-icon layui-icon-add-1"></i>
             </button>
-            <button class="table-action-btn table-action-delete" lay-event="remove" title="删除">
+            <button class="table-action-btn table-action-delete" lay-event="remove" title="{{ __('admin.delete') }}">
                 <i class="layui-icon layui-icon-delete"></i>
             </button>
         </div>
@@ -185,7 +179,7 @@
                     {type: "checkbox"},
                     {title: "ID", field: "id", width: 80, align: "center"},
                     {
-                        title: "菜单标题",
+                        title: "{{ __('admin.menu_title') }}",
                         field: "title",
                         width: 200,
                         templet: function(d) {
@@ -196,9 +190,9 @@
                             return iconHtml + d.title;
                         }
                     },
-                    {title: "菜单标识", field: "name", width: 180},
+                    {title: "{{ __('admin.menu_key') }}", field: "name", width: 180},
                     {
-                        title: "排序",
+                        title: "{{ __('admin.sort') }}",
                         field: "sort",
                         width: 100,
                         align: "center",
@@ -206,51 +200,51 @@
                         edit: true
                     },
                     {
-                        title: "类型",
+                        title: "{{ __('admin.type') }}",
                         field: "type",
                         width: 80,
                         align: "center",
                         templet: function(d) {
-                            if (d.type == 0) {
-                                return '<span class="layui-badge layui-bg-blue">目录</span>';
-                            } else if (d.type == 1) {
-                                return '<span class="layui-badge layui-bg-green">菜单</span>';
-                            } else if (d.type == 2) {
-                                return '<span class="layui-badge layui-bg-orange">按钮</span>';
+                            if (d.type == 'directory' || d.type == 0) {
+                                return '<span class="layui-badge layui-bg-blue">{{ __('admin.directory') }}</span>';
+                            } else if (d.type == 'menu' || d.type == 1) {
+                                return '<span class="layui-badge layui-bg-green">{{ __('admin.menu_type') }}</span>';
+                            } else if (d.type == 'button' || d.type == 2) {
+                                return '<span class="layui-badge layui-bg-orange">{{ __('admin.button') }}</span>';
                             } else {
-                                return '<span class="layui-badge layui-bg-gray">未知</span>';
+                                return '<span class="layui-badge layui-bg-gray">{{ __('admin.unknown') }}</span>';
                             }
                         }
                     },
-                    {title: "链接", field: "url", width: 200},
+                    {title: "{{ __('admin.link') }}", field: "url", width: 200},
                     {
-                        title: "显示",
+                        title: "{{ __('admin.visible') }}",
                         field: "is_show",
                         width: 80,
                         align: "center",
                         templet: function(d) {
                             if (d.is_show == 1) {
-                                return '<span class="layui-badge layui-bg-green">显示</span>';
+                                return '<span class="layui-badge layui-bg-green">{{ __('admin.visible') }}</span>';
                             } else {
-                                return '<span class="layui-badge layui-bg-orange">隐藏</span>';
+                                return '<span class="layui-badge layui-bg-orange">{{ __('admin.hidden') }}</span>';
                             }
                         }
                     },
                     {
-                        title: "状态",
+                        title: "{{ __('admin.status') }}",
                         field: "status",
                         width: 80,
                         align: "center",
                         templet: function(d) {
                             if (d.status == 1) {
-                                return '<span class="layui-badge layui-bg-green">启用</span>';
+                                return '<span class="layui-badge layui-bg-green">{{ __('admin.enabled') }}</span>';
                             } else {
-                                return '<span class="layui-badge layui-bg-gray">禁用</span>';
+                                return '<span class="layui-badge layui-bg-gray">{{ __('admin.disabled') }}</span>';
                             }
                         }
                     },
-                    {title: "创建时间", field: "created_at", width: 160, align: "center"},
-                    {title: "操作", width: 100, align: "center", toolbar: "#table-bar", fixed: "right"}
+                    {title: "{{ __('admin.created_at') }}", field: "created_at", width: 160, align: "center"},
+                    {title: "{{ __('admin.actions_col') }}", width: 100, align: "center", toolbar: "#table-bar", fixed: "right"}
                 ]
             ];
 
@@ -261,7 +255,7 @@
                 method: "GET",
                 toolbar: "#table-toolbar",
                 defaultToolbar: [{
-                    title: '刷新',
+                    title: '{{ __('admin.refresh') }}',
                     layEvent: 'refresh',
                     icon: 'layui-icon-refresh',
                 }, "filter", "exports", "print"],
@@ -317,7 +311,7 @@
                         return;
                     }
                     let ids = data.map(item => item[PRIMARY_KEY]);
-                    layer.confirm('确定删除选中的菜单吗？', {icon: 3, title: '提示'}, function (index) {
+                    layer.confirm('确定删除选中的菜单吗？', {icon: 3, title: '{{ __('admin.tip') }}'}, function (index) {
                         $.ajax({
                             url: BATCH_DELETE_API,
                             method: 'DELETE',
@@ -366,7 +360,7 @@
                         content: createUrl
                     });
                 } else if (obj.event === 'remove') {
-                    layer.confirm('确定删除该菜单吗？', {icon: 3, title: '提示'}, function (index) {
+                    layer.confirm('确定删除该菜单吗？', {icon: 3, title: '{{ __('admin.tip') }}'}, function (index) {
                         let deleteUrl = DELETE_API.replace(':id', data[PRIMARY_KEY]);
                         $.ajax({
                             url: deleteUrl,

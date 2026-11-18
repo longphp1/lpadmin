@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
     <head>
         <meta charset="utf-8">
         <title>角色管理</title>
@@ -13,30 +13,26 @@
                 <form class="layui-form" action="">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">角色名称</label>
+                            <label class="layui-form-label">{{ __('admin.role_name') }}</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="name" placeholder="请输入角色名称" class="layui-input">
+                                <input type="text" name="name" placeholder="{{ __('admin.enter_role_name') }}" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">状态</label>
+                            <label class="layui-form-label">{{ __('admin.status') }}</label>
                             <div class="layui-input-inline">
                                 <select name="status">
-                                    <option value="">全部状态</option>
-                                    <option value="1">启用</option>
-                                    <option value="0">禁用</option>
+                                    <option value="">{{ __('admin.all_status') }}</option>
+                                    <option value="1">{{ __('admin.enabled') }}</option>
+                                    <option value="0">{{ __('admin.disabled') }}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="layui-inline">
                             <button type="submit" class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="role-query">
-                                <i class="layui-icon layui-icon-search"></i>
-                                查询
-                            </button>
+                                <i class="layui-icon layui-icon-search"></i>{{ __('admin.search') }}</button>
                             <button type="reset" class="pear-btn pear-btn-md">
-                                <i class="layui-icon layui-icon-refresh"></i>
-                                重置
-                            </button>
+                                <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                         </div>
                     </div>
                 </form>
@@ -50,29 +46,25 @@
                 <script type="text/html" id="role-toolbar">
                     <div class="layui-btn-group">
                         <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="add" style="margin-right: 5px;">
-                            <i class="layui-icon layui-icon-add-1"></i>
-                            新增
-                        </button>
+                            <i class="layui-icon layui-icon-add-1"></i>{{ __('admin.create') }}</button>
                         <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="batchRemove">
-                            <i class="layui-icon layui-icon-delete"></i>
-                            删除
-                        </button>
+                            <i class="layui-icon layui-icon-delete"></i>{{ __('admin.delete') }}</button>
                     </div>
                 </script>
 
                 <script type="text/html" id="role-status">
-                    <input type="checkbox" name="status" value="@{{d.id}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="role-status" @{{# if(d.status == 1) { }} checked @{{# } }}>
+                    <input type="checkbox" name="status" value="@{{d.id}}" lay-skin="switch" lay-text="{{ __('admin.enabled') }}|{{ __('admin.disabled') }}" lay-filter="role-status" @{{# if(d.status == 1) { }} checked @{{# } }}>
                 </script>
 
                 <script type="text/html" id="role-toolbar-right">
                     <div style="white-space: nowrap; display: flex; gap: 4px; justify-content: center;">
-                        <button class="table-action-btn table-action-edit" lay-event="edit" title="编辑">
+                        <button class="table-action-btn table-action-edit" lay-event="edit" title="{{ __('admin.edit') }}">
                             <i class="layui-icon layui-icon-edit"></i>
                         </button>
                         <button class="table-action-btn table-action-permission" lay-event="permission" title="权限">
                             <i class="layui-icon layui-icon-vercode"></i>
                         </button>
-                        <button class="table-action-btn table-action-delete" lay-event="remove" title="删除">
+                        <button class="table-action-btn table-action-delete" lay-event="remove" title="{{ __('admin.delete') }}">
                             <i class="layui-icon layui-icon-delete"></i>
                         </button>
                     </div>
@@ -104,14 +96,14 @@
                     [
                         {type: 'checkbox'},
                         {title: 'ID', field: 'id', width: 80, align: 'center'},
-                        {title: '角色名称', field: 'name', align: 'center'},
-                        {title: '显示名称', field: 'display_name', align: 'center'},
-                        {title: '描述', field: 'description', align: 'center'},
-                        {title: '权限数量', field: 'permission_count', width: 100, align: 'center'},
-                        {title: '管理员数量', field: 'admin_count', width: 120, align: 'center'},
-                        {title: '状态', field: 'status', width: 100, align: 'center', templet: '#role-status'},
-                        {title: '创建时间', field: 'created_at', width: 180, align: 'center'},
-                        {title: '操作', width: 100, align: 'center', toolbar: '#role-toolbar-right', fixed: "right"}
+                        {title: '{{ __('admin.role_name') }}', field: 'name', align: 'center'},
+                        {title: '{{ __('admin.display_name') }}', field: 'display_name', align: 'center'},
+                        {title: '{{ __('admin.description') }}', field: 'description', align: 'center'},
+                        {title: '{{ __('admin.rule_count') }}', field: 'permission_count', width: 100, align: 'center'},
+                        {title: '{{ __('admin.admin_count') }}', field: 'admin_count', width: 120, align: 'center'},
+                        {title: '{{ __('admin.status') }}', field: 'status', width: 100, align: 'center', templet: '#role-status'},
+                        {title: '{{ __('admin.created_at') }}', field: 'created_at', width: 180, align: 'center'},
+                        {title: '{{ __('admin.actions_col') }}', width: 100, align: 'center', toolbar: '#role-toolbar-right', fixed: "right"}
                     ]
                 ];
 
@@ -121,7 +113,7 @@
                     method: 'GET',
                     toolbar: '#role-toolbar',
                     defaultToolbar: [{
-                        title: '刷新',
+                        title: '{{ __('admin.refresh') }}',
                         layEvent: 'refresh',
                         icon: 'layui-icon-refresh',
                     }, 'filter', 'print', 'exports'],

@@ -182,15 +182,15 @@ class Upload extends Model
     public function getTypeLabelAttribute(): string
     {
         if ($this->isImage()) {
-            return '图片';
+            return __('admin.image_file');
         } elseif ($this->isVideo()) {
-            return '视频';
+            return __('admin.video');
         } elseif ($this->isAudio()) {
-            return '音频';
+            return __('admin.audio');
         } elseif ($this->isDocument()) {
-            return '文档';
+            return __('admin.document');
         } else {
-            return '其他';
+            return __('admin.other');
         }
     }
 
@@ -256,10 +256,19 @@ class Upload extends Model
     public function getCategoryLabelAttribute(): string
     {
         // 检查 category 字段是否存在
+        $keys = [
+            self::CATEGORY_GENERAL => 'admin.file_general',
+            self::CATEGORY_AVATAR => 'admin.file_avatar',
+            self::CATEGORY_DOCUMENT => 'admin.file_docs',
+            self::CATEGORY_IMAGE => 'admin.file_images',
+            self::CATEGORY_VIDEO => 'admin.file_videos',
+            self::CATEGORY_AUDIO => 'admin.file_audios',
+            self::CATEGORY_ARCHIVE => 'admin.file_archive',
+        ];
         if (!isset($this->attributes['category'])) {
-            return '通用';
+            return __('admin.general');
         }
-        return self::$categoryLabels[$this->category] ?? '未分类';
+        return isset($keys[$this->category]) ? __($keys[$this->category]) : __('admin.uncategorized');
     }
 
     /**

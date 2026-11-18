@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -146,7 +146,7 @@
                                 <p style="margin: 5px 0 0 0; color: #333;"><strong>联系电话：</strong> {{ config('lpadmin.system.contact.phone', '暂未设置') }}</p>
                             </div>
                             <div style="text-align: center;">
-                                <button type="button" class="layui-btn layui-btn-primary" onclick="layer.closeAll()">关闭</button>
+                                <button type="button" class="layui-btn layui-btn-primary" onclick="layer.closeAll()">{{ __('admin.off') }}</button>
                             </div>
                         </div>
                     `

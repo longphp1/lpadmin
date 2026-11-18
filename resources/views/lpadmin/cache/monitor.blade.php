@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -132,7 +132,7 @@
             </div>
             <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="search-keys">
                 <i class="layui-icon layui-icon-search"></i>
-                搜索
+                {{ __('admin.search_menu') }}
             </button>
         </div>
     </div>
@@ -313,22 +313,22 @@ layui.use(['layer', 'table', 'form', 'echarts', 'jquery'], function(){
             limits: [10, 20, 50, 100],
             height: 'full-100',
             cols: [[
-                {field: 'name', title: '缓存键', width: 400, templet: function(d) {
+                {field: 'name', title: '{{ __('admin.cache_key') }}', width: 400, templet: function(d) {
                     return '<span style="word-break: break-all;">' + (d.name || 'N/A') + '</span>';
                 }},
-                {field: 'type', title: '类型', align: 'center', templet: function(d) {
+                {field: 'type', title: '{{ __('admin.type') }}', align: 'center', templet: function(d) {
                     return d.type || 'N/A';
                 }},
-                {field: 'size', title: '大小', align: 'center', templet: function(d) {
+                {field: 'size', title: '{{ __('admin.size') }}', align: 'center', templet: function(d) {
                     return d.size || 'N/A';
                 }},
                 {field: 'ttl', title: 'TTL', align: 'center', templet: function(d) {
                     return d.ttl || 'N/A';
                 }},
-                {field: 'created_at', title: '创建时间', align: 'center', templet: function(d) {
+                {field: 'created_at', title: '{{ __('admin.created_at') }}', align: 'center', templet: function(d) {
                     return d.created_at || 'N/A';
                 }},
-                {title: '操作', width: 150, align: 'center', toolbar: '#cache-key-toolbar','fixed': 'right'}
+                {title: '{{ __('admin.actions_col') }}', width: 150, align: 'center', toolbar: '#cache-key-toolbar','fixed': 'right'}
             ]],
             text: {
                 none: '暂无缓存键数据'
@@ -565,7 +565,7 @@ layui.use(['layer', 'table', 'form', 'echarts', 'jquery'], function(){
         layer.confirm('确定要删除缓存键 "' + key + '" 吗？', {
             icon: 3,
             title: '确认删除',
-            btn: ['确定', '取消']
+            btn: ['确定', '{{ __('admin.cancel') }}']
         }, function(index) {
             $.ajax({
                 url: '{{ route("lpadmin.cache.deleteKey") }}',
@@ -596,7 +596,7 @@ layui.use(['layer', 'table', 'form', 'echarts', 'jquery'], function(){
 <!-- 表格工具栏模板 -->
 <script type="text/html" id="cache-key-toolbar">
     <a class="layui-btn layui-btn-xs" lay-event="view">查看</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">{{ __('admin.delete') }}</a>
 </script>
 
 </body>

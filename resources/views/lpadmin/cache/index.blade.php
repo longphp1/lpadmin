@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>缓存管理</title>
+    <title>{{ __('admin.cache_mgmt') }}</title>
     <link rel="stylesheet" href="/static/admin/component/pear/css/pear.css" />
     <link rel="stylesheet" href="/static/admin/css/admin.css" />
     <link rel="stylesheet" href="/static/admin/css/reset.css" />
@@ -12,9 +12,7 @@
 <body class="pear-container">
     <div class="layui-card">
         <div class="layui-card-header">
-            <i class="layui-icon layui-icon-engine"></i>
-            缓存管理
-            <div class="layui-card-header-right">
+            <i class="layui-icon layui-icon-engine"></i>{{ __('admin.cache_mgmt') }}<div class="layui-card-header-right">
                 <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="refresh-stats">
                     <i class="layui-icon layui-icon-refresh"></i>
                     刷新统计

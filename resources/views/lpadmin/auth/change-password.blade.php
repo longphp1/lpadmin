@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
     <head>
         <meta charset="UTF-8">
-        <title>修改密码</title>
+        <title>{{ __('admin.change_password') }}</title>
         <link rel="stylesheet" href="/static/admin/component/pear/css/pear.css" />
         <link rel="stylesheet" href="/static/admin/css/reset.css" />
     </head>
@@ -39,12 +39,8 @@
 
             <div class="bottom">
                 <div class="button-container">
-                    <button type="submit" class="pear-btn pear-btn-primary pear-btn-md" lay-submit="" lay-filter="save">
-                        修改密码
-                    </button>
-                    <button type="reset" class="pear-btn pear-btn-md">
-                        重置
-                    </button>
+                    <button type="submit" class="pear-btn pear-btn-primary pear-btn-md" lay-submit="" lay-filter="save">{{ __('admin.change_password') }}</button>
+                    <button type="reset" class="pear-btn pear-btn-md">{{ __('admin.reset') }}</button>
                 </div>
             </div>
 

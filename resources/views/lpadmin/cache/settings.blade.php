@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -90,16 +90,14 @@
                     <div class="config-group-title">基础设置</div>
                     <div class="config-form">
                         <div class="layui-form-item">
-                            <label class="layui-form-label">
-                                缓存驱动
-                                <div class="config-name">cache_driver</div>
+                            <label class="layui-form-label">{{ __('admin.cache_driver') }}<div class="config-name">cache_driver</div>
                             </label>
                             <div class="layui-input-block">
                                 <select name="cache_driver" lay-filter="cache-driver">
                                     <option value="file">文件缓存</option>
                                     <option value="redis">Redis</option>
                                     <option value="memcached">Memcached</option>
-                                    <option value="database">数据库</option>
+                                    <option value="database">{{ __('admin.database') }}</option>
                                 </select>
                                 <div class="config-description">选择缓存存储驱动类型</div>
                             </div>
@@ -199,8 +197,7 @@
                             <i class="layui-icon layui-icon-link"></i> 测试连接
                         </button>
                         <button type="button" class="layui-btn layui-btn-primary" id="reset-form">
-                            <i class="layui-icon layui-icon-refresh"></i> 重置
-                        </button>
+                            <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                     </div>
                 </div>
             </form>

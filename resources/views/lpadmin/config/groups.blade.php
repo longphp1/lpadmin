@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -14,20 +14,16 @@
             <form class="layui-form" action="">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">分组名称</label>
+                        <label class="layui-form-label">{{ __('admin.group_name') }}</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="name" placeholder="请输入分组名称" class="layui-input">
+                            <input type="text" name="name" placeholder="{{ __('admin.enter_group_name') }}" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <button type="submit" class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="group-query">
-                            <i class="layui-icon layui-icon-search"></i>
-                            查询
-                        </button>
+                            <i class="layui-icon layui-icon-search"></i>{{ __('admin.search') }}</button>
                         <button type="reset" class="pear-btn pear-btn-md">
-                            <i class="layui-icon layui-icon-refresh"></i>
-                            重置
-                        </button>
+                            <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                     </div>
                 </div>
             </form>
@@ -43,22 +39,18 @@
     <script type="text/html" id="group-toolbar">
         <div class="layui-btn-group">
             <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="add">
-                <i class="layui-icon layui-icon-add-1"></i>
-                新增
-            </button>
+                <i class="layui-icon layui-icon-add-1"></i>{{ __('admin.create') }}</button>
             <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="batchRemove">
-                <i class="layui-icon layui-icon-delete"></i>
-                删除
-            </button>
+                <i class="layui-icon layui-icon-delete"></i>{{ __('admin.delete') }}</button>
         </div>
     </script>
 
     <script type="text/html" id="group-toolbar-right">
         <div style="white-space: nowrap; display: flex; gap: 3px; justify-content: center;">
-            <button class="table-action-btn table-action-edit" lay-event="edit" title="编辑">
+            <button class="table-action-btn table-action-edit" lay-event="edit" title="{{ __('admin.edit') }}">
                 <i class="layui-icon layui-icon-edit"></i>
             </button>
-            <button class="table-action-btn table-action-delete" lay-event="remove" title="删除">
+            <button class="table-action-btn table-action-delete" lay-event="remove" title="{{ __('admin.delete') }}">
                 <i class="layui-icon layui-icon-delete"></i>
             </button>
         </div>
@@ -83,11 +75,11 @@
             let cols = [
                 [
                     {type: 'checkbox'},
-                    {title: '分组名称', field: 'name', width: 150},
-                    {title: '分组标题', field: 'title', width: 200},
-                    {title: '分组描述', field: 'description', width: 250},
-                    {title: '配置数量', field: 'config_count', width: 120, align: 'center'},
-                    {title: '操作', width: 100, align: 'center', toolbar: '#group-toolbar-right', fixed: 'right'}
+                    {title: '{{ __('admin.group_name') }}', field: 'name', width: 150},
+                    {title: '{{ __('admin.group_title') }}', field: 'title', width: 200},
+                    {title: '{{ __('admin.group_description') }}', field: 'description', width: 250},
+                    {title: '{{ __('admin.config_count') }}', field: 'config_count', width: 120, align: 'center'},
+                    {title: '{{ __('admin.actions_col') }}', width: 100, align: 'center', toolbar: '#group-toolbar-right', fixed: 'right'}
                 ]
             ];
 
@@ -97,7 +89,7 @@
                 method: 'GET',
                 toolbar: '#group-toolbar',
                 defaultToolbar: [{
-                    title: '刷新',
+                    title: '{{ __('admin.refresh') }}',
                     layEvent: 'refresh',
                     icon: 'layui-icon-refresh',
                 }, 'filter', 'print', 'exports'],
@@ -137,7 +129,7 @@
 
                     layer.confirm('确定要删除选中的 ' + checkStatus.data.length + ' 个分组吗？', {
                         icon: 3,
-                        title: '提示'
+                        title: '{{ __('admin.tip') }}'
                     }, function(index) {
                         const names = checkStatus.data.map(item => item[PRIMARY_KEY]);
                         batchDelete(names);
@@ -157,7 +149,7 @@
                 } else if (obj.event === 'remove') {
                     layer.confirm('确定要删除分组 "' + data.title + '" 吗？', {
                         icon: 3,
-                        title: '提示'
+                        title: '{{ __('admin.tip') }}'
                     }, function(index) {
                         deleteGroup(data.name, obj);
                         layer.close(index);
@@ -173,24 +165,24 @@
                 const formHtml = `
                     <form class="layui-form" lay-filter="group-form" style="padding: 20px;">
                         <div class="layui-form-item">
-                            <label class="layui-form-label">分组名称</label>
+                            <label class="layui-form-label">{{ __('admin.group_name') }}</label>
                             <div class="layui-input-block">
                                 <input type="text" name="name" value="${data ? data.name : ''}" 
-                                       placeholder="请输入分组名称（英文）" class="layui-input" 
+                                       placeholder="{{ __('admin.enter_group_key') }}" class="layui-input" 
                                        lay-verify="required" ${isEdit ? 'readonly' : ''}>
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">分组标题</label>
+                            <label class="layui-form-label">{{ __('admin.group_title') }}</label>
                             <div class="layui-input-block">
                                 <input type="text" name="title" value="${data ? data.title : ''}" 
-                                       placeholder="请输入分组标题（中文）" class="layui-input" lay-verify="required">
+                                       placeholder="{{ __('admin.enter_group_title') }}" class="layui-input" lay-verify="required">
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">分组描述</label>
+                            <label class="layui-form-label">{{ __('admin.group_description') }}</label>
                             <div class="layui-input-block">
-                                <textarea name="description" placeholder="请输入分组描述" 
+                                <textarea name="description" placeholder="{{ __('admin.enter_group_description') }}" 
                                           class="layui-textarea">${data ? data.description : ''}</textarea>
                             </div>
                         </div>
@@ -200,7 +192,7 @@
                                     <i class="layui-icon layui-icon-ok"></i> 保存
                                 </button>
                                 <button type="button" class="layui-btn layui-btn-primary" onclick="layer.closeAll()">
-                                    <i class="layui-icon layui-icon-close"></i> 取消
+                                    <i class="layui-icon layui-icon-close"></i> {{ __('admin.cancel') }}
                                 </button>
                             </div>
                         </div>

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>上传文件</title>
+    <title>{{ __('admin.upload_file') }}</title>
     <link rel="stylesheet" href="/static/admin/component/pear/css/pear.css" />
     <link rel="stylesheet" href="/static/admin/css/reset.css" />
     <link rel="stylesheet" href="/static/admin/css/form-common.css" />
@@ -17,43 +17,43 @@
                 {{-- 使用通用单选框组件 - 文件分类 --}}
                 @include('lpadmin.components.radio-group', [
                     'name' => 'category',
-                    'label' => '文件分类',
+                    'label' => __('admin.file_category'),
                     'required' => false,
                     'options' => [
-                        ['value' => '', 'title' => '自动检测'],
-                        ['value' => 'general', 'title' => '通用文件'],
-                        ['value' => 'avatar', 'title' => '头像图片'],
-                        ['value' => 'document', 'title' => '文档资料'],
-                        ['value' => 'image', 'title' => '图片素材'],
-                        ['value' => 'video', 'title' => '视频文件'],
-                        ['value' => 'audio', 'title' => '音频文件'],
-                        ['value' => 'archive', 'title' => '压缩包']
+                        ['value' => '', 'title' => __('admin.auto_detect')],
+                        ['value' => 'general', 'title' => __('admin.file_general')],
+                        ['value' => 'avatar', 'title' => __('admin.file_avatar')],
+                        ['value' => 'document', 'title' => __('admin.file_docs')],
+                        ['value' => 'image', 'title' => __('admin.file_images')],
+                        ['value' => 'video', 'title' => __('admin.file_videos')],
+                        ['value' => 'audio', 'title' => __('admin.file_audios')],
+                        ['value' => 'archive', 'title' => __('admin.file_archive')]
                     ],
                     'default' => '',
                     'class' => 'upload-category'
                 ])
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">文件标签</label>
+                    <label class="layui-form-label">{{ __('admin.file_tags') }}</label>
                     <div class="layui-input-block">
-                        <input type="text" name="tags" placeholder="请输入标签，多个标签用逗号分隔" class="layui-input">
-                        <div class="layui-form-mid layui-word-aux">例如：重要,工作,设计</div>
+                        <input type="text" name="tags" placeholder="{{ __('admin.enter_tags') }}" class="layui-input">
+                        <div class="layui-form-mid layui-word-aux">{{ __('admin.tags_example') }}</div>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">文件上传</label>
+                    <label class="layui-form-label">{{ __('admin.upload_file') }}</label>
                     <div class="layui-input-block">
                         <div class="layui-upload">
-                            <button type="button" class="layui-btn" id="upload-btn">选择文件</button>
+                            <button type="button" class="layui-btn" id="upload-btn">{{ __('admin.choose_files') }}</button>
                             <div class="layui-upload-list">
                                 <table class="layui-table">
                                     <thead>
                                         <tr>
-                                            <th>文件名</th>
-                                            <th>大小</th>
-                                            <th>状态</th>
-                                            <th>操作</th>
+                                            <th>{{ __('admin.file_name') }}</th>
+                                            <th>{{ __('admin.size') }}</th>
+                                            <th>{{ __('admin.status') }}</th>
+                                            <th>{{ __('admin.actions_col') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody id="upload-list"></tbody>
@@ -66,15 +66,15 @@
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <div class="upload-tips">
-                            <p><strong>上传说明：</strong></p>
+                            <p><strong>{{ __('admin.upload_notes') }}</strong></p>
                             <ul>
-                                <li>支持的图片格式：jpg、jpeg、png、gif、webp</li>
-                                <li>支持的文档格式：pdf、doc、docx、xls、xlsx、ppt、pptx</li>
-                                <li>支持的视频格式：mp4、avi、mov、wmv</li>
-                                <li>支持的音频格式：mp3、wav、flac</li>
-                                <li>支持的压缩格式：zip、rar、7z</li>
-                                <li>单个文件最大：10MB</li>
-                                <li>可同时上传多个文件</li>
+                                <li>{{ __('admin.note_images') }}</li>
+                                <li>{{ __('admin.note_documents') }}</li>
+                                <li>{{ __('admin.note_videos') }}</li>
+                                <li>{{ __('admin.note_audios') }}</li>
+                                <li>{{ __('admin.note_archives') }}</li>
+                                <li>{{ __('admin.note_max_size') }}</li>
+                                <li>{{ __('admin.note_multiple') }}</li>
                             </ul>
                         </div>
                     </div>
@@ -87,12 +87,10 @@
             <div class="button-container">
                 <button type="button" class="pear-btn pear-btn-primary" id="upload-all">
                     <i class="layui-icon layui-icon-upload"></i>
-                    开始上传
+                    {{ __('admin.start_upload') }}
                 </button>
                 <button type="button" class="pear-btn pear-btn-warm" onclick="parent.layer.closeAll()">
-                    <i class="layui-icon layui-icon-close"></i>
-                    关闭
-                </button>
+                    <i class="layui-icon layui-icon-close"></i>{{ __('admin.off') }}</button>
             </div>
         </div>
     </form>
@@ -145,10 +143,10 @@
                         let tr = $(['<tr id="upload-'+ index +'">',
                             '<td>'+ file.name +'</td>',
                             '<td>'+ (file.size/1014).toFixed(1) +'kb</td>',
-                            '<td>等待上传</td>',
+                            '<td>{{ __('admin.waiting_upload') }}</td>',
                             '<td>',
-                                '<button class="layui-btn layui-btn-xs upload-reload layui-hide">重传</button>',
-                                '<button class="layui-btn layui-btn-xs layui-btn-danger upload-delete">删除</button>',
+                                '<button class="layui-btn layui-btn-xs upload-reload layui-hide">{{ __('admin.retry_upload') }}</button>',
+                                '<button class="layui-btn layui-btn-xs layui-btn-danger upload-delete">{{ __('admin.delete') }}</button>',
                             '</td>',
                         '</tr>'].join(''));
                         
@@ -174,7 +172,7 @@
                     if(res.code == 0 || res.code == 200){ // 上传成功
                         let tr = $('#upload-list tr#upload-'+ index);
                         let tds = tr.children();
-                        tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+                        tds.eq(2).html('<span style="color: #5FB878;">{{ __('admin.upload_ok') }}</span>');
                         tds.eq(3).html(''); // 清空操作
                         return delete this.files[index]; // 删除文件队列已经上传成功的文件
                     }
@@ -183,7 +181,7 @@
                 allDone: function(obj){
                     // 确保关闭所有加载框
                     layer.closeAll('loading');
-                    layer.msg('全部文件上传完成', {icon: 1});
+                    layer.msg('{{ __('admin.all_uploaded') }}', {icon: 1});
 
                     // 刷新父页面表格
                     if (parent.layui && parent.layui.table) {
@@ -198,7 +196,7 @@
                     let tds = tr.children();
 
                     // 获取错误信息
-                    let errorMsg = '上传失败';
+                    let errorMsg = '{{ __('admin.upload_failed') }}';
                     if (res && res.message) {
                         errorMsg = res.message;
                     } else if (res && res.msg) {
@@ -210,7 +208,7 @@
                                 errorMsg = response.message;
                             }
                         } catch (e) {
-                            errorMsg = '上传失败：服务器响应异常';
+                            errorMsg = '{{ __('admin.upload_bad_response') }}';
                         }
                     }
 

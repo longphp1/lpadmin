@@ -1,22 +1,26 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LPadmin\AuthController;
-use App\Http\Controllers\LPadmin\CaptchaController;
-use App\Http\Controllers\LPadmin\DashboardController;
 use App\Http\Controllers\LPadmin\AdminController;
-use App\Http\Controllers\LPadmin\RoleController;
-use App\Http\Controllers\LPadmin\RuleController;
-use App\Http\Controllers\LPadmin\UserController;
-use App\Http\Controllers\LPadmin\MenuController;
-use App\Http\Controllers\LPadmin\UploadController;
-use App\Http\Controllers\LPadmin\ConfigController;
+use App\Http\Controllers\LPadmin\AuthController;
 use App\Http\Controllers\LPadmin\CacheController;
+use App\Http\Controllers\LPadmin\CaptchaController;
+use App\Http\Controllers\LPadmin\ComponentController;
+use App\Http\Controllers\LPadmin\ConfigController;
+use App\Http\Controllers\LPadmin\DashboardController;
 use App\Http\Controllers\LPadmin\DictionaryController;
 use App\Http\Controllers\LPadmin\DictionaryItemController;
 use App\Http\Controllers\LPadmin\DocController;
-use App\Http\Controllers\LPadmin\ComponentController;
+use App\Http\Controllers\LPadmin\MenuController;
+use App\Http\Controllers\LPadmin\RoleController;
+use App\Http\Controllers\LPadmin\RuleController;
+use App\Http\Controllers\LPadmin\UploadController;
+use App\Http\Controllers\LPadmin\UserController;
+use App\Http\Controllers\Website\WebSiteConfigController;
+use App\Http\Controllers\Website\WebSiteMenuController;
+use App\Http\Controllers\Website\WebSitePlatformController;
+use App\Http\Controllers\Website\WebSiteProductController;
 use App\Services\LPadmin\ComponentRouteManager;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +56,9 @@ Route::group($groupConfig, function () {
     | 认证相关路由（不需要登录验证）
     |--------------------------------------------------------------------------
     */
+
+    // 切换后台语言
+    Route::get('locale/{locale}', [\App\Http\Controllers\LPadmin\LocaleController::class, 'switch'])->name('locale');
 
     // 显示登录页面
     Route::get('login', [AuthController::class, 'showLogin'])->name('login');
@@ -89,6 +96,7 @@ Route::group($groupConfig, function () {
         */
         // 后台主页面（框架页面）
         Route::get('/', [AdminController::class, 'main'])->name('index');
+        Route::get('pear-config', [AdminController::class, 'pearConfig'])->name('pear_config');
 
         Route::prefix('dashboard')->name('dashboard.')->group(function () {
             Route::get('/', [DashboardController::class, 'index'])->name('index'); // 仪表盘首页
@@ -329,6 +337,63 @@ Route::group($groupConfig, function () {
             Route::post('batch-delete', [UploadController::class, 'batchDelete'])->name('batch_delete'); // 批量删除文件
             Route::get('{upload}', [UploadController::class, 'show'])->name('show'); // 查看文件详情
             Route::delete('{upload}', [UploadController::class, 'destroy'])->name('destroy'); // 删除文件
+        });
+
+        Route::prefix('website')->name('website.')->group(function () {
+            Route::prefix('config')->name('config.')->group(function () {
+                /* -站点配置- */
+                Route::get('/', [WebSiteConfigController::class, 'index'])->name('index');
+                Route::get('/webSiteList', [WebSiteConfigController::class, 'webSiteList'])->name('webSiteList');
+                Route::get('/show/{id}', [WebSiteConfigController::class, 'show'])->name('show');
+                Route::get('/edit/{id}', [WebSiteConfigController::class, 'edit'])->name('edit');
+                Route::put('/update/{id}', [WebSiteConfigController::class, 'update'])->name('update');
+                Route::get('/create', [WebSiteConfigController::class, 'create'])->name('create');
+                Route::post('/store', [WebSiteConfigController::class, 'store'])->name('store');
+                Route::delete('/{id}', [WebSiteConfigController::class, 'destroy'])->name('destroy');
+            });
+
+            Route::prefix('menu')->name('menu.')->group(function () {
+                /* -菜单管理- */
+                Route::get('/', [WebSiteMenuController::class, 'index'])->name('index');
+                Route::get('/edit/{id}', [WebSiteMenuController::class, 'edit'])->name('edit');
+                Route::get('/show/{id}', [WebSiteMenuController::class, 'show'])->name('show');
+                Route::put('/update/{id}', [WebSiteMenuController::class, 'update'])->name('update');
+                Route::get('/create', [WebSiteMenuController::class, 'create'])->name('create');
+                Route::post('/store', [WebSiteMenuController::class, 'store'])->name('store');
+                Route::delete('/{id}', [WebSiteMenuController::class, 'destroy'])->name('destroy');
+            });
+
+            Route::prefix('product')->name('product.')->group(function () {
+                /* -菜单管理- */
+                Route::get('/', [WebSiteProductController::class, 'index'])->name('index');
+                Route::get('/edit/{id}', [WebSiteProductController::class, 'edit'])->name('edit');
+                Route::get('/show/{id}', [WebSiteProductController::class, 'show'])->name('show');
+                Route::put('/update/{id}', [WebSiteProductController::class, 'update'])->name('update');
+                Route::get('/create', [WebSiteProductController::class, 'create'])->name('create');
+                Route::post('/store', [WebSiteProductController::class, 'store'])->name('store');
+                Route::post('/fetch-source', [WebSiteProductController::class, 'fetchSource'])->name('fetch_source');
+                Route::delete('/{id}', [WebSiteProductController::class, 'destroy'])->name('destroy');
+                Route::post('/batch-delete', [WebSiteProductController::class, 'batchDelete'])->name('batch_delete');
+                Route::get('/export', [WebSiteProductController::class, 'exportProduct'])->name('export');
+                Route::get('/import', [WebSiteProductController::class, 'showImport'])->name('import.show');
+                Route::post('/import', [WebSiteProductController::class, 'import'])->name('import');
+                Route::get('/brand', [WebSiteProductController::class, 'showBrand'])->name('brand.show');
+                Route::post('/brand', [WebSiteProductController::class, 'updateProductBrand'])->name('brand.update');
+            });
+
+            Route::prefix('platform')->name('platform.')->group(function () {
+                /* -站点配置- */
+                Route::get('/', [WebSitePlatformController::class, 'index'])->name('index');
+                Route::get('/show/{id}', [WebSitePlatformController::class, 'show'])->name('show');
+                Route::get('/edit/{id}', [WebSitePlatformController::class, 'edit'])->name('edit');
+                Route::put('/update/{id}', [WebSitePlatformController::class, 'update'])->name('update');
+                Route::get('/create', [WebSitePlatformController::class, 'create'])->name('create');
+                Route::post('/store', [WebSitePlatformController::class, 'store'])->name('store');
+                Route::delete('/{id}', [WebSitePlatformController::class, 'destroy'])->name('destroy');
+                Route::post('/updatePlatform', [WebSitePlatformController::class, 'updatePlatform'])->name('updatePlatform');
+                Route::post('/updateNextPlatform', [WebSitePlatformController::class, 'updateNextPlatform'])->name('updateNextPlatform');
+                Route::post('/pushPlatform', [WebSitePlatformController::class, 'pushPlatform'])->name('pushPlatform');
+            });
         });
     });
 });

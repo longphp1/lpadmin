@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -37,6 +37,14 @@
             <div id="control" class="layui-layout-control"></div>
             <!-- 顶部右侧菜单 -->
             <ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item">
+                    <a href="javascript:;">{{ config('lpadmin.languages')[app()->getLocale()] ?? '中文' }}</a>
+                    <dl class="layui-nav-child">
+                        @foreach(config('lpadmin.languages') as $code => $label)
+                            <dd><a href="{{ route('lpadmin.locale', $code) }}">{{ $label }}</a></dd>
+                        @endforeach
+                    </dl>
+                </li>
                 <li class="layui-nav-item layui-hide-xs"><a href="#" class="menuSearch layui-icon layui-icon-search"></a></li>
                 <li class="layui-nav-item layui-hide-xs"><a href="#" class="fullScreen layui-icon layui-icon-screen-full"></a></li>
                 <li class="layui-nav-item layui-hide-xs message"></li>
@@ -48,9 +56,9 @@
                     </a>
                     <!-- 功能菜单 -->
                     <dl class="layui-nav-child">
-                        <dd><a user-menu-url="{{ route('lpadmin.profile') }}" user-menu-id="10" user-menu-title="基本资料">基本资料</a></dd>
-                        <dd><a user-menu-url="{{ route('lpadmin.change_password') }}" user-menu-id="11" user-menu-title="修改密码">修改密码</a></dd>
-                        <dd><a href="javascript:void(0);" class="logout">注销登录</a></dd>
+                        <dd><a user-menu-url="{{ route('lpadmin.profile') }}" user-menu-id="10" user-menu-title="{{ __('admin.profile') }}">{{ __('admin.profile') }}</a></dd>
+                        <dd><a user-menu-url="{{ route('lpadmin.change_password') }}" user-menu-id="11" user-menu-title="{{ __('admin.change_password') }}">{{ __('admin.change_password') }}</a></dd>
+                        <dd><a href="javascript:void(0);" class="logout">{{ __('admin.logout') }}</a></dd>
                     </dl>
                 </li>
                 <!-- 主题配置 -->
@@ -113,7 +121,7 @@
             var popup = layui.popup;
 
             admin.setConfigType("json");
-            admin.setConfigPath("/static/admin/config/pear.config.json");
+            admin.setConfigPath("{{ route('lpadmin.pear_config') }}");
 
             admin.render();
 
@@ -130,7 +138,7 @@
                         if (res.code) {
                             return popup.error(res.message || res.msg);
                         }
-                        popup.success("注销成功",function(){
+                        popup.success("{{ __('admin.logout_success') }}",function(){
                             location.href = "{{ route('lpadmin.login') }}";
                         })
                     }

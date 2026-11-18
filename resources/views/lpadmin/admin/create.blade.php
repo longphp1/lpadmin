@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
     <head>
         <meta charset="UTF-8">
         <title>新增管理员</title>
@@ -14,36 +14,36 @@
                 <div class="main-container mr-5">
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">角色</label>
+                        <label class="layui-form-label required">{{ __('admin.role') }}</label>
                         <div class="layui-input-block">
                             <div name="roles" id="roles" value=""></div>
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">状态</label>
+                        <label class="layui-form-label required">{{ __('admin.status') }}</label>
                         <div class="layui-input-block">
-                            <input type="radio" name="status" data-value="1" title="启用" lay-filter="status" checked>
-                            <input type="radio" name="status" data-value="0" title="禁用" lay-filter="status">
+                            <input type="radio" name="status" data-value="1" title="{{ __('admin.enabled') }}" lay-filter="status" checked>
+                            <input type="radio" name="status" data-value="0" title="{{ __('admin.disabled') }}" lay-filter="status">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">用户名</label>
+                        <label class="layui-form-label required">{{ __('admin.username') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="username" value="" required lay-verify="required" class="layui-input">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">昵称</label>
+                        <label class="layui-form-label required">{{ __('admin.nickname') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="nickname" value="" required lay-verify="required" class="layui-input">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">密码</label>
+                        <label class="layui-form-label required">{{ __('admin.password') }}</label>
                         <div class="layui-input-block">
                             <input type="password" name="password" value="" required lay-verify="required|minLength" minlength="6" class="layui-input" placeholder="请输入密码，至少6位">
                         </div>
@@ -57,7 +57,7 @@
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">头像</label>
+                        <label class="layui-form-label">{{ __('admin.avatar') }}</label>
                         <div class="layui-input-block">
                             <div class="avatar-selector">
                                 <div class="avatar-preview-container" style="margin-bottom: 10px;">
@@ -70,8 +70,7 @@
                                         <i class="layui-icon layui-icon-picture"></i> 选择头像
                                     </button>
                                     <button type="button" class="pear-btn pear-btn-warm pear-btn-sm" onclick="clearAdminAvatar()">
-                                        <i class="layui-icon layui-icon-delete"></i> 清除
-                                    </button>
+                                        <i class="layui-icon layui-icon-delete"></i>{{ __('admin.clear') }}</button>
                                 </div>
                                 <input type="hidden" name="avatar" id="avatar-input" value="/static/images/default-avatar.png">
                                 <div class="layui-form-mid layui-word-aux">点击图片或按钮选择头像，支持jpg、png格式</div>
@@ -80,14 +79,14 @@
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">邮箱</label>
+                        <label class="layui-form-label">{{ __('admin.email') }}</label>
                         <div class="layui-input-block">
                             <input type="email" name="email" value="" class="layui-input">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
-                        <label class="layui-form-label">手机</label>
+                        <label class="layui-form-label">{{ __('admin.phone') }}</label>
                         <div class="layui-input-block">
                             <input type="text" name="phone" value="" class="layui-input">
                         </div>
@@ -99,12 +98,8 @@
             <div class="bottom">
                 <div class="button-container">
                     <button type="submit" class="pear-btn pear-btn-primary pear-btn-md" lay-submit=""
-                        lay-filter="save">
-                        提交
-                    </button>
-                    <button type="reset" class="pear-btn pear-btn-md">
-                        重置
-                    </button>
+                        lay-filter="save">{{ __('admin.submit') }}</button>
+                    <button type="reset" class="pear-btn pear-btn-md">{{ __('admin.reset') }}</button>
                 </div>
             </div>
 
@@ -248,7 +243,7 @@
                             if (res.code !== 0) {
                                 return layui.popup.failure(res.message);
                             }
-                            return layui.popup.success("操作成功", function () {
+                            return layui.popup.success("{{ __('admin.success') }}", function () {
                                 parent.refreshTable();
                                 parent.layer.close(parent.layer.getFrameIndex(window.name));
                             });

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
     <head>
         <meta charset="UTF-8">
         <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -32,8 +32,8 @@
                             <div class="layui-btn-group">
                                 <button type="button" class="layui-btn layui-btn-sm" id="checkAll">全选</button>
                                 <button type="button" class="layui-btn layui-btn-sm" id="uncheckAll">全不选</button>
-                                <button type="button" class="layui-btn layui-btn-sm" id="expandAll">展开全部</button>
-                                <button type="button" class="layui-btn layui-btn-sm" id="collapseAll">收起全部</button>
+                                <button type="button" class="layui-btn layui-btn-sm" id="expandAll">{{ __('admin.expand_all') }}</button>
+                                <button type="button" class="layui-btn layui-btn-sm" id="collapseAll">{{ __('admin.collapse_all') }}</button>
                             </div>
                         </div>
                     </div>

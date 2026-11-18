@@ -97,7 +97,7 @@ class UploadController extends BaseController
 
             // 格式化数据
             foreach ($uploads as $upload) {
-                $upload->admin_name = $upload->admin ? $upload->admin->username : '未知';
+                $upload->admin_name = $upload->admin ? $upload->admin->username : __('admin.unknown');
                 $upload->formatted_size = $upload->formatted_size;
                 $upload->category_label = $upload->category_label;
                 $upload->type_label = $upload->type_label;
@@ -118,9 +118,9 @@ class UploadController extends BaseController
         $validator = Validator::make($request->all(), [
             'file' => 'required|file|max:10240', // 最大10MB
         ], [
-            'file.required' => '请选择要上传的文件',
-            'file.file' => '上传的必须是文件',
-            'file.max' => '文件大小不能超过10MB',
+            'file.required' => __('admin.choose_upload_file'),
+            'file.file' => __('admin.must_be_file'),
+            'file.max' => __('admin.file_max_10mb'),
         ]);
 
         if ($validator->fails()) {
@@ -149,7 +149,7 @@ class UploadController extends BaseController
                     'id' => $existingFile->id,
                     'url' => $existingFile->url,
                     'original_name' => $existingFile->original_name,
-                ], '文件已存在，返回已有文件信息');
+                ], __('admin.file_exists'));
             }
 
             // 保存文件信息
@@ -178,9 +178,9 @@ class UploadController extends BaseController
                 'original_name' => $upload->original_name,
                 'size' => $upload->size,
                 'extension' => $upload->extension,
-            ], '上传成功');
+            ], __('admin.upload_ok'));
         } catch (\Exception $e) {
-            return $this->error('上传失败: ' . $e->getMessage());
+            return $this->error(__('admin.upload_failed') . ': ' . $e->getMessage());
         }
     }
 
@@ -200,9 +200,9 @@ class UploadController extends BaseController
 
             $this->log('delete', '删除文件', ['upload_id' => $upload->id, 'filename' => $upload->original_name]);
 
-            return $this->success(null, '删除成功');
+            return $this->success(null, __('admin.deleted_ok'));
         } catch (\Exception $e) {
-            return $this->error('删除失败: ' . $e->getMessage());
+            return $this->error(__('admin.delete_failed') . ': ' . $e->getMessage());
         }
     }
 
@@ -236,9 +236,9 @@ class UploadController extends BaseController
 
             $this->log('delete', '批量删除文件', ['count' => count($uploads), 'ids' => $ids]);
 
-            return $this->success(null, "成功删除 " . count($uploads) . " 个文件");
+            return $this->success(null, __('admin.deleted_count', ['count' => count($uploads)]));
         } catch (\Exception $e) {
-            return $this->error('批量删除失败: ' . $e->getMessage());
+            return $this->error(__('admin.batch_delete_failed') . ': ' . $e->getMessage());
         }
     }
 
@@ -286,7 +286,7 @@ class UploadController extends BaseController
 
             // 格式化数据
             foreach ($uploads as $upload) {
-                $upload->admin_name = $upload->admin ? $upload->admin->username : '未知';
+                $upload->admin_name = $upload->admin ? $upload->admin->username : __('admin.unknown');
                 $upload->formatted_size = $upload->formatted_size;
                 $upload->category_label = $upload->category_label;
                 $upload->type_label = $upload->type_label;
@@ -390,15 +390,15 @@ class UploadController extends BaseController
             'enable_security_check' => 'sometimes|boolean',
             'enable_duplicate_check' => 'sometimes|boolean',
         ], [
-            'max_size.required' => '请设置最大文件大小',
-            'max_size.integer' => '文件大小必须是整数',
-            'max_size.min' => '文件大小不能小于1KB',
-            'max_size.max' => '文件大小不能超过100MB',
-            'disk.required' => '请选择存储方式',
-            'disk.in' => '存储方式选择无效',
-            'path.required' => '请设置存储路径',
-            'path.max' => '存储路径不能超过255个字符',
-            'allowed_extensions.required' => '请设置允许的文件扩展名',
+            'max_size.required' => __('admin.max_size_required'),
+            'max_size.integer' => __('admin.max_size_integer'),
+            'max_size.min' => __('admin.max_size_min'),
+            'max_size.max' => __('admin.max_size_max'),
+            'disk.required' => __('admin.disk_required'),
+            'disk.in' => __('admin.disk_invalid'),
+            'path.required' => __('admin.path_required'),
+            'path.max' => __('admin.path_too_long'),
+            'allowed_extensions.required' => __('admin.extensions_required'),
         ]);
 
         if ($validator->fails()) {
@@ -437,9 +437,9 @@ class UploadController extends BaseController
 
             $this->log('update', '更新文件上传配置', $request->all());
 
-            return $this->success([], '配置更新成功');
+            return $this->success([], __('admin.config_saved'));
         } catch (\Exception $e) {
-            return $this->error('配置更新失败: ' . $e->getMessage());
+            return $this->error(__('admin.config_update_failed') . ': ' . $e->getMessage());
         }
     }
 
@@ -519,10 +519,10 @@ class UploadController extends BaseController
         return $this->handleUpload($request, [
             'file' => 'required|image|mimes:jpeg,jpg,png,gif,webp|max:5120'
         ], [
-            'file.required' => '请选择要上传的图片',
-            'file.image' => '文件必须是图片格式',
-            'file.mimes' => '图片格式只支持 jpeg、jpg、png、gif、webp',
-            'file.max' => '图片大小不能超过5MB'
+            'file.required' => __('admin.choose_image_required'),
+            'file.image' => __('admin.must_be_image'),
+            'file.mimes' => __('admin.image_mimes'),
+            'file.max' => __('admin.image_max_5mb')
         ], 'images');
     }
 
@@ -561,7 +561,7 @@ class UploadController extends BaseController
                     'url' => $existingFile->url,
                     'original_name' => $existingFile->original_name,
                     'size' => $existingFile->size,
-                ], '文件已存在，返回已有文件信息');
+                ], __('admin.file_exists'));
             }
 
             // 存储文件到指定文件夹
@@ -623,10 +623,10 @@ class UploadController extends BaseController
                 'size' => $upload->size,
                 'extension' => $upload->extension,
                 'type_label' => $upload->type_label,
-            ], '文件上传成功');
+            ], __('admin.upload_ok_msg'));
 
         } catch (\Exception $e) {
-            return $this->error('上传失败：' . $e->getMessage(),200);
+            return $this->error(__('admin.upload_failed') . ': ' . $e->getMessage(), 200);
         }
     }
 
@@ -643,8 +643,8 @@ class UploadController extends BaseController
         return $this->handleUpload($request, [
             'file' => "required|file|max:{$maxSize}"
         ], [
-            'file.required' => '请选择要上传的文件',
-            'file.max' => "文件大小不能超过{$maxSize}KB"
+            'file.required' => __('admin.choose_upload_file'),
+            'file.max' => __('admin.file_max_kb', ['size' => $maxSize])
         ], 'files');
     }
 
@@ -661,7 +661,7 @@ class UploadController extends BaseController
         if (!in_array($extension, $allowedExtensions)) {
             return [
                 'safe' => false,
-                'message' => "不允许上传 .{$extension} 格式的文件"
+                'message' => __('admin.extension_not_allowed', ['ext' => $extension])
             ];
         }
 
@@ -681,7 +681,7 @@ class UploadController extends BaseController
         if (in_array($mimeType, $dangerousMimes)) {
             return [
                 'safe' => false,
-                'message' => '检测到危险文件类型，禁止上传'
+                'message' => __('admin.dangerous_file')
             ];
         }
 
@@ -689,7 +689,7 @@ class UploadController extends BaseController
         if ($this->containsMaliciousContent($file)) {
             return [
                 'safe' => false,
-                'message' => '文件包含可疑内容，禁止上传'
+                'message' => __('admin.suspicious_file')
             ];
         }
 
@@ -800,7 +800,15 @@ class UploadController extends BaseController
         }
 
         return $this->success([
-            'categories' => Upload::$categoryLabels,
+            'categories' => [
+                'general' => __('admin.file_general'),
+                'avatar' => __('admin.file_avatar'),
+                'document' => __('admin.file_docs'),
+                'image' => __('admin.file_images'),
+                'video' => __('admin.file_videos'),
+                'audio' => __('admin.file_audios'),
+                'archive' => __('admin.file_archive'),
+            ],
             'statistics' => $statistics
         ]);
     }
@@ -825,14 +833,14 @@ class UploadController extends BaseController
 
             // 分类统计
             $categories = [
-                '' => '自动检测',
-                'general' => '通用文件',
-                'avatar' => '头像图片',
-                'document' => '文档资料',
-                'image' => '图片素材',
-                'video' => '视频文件',
-                'audio' => '音频文件',
-                'archive' => '压缩包'
+                '' => __('admin.auto_detect'),
+                'general' => __('admin.file_general'),
+                'avatar' => __('admin.file_avatar'),
+                'document' => __('admin.file_docs'),
+                'image' => __('admin.file_images'),
+                'video' => __('admin.file_videos'),
+                'audio' => __('admin.file_audios'),
+                'archive' => __('admin.file_archive'),
             ];
 
             $categoryStats = [];
@@ -857,7 +865,7 @@ class UploadController extends BaseController
 
             return response()->json([
                 'code' => 0,
-                'message' => '获取统计信息成功',
+                'message' => __('admin.stats_refreshed'),
                 'data' => [
                     'total_files' => $totalFiles,
                     'total_size' => $totalSize,
@@ -870,7 +878,7 @@ class UploadController extends BaseController
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 1,
-                'message' => '获取统计信息失败：' . $e->getMessage(),
+                'message' => __('admin.load_config_failed') . ': ' . $e->getMessage(),
                 'data' => null
             ]);
         }
@@ -985,7 +993,7 @@ class UploadController extends BaseController
                 'extension' => $upload->extension,
                 'metadata' => $upload->metadata,
                 'created_at' => $upload->created_at->format('Y-m-d H:i:s'),
-                'admin_name' => $upload->admin ? $upload->admin->username : '未知',
+                'admin_name' => $upload->admin ? $upload->admin->username : __('admin.unknown'),
                 'category_label' => $upload->category_label,
                 'tags' => $upload->tags,
                 'description' => $upload->description,
@@ -1013,7 +1021,7 @@ class UploadController extends BaseController
                         $content = Storage::disk($upload->disk)->get($upload->path);
                         $previewData['content'] = mb_convert_encoding($content, 'UTF-8', 'auto');
                     } catch (\Exception $e) {
-                        $previewData['content'] = '无法读取文件内容';
+                        $previewData['content'] = __('admin.cannot_read_content');
                     }
                 }
             } else {
@@ -1023,7 +1031,7 @@ class UploadController extends BaseController
 
             return $this->success($previewData);
         } catch (\Exception $e) {
-            return $this->error('预览失败: ' . $e->getMessage());
+            return $this->error(__('admin.preview_failed') . ': ' . $e->getMessage());
         }
     }
 
@@ -1034,7 +1042,7 @@ class UploadController extends BaseController
     {
         try {
             if (!Storage::disk($upload->disk)->exists($upload->path)) {
-                abort(404, '文件不存在');
+                abort(404, __('admin.no_file'));
             }
 
             $this->log('download', '下载文件', ['upload_id' => $upload->id, 'filename' => $upload->original_name]);
@@ -1084,7 +1092,7 @@ class UploadController extends BaseController
                 return response($content)->header('Content-Type', $upload->mime_type);
             }
 
-            abort(404, '文件不存在');
+            abort(404, __('admin.no_file'));
         } catch (\Exception $e) {
             abort(500, '生成缩略图失败: ' . $e->getMessage());
         }

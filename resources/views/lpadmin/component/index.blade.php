@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="{{ app()->getLocale() === 'en' ? 'en' : 'zh-CN' }}">
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>组件管理</title>
+    <title>{{ __('menu.component') }}</title>
     <link rel="stylesheet" href="/static/admin/component/pear/css/pear.css" />
     <link rel="stylesheet" href="/static/admin/css/reset.css" />
     <link rel="stylesheet" href="/static/admin/css/table-common.css" />
@@ -15,32 +15,31 @@
                 <div class="layui-card">
                     <div class="layui-card-header">
                         <span class="layui-icon layui-icon-component"></span>
-                        组件管理
+                        {{ __('menu.component') }}
                     </div>
                     <div class="layui-card-body">
                     <!-- 搜索表单 -->
                     <form class="layui-form" lay-filter="searchForm">
                         <div class="layui-row layui-col-space10">
                             <div class="layui-col-md3">
-                                <input type="text" name="name" placeholder="组件名称" class="layui-input">
+                                <input type="text" name="name" placeholder="{{ __('admin.component_name') }}" class="layui-input">
                             </div>
                             <div class="layui-col-md3">
                                 <select name="status">
-                                    <option value="">全部状态</option>
-                                    <option value="1">已安装</option>
-                                    <option value="0">未安装</option>
+                                    <option value="">{{ __('admin.all_status') }}</option>
+                                    <option value="1">{{ __('admin.installed') }}</option>
+                                    <option value="0">{{ __('admin.not_installed') }}</option>
                                 </select>
                             </div>
                             <div class="layui-col-md3">
-                                <input type="text" name="author" placeholder="作者" class="layui-input">
+                                <input type="text" name="author" placeholder="{{ __('admin.author') }}" class="layui-input">
                             </div>
                             <div class="layui-col-md3">
                                 <button type="submit" class="layui-btn" lay-submit lay-filter="search">
-                                    <i class="layui-icon layui-icon-search"></i> 搜索
+                                    <i class="layui-icon layui-icon-search"></i> {{ __('admin.search_menu') }}
                                 </button>
                                 <button type="reset" class="layui-btn layui-btn-primary">
-                                    <i class="layui-icon layui-icon-refresh"></i> 重置
-                                </button>
+                                    <i class="layui-icon layui-icon-refresh"></i>{{ __('admin.reset') }}</button>
                             </div>
                         </div>
                     </form>
@@ -57,40 +56,40 @@
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm" lay-event="refresh">
-            <i class="layui-icon layui-icon-refresh"></i> 刷新组件
+            <i class="layui-icon layui-icon-refresh"></i> {{ __('admin.refresh_components') }}
         </button>
-        <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="batchInstall">批量安装</button>
-        <button class="layui-btn layui-btn-warm layui-btn-sm" lay-event="batchUninstall">批量卸载</button>
-        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="statistics">统计信息</button>
+        <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="batchInstall">{{ __('admin.batch_install') }}</button>
+        <button class="layui-btn layui-btn-warm layui-btn-sm" lay-event="batchUninstall">{{ __('admin.batch_uninstall') }}</button>
+        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="statistics">{{ __('admin.statistics') }}</button>
     </div>
 </script>
 
 <!-- 操作列模板 -->
 <script type="text/html" id="actionBar">
     @{{# if(d.status === 1){ }}
-        <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="uninstall">卸载</a>
+        <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="uninstall">{{ __('admin.uninstall') }}</a>
     @{{# } else { }}
-        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="install">安装</a>
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="install">{{ __('admin.install') }}</a>
     @{{# } }}
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="validate">验证</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">{{ __('admin.detail') }}</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="validate">{{ __('admin.validate') }}</a>
 </script>
 
 <!-- 状态模板 -->
 <script type="text/html" id="statusTpl">
     @{{# if(d.status === 1){ }}
-        <span class="layui-badge layui-bg-green">已安装</span>
+        <span class="layui-badge layui-bg-green">{{ __('admin.installed') }}</span>
     @{{# } else { }}
-        <span class="layui-badge layui-bg-gray">未安装</span>
+        <span class="layui-badge layui-bg-gray">{{ __('admin.not_installed') }}</span>
     @{{# } }}
 </script>
 
 <!-- 完整性模板 -->
 <script type="text/html" id="completeTpl">
     @{{# if(d.is_complete){ }}
-        <span class="layui-badge layui-bg-blue">完整</span>
+        <span class="layui-badge layui-bg-blue">{{ __('admin.complete_yes') }}</span>
     @{{# } else { }}
-        <span class="layui-badge layui-bg-orange">不完整</span>
+        <span class="layui-badge layui-bg-orange">{{ __('admin.incomplete') }}</span>
     @{{# } }}
 </script>
 
@@ -98,13 +97,13 @@
 <script type="text/html" id="filesTpl">
     <div>
         @{{# if(d.has_controller){ }}
-            <span class="layui-badge layui-bg-green">控制器</span>
+            <span class="layui-badge layui-bg-green">{{ __('admin.controller') }}</span>
         @{{# } }}
         @{{# if(d.has_routes){ }}
-            <span class="layui-badge layui-bg-blue">路由</span>
+            <span class="layui-badge layui-bg-blue">{{ __('admin.route') }}</span>
         @{{# } }}
         @{{# if(d.has_views){ }}
-            <span class="layui-badge layui-bg-cyan">视图</span>
+            <span class="layui-badge layui-bg-cyan">{{ __('admin.view') }}</span>
         @{{# } }}
     </div>
 </script>
@@ -126,16 +125,16 @@ layui.use(['table', 'form', 'layer'], function(){
         defaultToolbar: ['filter', 'exports', 'print'],
         cols: [[
             {type: 'checkbox', fixed: 'left'},
-            {field: 'name', title: '组件名称', width: 150, sort: true},
-            {field: 'title', title: '组件标题', width: 200},
-            {field: 'description', title: '描述', minWidth: 250},
-            {field: 'version', title: '版本', width: 100},
-            {field: 'author', title: '作者', width: 120},
-            {field: 'status', title: '状态', width: 100, templet: '#statusTpl'},
-            {field: 'is_complete', title: '完整性', width: 100, templet: '#completeTpl'},
-            {field: 'files', title: '文件结构', width: 200, templet: '#filesTpl'},
-            {field: 'installed_at', title: '安装时间', width: 160},
-            {title: '操作', width: 200, toolbar: '#actionBar', fixed: 'right'}
+            {field: 'name', title: '{{ __('admin.component_name') }}', width: 150, sort: true},
+            {field: 'title', title: '{{ __('admin.component_title') }}', width: 200},
+            {field: 'description', title: '{{ __('admin.description') }}', minWidth: 250},
+            {field: 'version', title: '{{ __('admin.version') }}', width: 100},
+            {field: 'author', title: '{{ __('admin.author') }}', width: 120},
+            {field: 'status', title: '{{ __('admin.status') }}', width: 100, templet: '#statusTpl'},
+            {field: 'is_complete', title: '{{ __('admin.complete') }}', width: 100, templet: '#completeTpl'},
+            {field: 'files', title: '{{ __('admin.file_structure') }}', width: 200, templet: '#filesTpl'},
+            {field: 'installed_at', title: '{{ __('admin.installed_at') }}', width: 160},
+            {title: '{{ __('admin.actions_col') }}', width: 200, toolbar: '#actionBar', fixed: 'right'}
         ]],
         page: true,
         height: 'full-200',
@@ -341,12 +340,12 @@ layui.use(['table', 'form', 'layer'], function(){
                     '<div class="layui-row"><div class="layui-col-md3"><strong>描述:</strong></div><div class="layui-col-md9">' + (data.description || '无') + '</div></div>' +
                     '<div class="layui-row"><div class="layui-col-md3"><strong>版本:</strong></div><div class="layui-col-md9">' + (data.version || '1.0.0') + '</div></div>' +
                     '<div class="layui-row"><div class="layui-col-md3"><strong>作者:</strong></div><div class="layui-col-md9">' + (data.author || '无') + '</div></div>' +
-                    '<div class="layui-row"><div class="layui-col-md3"><strong>状态:</strong></div><div class="layui-col-md9">' + (data.status === 1 ? '已安装' : '未安装') + '</div></div>' +
-                    '<div class="layui-row"><div class="layui-col-md3"><strong>安装时间:</strong></div><div class="layui-col-md9">' + (data.installed_at || '未安装') + '</div></div>' +
+                    '<div class="layui-row"><div class="layui-col-md3"><strong>状态:</strong></div><div class="layui-col-md9">' + (data.status === 1 ? '{{ __('admin.installed') }}' : '{{ __('admin.not_installed') }}') + '</div></div>' +
+                    '<div class="layui-row"><div class="layui-col-md3"><strong>安装时间:</strong></div><div class="layui-col-md9">' + (data.installed_at || '{{ __('admin.not_installed') }}') + '</div></div>' +
                     '<div class="layui-row"><div class="layui-col-md3"><strong>文件结构:</strong></div><div class="layui-col-md9">' +
-                    (data.has_controller ? '<span class="layui-badge layui-bg-green">控制器</span> ' : '') +
-                    (data.has_routes ? '<span class="layui-badge layui-bg-blue">路由</span> ' : '') +
-                    (data.has_views ? '<span class="layui-badge layui-bg-cyan">视图</span> ' : '') +
+                    (data.has_controller ? '<span class="layui-badge layui-bg-green">{{ __('admin.controller') }}</span> ' : '') +
+                    (data.has_routes ? '<span class="layui-badge layui-bg-blue">{{ __('admin.route') }}</span> ' : '') +
+                    (data.has_views ? '<span class="layui-badge layui-bg-cyan">{{ __('admin.view') }}</span> ' : '') +
                     '</div></div>' +
                     '</div>';
                 
@@ -413,10 +412,10 @@ layui.use(['table', 'form', 'layer'], function(){
                 var content = '<div style="padding: 20px;">' +
                     '<div class="layui-row layui-col-space10">' +
                     '<div class="layui-col-md6"><div class="layui-card"><div class="layui-card-header">总组件数</div><div class="layui-card-body" style="text-align:center;font-size:24px;color:#1E9FFF;">' + stats.total_components + '</div></div></div>' +
-                    '<div class="layui-col-md6"><div class="layui-card"><div class="layui-card-header">已安装</div><div class="layui-card-body" style="text-align:center;font-size:24px;color:#5FB878;">' + stats.installed_components + '</div></div></div>' +
+                    '<div class="layui-col-md6"><div class="layui-card"><div class="layui-card-header">{{ __('admin.installed') }}</div><div class="layui-card-body" style="text-align:center;font-size:24px;color:#5FB878;">' + stats.installed_components + '</div></div></div>' +
                     '</div>' +
                     '<div class="layui-row layui-col-space10">' +
-                    '<div class="layui-col-md6"><div class="layui-card"><div class="layui-card-header">未安装</div><div class="layui-card-body" style="text-align:center;font-size:24px;color:#FFB800;">' + stats.uninstalled_components + '</div></div></div>' +
+                    '<div class="layui-col-md6"><div class="layui-card"><div class="layui-card-header">{{ __('admin.not_installed') }}</div><div class="layui-card-body" style="text-align:center;font-size:24px;color:#FFB800;">' + stats.uninstalled_components + '</div></div></div>' +
                     '<div class="layui-col-md6"><div class="layui-card"><div class="layui-card-header">完整组件</div><div class="layui-card-body" style="text-align:center;font-size:24px;color:#FF5722;">' + stats.complete_components + '</div></div></div>' +
                     '</div>' +
                     '</div>';
