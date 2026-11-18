@@ -54,7 +54,7 @@ LPadmin是基于Laravel框架开发的现代化后台管理系统，完全复刻
 
 1. **克隆项目**
 ```bash
-git clone https://gitee.com/xw54/lpadmin.git
+git clone git@github.com:longphp1/lpadmin.git
 cd lpadmin
 ```
 
@@ -114,12 +114,12 @@ location / {
 
 ## 📞 联系我们
 
-- 项目主页: https://gitee.com/xw54/lpadmin
-- 问题反馈: https://gitee.com/xw54/lpadmin/issues
-- 邮箱: jiu-men@qq.com
+- 项目主页: https://github.com/longphp1/lpadmin
+- 问题反馈: https://github.com/longphp1/lpadmin/issues
+- 邮箱: 2209442773@qq.com
 ---
 
 <div align="center">
   <p>Made with ❤️ by LPadmin Team</p>
-  <p>Copyright © 2024 LPadmin. All rights reserved.</p>
+  <p>Copyright © 2026 LPadmin. All rights reserved.</p>
 </div>
